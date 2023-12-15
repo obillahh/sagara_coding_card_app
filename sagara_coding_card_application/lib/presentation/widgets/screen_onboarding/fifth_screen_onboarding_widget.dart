@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 import '../../utils/assets_constant.dart';
 import '../../utils/themes/app_colors.dart';
 import '../../utils/themes/app_fonts.dart';
+import '../primary_elevated_button_widget.dart';
 
 class FifthScreenOnboardingWidget extends StatelessWidget {
   final PageController pageController;
@@ -77,18 +79,11 @@ class FifthScreenOnboardingWidget extends StatelessWidget {
                 ),
               ],
             ),
-            ElevatedButton(
-              onPressed: () {},
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                minimumSize: Size(280.w, 36.h),
-              ),
-              child: Text(
-                'Get Started',
-                style: AppFonts.appFont.titleMedium!.copyWith(
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
+            PrimaryElevatedButtonWidget(
+              onPressed: () {
+                context.go('/login');
+              },
+              text: 'Get Started',
             ),
           ],
         ),

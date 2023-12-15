@@ -83,7 +83,7 @@ class FourthScreenOnboardingWidget extends StatelessWidget {
                 TextButton(
                   onPressed: () {
                     pageController.previousPage(
-                        duration: const Duration(seconds: 1),
+                        duration: const Duration(milliseconds: 500),
                         curve: Curves.easeInOut);
                   },
                   child: Row(
@@ -105,7 +105,7 @@ class FourthScreenOnboardingWidget extends StatelessWidget {
                 TextButton(
                   onPressed: () {
                     pageController.nextPage(
-                        duration: const Duration(seconds: 1),
+                        duration: const Duration(milliseconds: 500),
                         curve: Curves.easeInOut);
                   },
                   child: Row(

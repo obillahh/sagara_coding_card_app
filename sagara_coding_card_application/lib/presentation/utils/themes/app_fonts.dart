@@ -13,7 +13,7 @@ class AppFonts {
       color: AppColors.text,
     ),
     displaySmall: GoogleFonts.barlow(
-      fontSize: 51,
+      fontSize: 48,
       color: AppColors.text,
     ),
     headlineMedium: GoogleFonts.barlow(
