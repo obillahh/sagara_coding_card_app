@@ -196,7 +196,7 @@ class VerificationScreenPage extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    context.push('/home');
+                    context.go('/home');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
