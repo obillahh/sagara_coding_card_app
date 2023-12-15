@@ -20,6 +20,7 @@ class AssetsConstant {
   static const String myCollectionCard = 'assets/images/my_collection_card.png';
   static const String characterCard = 'assets/images/char_card.png';
   static const String profilePicture = 'assets/images/profile_picture.png';
+  static const String character = 'assets/images/character.png';
 
   // svg
   static const String nameIcon = 'assets/icons/name.svg';
@@ -48,4 +49,5 @@ class AssetsConstant {
   static const String myCollectionIcon = 'assets/icons/my_collection_icon.svg';
   static const String myHistoryIcon = 'assets/icons/my_history_icon.svg';
   static const String myLeaderboardIcon = 'assets/icons/my_leaderboard_icon.svg';
+  static const String characterLevelIcon = 'assets/icons/char_level_icon.svg';
 }

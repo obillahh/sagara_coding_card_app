@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sagara_coding_card_application/presentation/pages/collection_screen_page.dart';
+import 'package:sagara_coding_card_application/presentation/pages/detail_collection_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/leaderboard_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/onboarding_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/scanner_screen_page.dart';
@@ -84,6 +85,16 @@ final GoRouter router = GoRouter(
               builder: (context, state) => CollectionScreenPage(
                 key: state.pageKey,
               ),
+              routes: [
+                GoRoute(
+                  parentNavigatorKey: _rootNavigatorKey,
+                  path: 'detail',
+                  name: RouterConstant.detail,
+                  builder: (context, state) => DetailsCollectionScreenPage(
+                    key: state.pageKey,
+                  ),
+                ),
+              ],
             ),
           ],
         ),
@@ -111,7 +122,6 @@ final GoRouter router = GoRouter(
             ),
           ],
         ),
-        
       ],
     ),
     GoRoute(

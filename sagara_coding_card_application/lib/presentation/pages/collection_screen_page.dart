@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
+import 'package:sagara_coding_card_application/presentation/utils/router_constant.dart';
 
 import '../utils/assets_constant.dart';
 import '../utils/themes/app_colors.dart';
@@ -95,8 +97,13 @@ class CollectionScreenPage extends StatelessWidget {
                     childAspectRatio: .7,
                   ),
                   itemBuilder: (context, index) {
-                    return Image.asset(
-                      AssetsConstant.characterCard,
+                    return GestureDetector(
+                      onTap: () {
+                        context.pushNamed(RouterConstant.detail);
+                      },
+                      child: Image.asset(
+                        AssetsConstant.characterCard,
+                      ),
                     );
                   },
                   itemCount: 6,
