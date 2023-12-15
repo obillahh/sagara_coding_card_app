@@ -29,13 +29,16 @@ class _NavigationBottomWidgetState extends State<NavigationBottomWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: true,
+      backgroundColor: Colors.transparent,
       body: widget.navigationShell,
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: SizedBox(
         height: 70.h,
         width: 70.w,
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            context.push('/scanner');
+          },
           backgroundColor: const Color(0xffC5233A),
           shape: const CircleBorder(),
           child: SvgPicture.asset(
@@ -47,7 +50,7 @@ class _NavigationBottomWidgetState extends State<NavigationBottomWidget> {
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         color: const Color(0xff333030),
-        notchMargin: 20,
+        notchMargin: 14,
         clipBehavior: Clip.antiAlias,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

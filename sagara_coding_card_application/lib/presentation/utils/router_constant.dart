@@ -8,4 +8,5 @@ class RouterConstant {
   static const String collection = 'collection';
   static const String leaderboard = 'leaderboard';
   static const String profile = 'profile';
+  static const String scanner = 'scanner';
 }

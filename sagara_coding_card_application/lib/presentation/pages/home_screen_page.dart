@@ -55,12 +55,14 @@ class HomeScreenPage extends StatelessWidget {
                     style: AppFonts.appFont.displaySmall!.copyWith(
                       fontWeight: FontWeight.w700,
                       color: AppColors.primary,
+                      height: 0.h,
                     ),
                     children: [
                       TextSpan(
                         text: '!!',
                         style: AppFonts.appFont.displaySmall!.copyWith(
                           fontWeight: FontWeight.w700,
+                          height: 0.h,
                         ),
                       )
                     ],

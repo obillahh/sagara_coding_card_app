@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:sagara_coding_card_application/presentation/pages/collection_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/leaderboard_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/onboarding_screen_page.dart';
+import 'package:sagara_coding_card_application/presentation/pages/scanner_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/verification_scren_page.dart';
 import 'package:sagara_coding_card_application/presentation/utils/router_constant.dart';
 
@@ -110,7 +111,14 @@ final GoRouter router = GoRouter(
             ),
           ],
         ),
+        
       ],
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: '/scanner',
+      name: RouterConstant.scanner,
+      builder: (context, state) => const ScannerScreenPage(),
     ),
   ],
 );

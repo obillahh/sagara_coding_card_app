@@ -18,10 +18,12 @@ class AssetsConstant {
       'assets/images/logo_sagara_coding_card.png';
   static const String scanPlayCard = 'assets/images/scan_play.png';
   static const String myCollectionCard = 'assets/images/my_collection_card.png';
+  static const String characterCard = 'assets/images/char_card.png';
+  static const String profilePicture = 'assets/images/profile_picture.png';
 
   // svg
   static const String nameIcon = 'assets/icons/name.svg';
-  static const String usernameIcon = 'assets/icons/username.svg';
+  static const String usernameIcon = 'assets/icons/userna me.svg';
   static const String emailIcon = 'assets/icons/email.svg';
   static const String passwordIcon = 'assets/icons/password.svg';
   static const String googleIcon = 'assets/icons/google.svg';
@@ -38,4 +40,12 @@ class AssetsConstant {
   static const String scannerIcon = 'assets/icons/scanner_icon.svg';
   static const String logoSagaraCodingCardIcon = 'assets/icons/logo.svg';
   static const String settingIcon = 'assets/icons/setting.svg';
+  static const String cardCollectionIcon =
+      'assets/icons/card_collection_icon.svg';
+  static const String rankIcon = 'assets/icons/rank_icon.svg';
+  static const String doubleArrowIcon = 'assets/icons/double_arrow_icon.svg';
+  static const String scanNewCardIcon = 'assets/icons/scan_new_card_icon.svg';
+  static const String myCollectionIcon = 'assets/icons/my_collection_icon.svg';
+  static const String myHistoryIcon = 'assets/icons/my_history_icon.svg';
+  static const String myLeaderboardIcon = 'assets/icons/my_leaderboard_icon.svg';
 }
