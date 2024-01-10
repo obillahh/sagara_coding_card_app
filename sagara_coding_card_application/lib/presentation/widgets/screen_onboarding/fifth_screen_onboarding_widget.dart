@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import '../../utils/assets_constant.dart';
+import '../../utils/constant/assets_constant.dart';
 import '../../utils/themes/app_colors.dart';
 import '../../utils/themes/app_fonts.dart';
 import '../primary_elevated_button_widget.dart';

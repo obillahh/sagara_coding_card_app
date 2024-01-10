@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sagara_coding_card_application/presentation/utils/assets_constant.dart';
+import 'package:sagara_coding_card_application/presentation/utils/constant/assets_constant.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
 
 import '../utils/themes/app_colors.dart';
@@ -74,7 +74,7 @@ class ProfileScreenPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          padding: EdgeInsets.all(12.sp),
+                          padding: EdgeInsets.all(8.sp),
                           width: 144.w,
                           height: 70.h,
                           decoration: BoxDecoration(
@@ -134,7 +134,7 @@ class ProfileScreenPage extends StatelessWidget {
                           ),
                         ),
                         Container(
-                          padding: EdgeInsets.all(12.sp),
+                          padding: EdgeInsets.all(8.sp),
                           width: 144.w,
                           height: 70.h,
                           decoration: BoxDecoration(

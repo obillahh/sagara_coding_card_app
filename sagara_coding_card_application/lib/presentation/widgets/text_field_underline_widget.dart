@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../utils/assets_constant.dart';
+import '../utils/constant/assets_constant.dart';
 import '../utils/themes/app_colors.dart';
 import '../utils/themes/app_fonts.dart';
 
 class TextFieldUnderlineWidget extends StatelessWidget {
+  final TextEditingController controller;
   final bool? obscureText;
   final String hintText;
   final String prefixIcon;
@@ -17,11 +18,13 @@ class TextFieldUnderlineWidget extends StatelessWidget {
     required this.hintText,
     required this.prefixIcon,
     this.suffixIcon,
+    required this.controller,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextField(
+      controller: controller,
       style: AppFonts.appFont.labelLarge!.copyWith(
         color: AppColors.text, // Warna teks input
       ),

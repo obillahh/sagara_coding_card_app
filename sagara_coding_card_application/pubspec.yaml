@@ -42,6 +42,10 @@ dependencies:
   flutter_svg: ^2.0.9
   mobile_scanner: ^3.5.5
   qr_scanner_overlay: ^0.0.2
+  dio: ^5.4.0
+  bloc: ^8.1.2
+  flutter_bloc: ^8.1.3
+  shimmer: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -53,9 +57,18 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
+  icons_launcher: ^2.1.6
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
+icons_launcher:
+  min_sdk_android: 21
+  image_path: 'assets/images/ic_logo_sagara_coding_card.png'
+  platforms:
+    android:
+      enable: true
+    ios:
+      enable: true
 
 # The following section is specific to Flutter packages.
 flutter:

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-import '../utils/assets_constant.dart';
+import '../utils/constant/assets_constant.dart';
 import '../utils/themes/app_colors.dart';
 import '../utils/themes/app_fonts.dart';
 import '../widgets/primary_elevated_button_widget.dart';
@@ -17,6 +17,12 @@ class RegisterScreenPage extends StatefulWidget {
 }
 
 class _RegisterScreenPageState extends State<RegisterScreenPage> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController confirmPasswordController = TextEditingController();
+
   bool obscureText = true;
   @override
   Widget build(BuildContext context) {
@@ -49,19 +55,23 @@ class _RegisterScreenPageState extends State<RegisterScreenPage> {
                     fontWeight: FontWeight.w100,
                   ),
                 ),
-                const TextFieldUnderlineWidget(
+                TextFieldUnderlineWidget(
+                  controller: nameController,
                   hintText: 'Name',
                   prefixIcon: AssetsConstant.nameIcon,
                 ),
-                const TextFieldUnderlineWidget(
+                TextFieldUnderlineWidget(
+                  controller: usernameController,
                   hintText: 'Username',
                   prefixIcon: AssetsConstant.usernameIcon,
                 ),
-                const TextFieldUnderlineWidget(
+                TextFieldUnderlineWidget(
+                  controller: emailController,
                   hintText: 'Email',
                   prefixIcon: AssetsConstant.emailIcon,
                 ),
                 TextFieldUnderlineWidget(
+                  controller: passwordController,
                   hintText: 'Password',
                   prefixIcon: AssetsConstant.passwordIcon,
                   suffixIcon: IconButton(
@@ -78,6 +88,7 @@ class _RegisterScreenPageState extends State<RegisterScreenPage> {
                   obscureText: obscureText,
                 ),
                 TextFieldUnderlineWidget(
+                  controller: confirmPasswordController,
                   hintText: 'Re-enter Password',
                   prefixIcon: AssetsConstant.passwordIcon,
                   suffixIcon: IconButton(

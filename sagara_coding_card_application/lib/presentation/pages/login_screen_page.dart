@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sagara_coding_card_application/presentation/utils/assets_constant.dart';
+import 'package:sagara_coding_card_application/presentation/utils/constant/assets_constant.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
 import 'package:sagara_coding_card_application/presentation/widgets/text_field_underline_widget.dart';
 
+import '../manager/auth_manage/bloc/auth_bloc.dart';
 import '../utils/themes/app_colors.dart';
 import '../widgets/primary_elevated_button_widget.dart';
 import '../widgets/secondary_elevated_button_widget.dart';
@@ -19,12 +21,16 @@ class LoginScreenPage extends StatefulWidget {
 }
 
 class _LoginScreenPageState extends State<LoginScreenPage> {
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
   bool? rememberMe = false;
   bool obscureText = true;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.background,
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 36.sp, vertical: 56.sp),
@@ -53,11 +59,13 @@ class _LoginScreenPageState extends State<LoginScreenPage> {
                     fontWeight: FontWeight.w100,
                   ),
                 ),
-                const TextFieldUnderlineWidget(
+                TextFieldUnderlineWidget(
                   hintText: 'Username',
                   prefixIcon: AssetsConstant.usernameIcon,
+                  controller: usernameController,
                 ),
                 TextFieldUnderlineWidget(
+                  controller: passwordController,
                   hintText: 'Password',
                   prefixIcon: AssetsConstant.passwordIcon,
                   suffixIcon: IconButton(
@@ -103,9 +111,26 @@ class _LoginScreenPageState extends State<LoginScreenPage> {
                     ),
                   ],
                 ),
-                PrimaryElevatedButtonWidget(
-                  onPressed: () {},
-                  text: 'Log in',
+                BlocListener<AuthBloc, AuthState>(
+                  listenWhen: (previous, current) {
+                    return previous != current;
+                  },
+                  listener: (context, state) {
+                    if (state is AuthSuccess) {
+                      context.go('/home');
+                    }
+                  },
+                  child: PrimaryElevatedButtonWidget(
+                    onPressed: () {
+                      context.read<AuthBloc>().add(
+                            LoginEvent(
+                              username: usernameController.text,
+                              password: passwordController.text,
+                            ),
+                          );
+                    },
+                    text: 'Log in',
+                  ),
                 ),
                 Row(
                   children: [

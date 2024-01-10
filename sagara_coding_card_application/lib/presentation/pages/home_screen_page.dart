@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sagara_coding_card_application/presentation/utils/assets_constant.dart';
+import 'package:sagara_coding_card_application/presentation/utils/constant/assets_constant.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_colors.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
 

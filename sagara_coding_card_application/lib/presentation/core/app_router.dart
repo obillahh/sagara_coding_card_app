@@ -6,7 +6,7 @@ import 'package:sagara_coding_card_application/presentation/pages/leaderboard_sc
 import 'package:sagara_coding_card_application/presentation/pages/onboarding_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/scanner_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/verification_scren_page.dart';
-import 'package:sagara_coding_card_application/presentation/utils/router_constant.dart';
+import 'package:sagara_coding_card_application/presentation/utils/constant/router_constant.dart';
 
 import '../pages/home_screen_page.dart';
 import '../pages/login_screen_page.dart';
@@ -26,7 +26,7 @@ final _rootNavigatorProfile =
     GlobalKey<NavigatorState>(debugLabel: 'shellProfile');
 
 final GoRouter router = GoRouter(
-  initialLocation: '/login',
+  initialLocation: '/splash',
   navigatorKey: _rootNavigatorKey,
   routes: [
     GoRoute(

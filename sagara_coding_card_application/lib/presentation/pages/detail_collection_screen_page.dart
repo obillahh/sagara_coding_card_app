@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_colors.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
 
-import '../utils/assets_constant.dart';
+import '../utils/constant/assets_constant.dart';
 
 class DetailsCollectionScreenPage extends StatefulWidget {
   const DetailsCollectionScreenPage({Key? key}) : super(key: key);

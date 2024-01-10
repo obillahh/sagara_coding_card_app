@@ -6,7 +6,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:qr_scanner_overlay/qr_scanner_overlay.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
 
-import '../utils/assets_constant.dart';
+import '../utils/constant/assets_constant.dart';
 import '../utils/themes/app_colors.dart';
 
 class ScannerScreenPage extends StatefulWidget {

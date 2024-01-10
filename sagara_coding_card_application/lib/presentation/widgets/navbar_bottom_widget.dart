@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 
-import '../utils/assets_constant.dart';
+import '../utils/constant/assets_constant.dart';
 
 class NavigationBottomWidget extends StatefulWidget {
   final StatefulNavigationShell navigationShell;
