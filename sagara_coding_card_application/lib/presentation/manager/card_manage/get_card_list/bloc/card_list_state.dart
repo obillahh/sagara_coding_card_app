@@ -8,7 +8,7 @@ final class CardListInitial extends CardListState {}
 final class CardListLoadingState extends CardListState {}
 
 final class CardListSuccessState extends CardListState {
-  final List<CardDataEntity> cardList;
+  final List<CardListDataEntity> cardList;
 
   CardListSuccessState({required this.cardList});
 }

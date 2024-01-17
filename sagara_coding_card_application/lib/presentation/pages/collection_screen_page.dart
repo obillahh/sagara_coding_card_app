@@ -1,14 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sagara_coding_card_application/presentation/manager/card_manage/get_card_id/bloc/card_id_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/router_constant.dart';
 
-import '../utils/constant/assets_constant.dart';
+import '../manager/card_manage/get_card_list/bloc/card_list_bloc.dart';
 import '../utils/themes/app_colors.dart';
 import '../utils/themes/app_fonts.dart';
 
-class CollectionScreenPage extends StatelessWidget {
+class CollectionScreenPage extends StatefulWidget {
   const CollectionScreenPage({super.key});
+
+  @override
+  State<CollectionScreenPage> createState() => _CollectionScreenPageState();
+}
+
+class _CollectionScreenPageState extends State<CollectionScreenPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<CardListBloc>().add(GetCardListEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,24 +102,43 @@ class CollectionScreenPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                GridView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  shrinkWrap: true,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: .7,
-                  ),
-                  itemBuilder: (context, index) {
-                    return GestureDetector(
-                      onTap: () {
-                        context.pushNamed(RouterConstant.detail);
-                      },
-                      child: Image.asset(
-                        AssetsConstant.characterCard,
-                      ),
+                BlocBuilder<CardListBloc, CardListState>(
+                  builder: (context, state) {
+                    if (state is CardListSuccessState) {
+                      return GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          // childAspectRatio: .6,
+                        ),
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              context.read<CardIdBloc>().add(
+                                  GetCardIdEvent(id: state.cardList[index].id));
+                              context.pushNamed(
+                                RouterConstant.detail,
+                                extra: state.cardList[index].id,
+                              );
+                            },
+                            child: Image.network(
+                              state.cardList[index].attributes.avatarCard.data
+                                  .attributes.formats.thumbnail.url,
+                              width: state.cardList[index].attributes.avatarCard
+                                  .data.attributes.formats.thumbnail.width
+                                  .toDouble(),
+                            ),
+                          );
+                        },
+                        itemCount: state.cardList.length,
+                      );
+                    }
+                    return const Center(
+                      child: CircularProgressIndicator(),
                     );
                   },
-                  itemCount: 6,
                 ),
                 SizedBox(height: 32.h),
               ],

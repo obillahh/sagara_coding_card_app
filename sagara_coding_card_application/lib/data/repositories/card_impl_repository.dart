@@ -1,5 +1,6 @@
 import 'package:sagara_coding_card_application/data/data_sources/remote/card_remote_data_source.dart';
 import 'package:sagara_coding_card_application/data/models/card_model/cards_list_response_model.dart';
+import 'package:sagara_coding_card_application/domain/entities/card_entity/card_id_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/entities/card_entity/card_list_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/repositories/card_repository.dart';
 
@@ -9,16 +10,15 @@ class CardImplRepository extends CardRepository {
   CardImplRepository({required this.remoteDataSource});
 
   @override
-  Future<List<CardDataEntity>?> getListCards() async {
-    // TODO: implement getListCards
+  Future<List<CardListDataEntity>?> getListCards() async {
     final response = await remoteDataSource.getListCard();
     if (response.data == null) {
       return null;
     }
     final data = CardResponseEntity(
-      data: List<CardDataModel>.from(response.data ?? [])
+      data: List<CardListDataModel>.from(response.data ?? [])
           .map(
-            (e) => CardDataEntity(
+            (e) => CardListDataEntity(
               id: e.id ?? 0,
               attributes: CardDataAttributesEntity(
                 name: e.attributes?.name ?? '',
@@ -78,31 +78,31 @@ class CardImplRepository extends CardRepository {
                         ),
                         thumbnail: FormatDataEntity(
                           ext: e.attributes?.avatarCard?.data?.attributes
-                                  ?.formats?.small?.ext ??
+                                  ?.formats?.thumbnail?.ext ??
                               '',
                           url: e.attributes?.avatarCard?.data?.attributes
-                                  ?.formats?.small?.url ??
+                                  ?.formats?.thumbnail?.url ??
                               '',
                           hash: e.attributes?.avatarCard?.data?.attributes
-                                  ?.formats?.small?.hash ??
+                                  ?.formats?.thumbnail?.hash ??
                               '',
                           mime: e.attributes?.avatarCard?.data?.attributes
-                                  ?.formats?.small?.mime ??
+                                  ?.formats?.thumbnail?.mime ??
                               '',
                           name: e.attributes?.avatarCard?.data?.attributes
-                                  ?.formats?.small?.name ??
+                                  ?.formats?.thumbnail?.name ??
                               '',
                           path: e.attributes?.avatarCard?.data?.attributes
-                                  ?.formats?.small?.path ??
+                                  ?.formats?.thumbnail?.path ??
                               '',
                           size: e.attributes?.avatarCard?.data?.attributes
-                                  ?.formats?.small?.size ??
+                                  ?.formats?.thumbnail?.size ??
                               0,
                           width: e.attributes?.avatarCard?.data?.attributes
-                                  ?.formats?.small?.width ??
+                                  ?.formats?.thumbnail?.width ??
                               0,
                           height: e.attributes?.avatarCard?.data?.attributes
-                                  ?.formats?.small?.height ??
+                                  ?.formats?.thumbnail?.height ??
                               0,
                         ),
                       ),
@@ -148,5 +148,192 @@ class CardImplRepository extends CardRepository {
       ),
     );
     return data.data;
+  }
+
+  @override
+  Future<CardIdResponseDataEntity?> getCardById(int id) async {
+    final response = await remoteDataSource.getCardById(id);
+    if (response.data == null) {
+      return null;
+    }
+    final data = CardIdResponseDataEntity(
+      id: response.data?.id ?? 0,
+      attributes: CardIdDataAttributesEntity(
+        name: response.data?.attributes?.name ?? '',
+        role: response.data?.attributes?.role ?? '',
+        description: response.data?.attributes?.description ?? '',
+        level: response.data?.attributes?.level ?? '',
+        createdAt: response.data?.attributes?.createdAt ?? DateTime.now(),
+        updatedAt: response.data?.attributes?.updatedAt ?? DateTime.now(),
+        publishedAt: response.data?.attributes?.publishedAt ?? DateTime.now(),
+        avatarCard: AvatarCardIdResponseEntity(
+          data: AvatarCardIdDataModel(
+            id: response.data?.attributes?.avatarCard?.data?.id ?? 0,
+            attributes: AvatarCardIdAttributesEntity(
+              name: response
+                      .data?.attributes?.avatarCard?.data?.attributes?.name ??
+                  '',
+              alternativeText: response.data?.attributes?.avatarCard?.data
+                      ?.attributes?.alternativeText ??
+                  '',
+              caption: response.data?.attributes?.avatarCard?.data?.attributes
+                      ?.caption ??
+                  '',
+              width: response
+                      .data?.attributes?.avatarCard?.data?.attributes?.width ??
+                  0,
+              height: response
+                      .data?.attributes?.avatarCard?.data?.attributes?.height ??
+                  0,
+              formats: FormatsIdEntity(
+                small: FormatIdDataEntity(
+                  ext: response.data?.attributes?.avatarCard?.data?.attributes
+                          ?.formats?.small?.ext ??
+                      '',
+                  url: response.data?.attributes?.avatarCard?.data?.attributes
+                          ?.formats?.small?.url ??
+                      '',
+                  hash: response.data?.attributes?.avatarCard?.data?.attributes
+                          ?.formats?.small?.hash ??
+                      '',
+                  mime: response.data?.attributes?.avatarCard?.data?.attributes
+                          ?.formats?.small?.mime ??
+                      '',
+                  name: response.data?.attributes?.avatarCard?.data?.attributes
+                          ?.formats?.small?.name ??
+                      '',
+                  path: response.data?.attributes?.avatarCard?.data?.attributes
+                          ?.formats?.small?.path ??
+                      '',
+                  size: response.data?.attributes?.avatarCard?.data?.attributes
+                          ?.formats?.small?.size ??
+                      0,
+                  width: response.data?.attributes?.avatarCard?.data?.attributes
+                          ?.formats?.small?.width ??
+                      0,
+                  height: response.data?.attributes?.avatarCard?.data
+                          ?.attributes?.formats?.small?.height ??
+                      0,
+                  providerMetadata: ProviderMetadataEntity(
+                    publicId: response
+                            .data
+                            ?.attributes
+                            ?.avatarCard
+                            ?.data
+                            ?.attributes
+                            ?.formats
+                            ?.small
+                            ?.providerMetadata
+                            ?.publicId ??
+                        '',
+                    resourceType: response
+                            .data
+                            ?.attributes
+                            ?.avatarCard
+                            ?.data
+                            ?.attributes
+                            ?.formats
+                            ?.small
+                            ?.providerMetadata
+                            ?.resourceType ??
+                        '',
+                  ),
+                ),
+                thumbnail: FormatIdDataEntity(
+                  ext: response.data?.attributes?.avatarCard?.data?.attributes
+                          ?.formats?.thumbnail?.ext ??
+                      '',
+                  url: response.data?.attributes?.avatarCard?.data?.attributes
+                          ?.formats?.thumbnail?.url ??
+                      '',
+                  hash: response.data?.attributes?.avatarCard?.data?.attributes
+                          ?.formats?.thumbnail?.hash ??
+                      '',
+                  mime: response.data?.attributes?.avatarCard?.data?.attributes
+                          ?.formats?.thumbnail?.mime ??
+                      '',
+                  name: response.data?.attributes?.avatarCard?.data?.attributes
+                          ?.formats?.thumbnail?.name ??
+                      '',
+                  path: response.data?.attributes?.avatarCard?.data?.attributes
+                          ?.formats?.thumbnail?.path ??
+                      '',
+                  size: response.data?.attributes?.avatarCard?.data?.attributes
+                          ?.formats?.thumbnail?.size ??
+                      0,
+                  width: response.data?.attributes?.avatarCard?.data?.attributes
+                          ?.formats?.thumbnail?.width ??
+                      0,
+                  height: response.data?.attributes?.avatarCard?.data
+                          ?.attributes?.formats?.thumbnail?.height ??
+                      0,
+                  providerMetadata: ProviderMetadataEntity(
+                    publicId: response
+                            .data
+                            ?.attributes
+                            ?.avatarCard
+                            ?.data
+                            ?.attributes
+                            ?.formats
+                            ?.thumbnail
+                            ?.providerMetadata
+                            ?.publicId ??
+                        '',
+                    resourceType: response
+                            .data
+                            ?.attributes
+                            ?.avatarCard
+                            ?.data
+                            ?.attributes
+                            ?.formats
+                            ?.thumbnail
+                            ?.providerMetadata
+                            ?.resourceType ??
+                        '',
+                  ),
+                ),
+              ),
+              hash: response
+                      .data?.attributes?.avatarCard?.data?.attributes?.hash ??
+                  '',
+              ext: response
+                      .data?.attributes?.avatarCard?.data?.attributes?.ext ??
+                  '',
+              mime: response
+                      .data?.attributes?.avatarCard?.data?.attributes?.mime ??
+                  '',
+              size: response
+                      .data?.attributes?.avatarCard?.data?.attributes?.size ??
+                  0,
+              url: response
+                      .data?.attributes?.avatarCard?.data?.attributes?.url ??
+                  '',
+              previewUrl: response.data?.attributes?.avatarCard?.data
+                      ?.attributes?.previewUrl ??
+                  '',
+              provider: response.data?.attributes?.avatarCard?.data?.attributes
+                      ?.provider ??
+                  '',
+              providerMetadata: ProviderMetadataEntity(
+                publicId: response.data?.attributes?.avatarCard?.data
+                        ?.attributes?.providerMetadata?.publicId ??
+                    '',
+                resourceType: response.data?.attributes?.avatarCard?.data
+                        ?.attributes?.providerMetadata?.resourceType ??
+                    '',
+              ),
+              createdAt: response.data?.attributes?.avatarCard?.data?.attributes
+                      ?.createdAt ??
+                  DateTime.now(),
+              updatedAt: response.data?.attributes?.avatarCard?.data?.attributes
+                      ?.updatedAt ??
+                  DateTime.now(),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    return data;
   }
 }

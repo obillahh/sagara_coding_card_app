@@ -1,13 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sagara_coding_card_application/presentation/manager/leaderboard_manage/get_leaderboard_bloc/leaderboard_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/assets_constant.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
 
 import '../utils/themes/app_colors.dart';
 
-class LeaderboardScreenPage extends StatelessWidget {
+class LeaderboardScreenPage extends StatefulWidget {
   const LeaderboardScreenPage({super.key});
+
+  @override
+  State<LeaderboardScreenPage> createState() => _LeaderboardScreenPageState();
+}
+
+class _LeaderboardScreenPageState extends State<LeaderboardScreenPage> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<LeaderboardBloc>().add(GetLeaderboardEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,43 +141,52 @@ class LeaderboardScreenPage extends StatelessWidget {
               const Divider(
                 color: AppColors.placeholder,
               ),
-              ListView.separated(
-                physics: const NeverScrollableScrollPhysics(),
-                shrinkWrap: true,
-                padding: EdgeInsets.symmetric(horizontal: 20.sp),
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: Text(
-                      '${index + 1}',
-                      style: AppFonts.appFont.bodyMedium!.copyWith(
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    title: Row(
-                      children: [
-                        Image.asset(
-                          AssetsConstant.profilePicture,
-                          width: 40.w,
-                        ),
-                        SizedBox(width: 12.w),
-                        Text(
-                          'MysticWanderer87',
-                          style: AppFonts.appFont.bodyLarge!.copyWith(
-                            fontWeight: FontWeight.w700,
+              BlocBuilder<LeaderboardBloc, LeaderboardState>(
+                builder: (context, state) {
+                  if (state is LeaderboardSuccessState) {
+                    return ListView.separated(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      padding: EdgeInsets.symmetric(horizontal: 20.sp),
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          leading: Text(
+                            '${index + 1}',
+                            style: AppFonts.appFont.bodyMedium!.copyWith(
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                    trailing: Text(
-                      '223 Card',
-                      style: AppFonts.appFont.bodyMedium,
-                    ),
+                          title: Row(
+                            children: [
+                              Image.asset(
+                                AssetsConstant.profilePicture,
+                                width: 40.w,
+                              ),
+                              SizedBox(width: 12.w),
+                              Text(
+                                state.leaderboard[index].username,
+                                style: AppFonts.appFont.bodyLarge!.copyWith(
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                          trailing: Text(
+                            '${state.leaderboard[index].collectionCard} Card',
+                            style: AppFonts.appFont.bodyMedium,
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return SizedBox(height: 8.h);
+                      },
+                      itemCount: state.leaderboard.length,
+                    );
+                  }
+                  return const Center(
+                    child: CircularProgressIndicator(),
                   );
                 },
-                separatorBuilder: (context, index) {
-                  return SizedBox(height: 8.h);
-                },
-                itemCount: 10,
               ),
               SizedBox(height: 32.h),
             ],

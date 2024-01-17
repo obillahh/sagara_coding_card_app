@@ -14,14 +14,15 @@ class CardListBloc extends Bloc<CardListEvent, CardListState> {
   }) : super(CardListInitial()) {
     on<CardListEvent>(
       (event, emit) async {
-        // TODO: implement event handler
         if (event is GetCardListEvent) {
           emit(CardListLoadingState());
-          final List<CardDataEntity>? data = await getListCardsUseCase();
+          final List<CardListDataEntity>? data = await getListCardsUseCase();
           if (data != null) {
             emit(CardListSuccessState(cardList: data));
           } else {
-            emit(CardListFailureState(message: 'Something went wrong'));
+            emit(
+              CardListFailureState(message: 'Something went wrong'),
+            );
           }
         }
       },

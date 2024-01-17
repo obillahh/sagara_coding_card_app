@@ -1,13 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/assets_constant.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
 
+import '../manager/auth_manage/login/auth_bloc.dart';
 import '../utils/themes/app_colors.dart';
 
-class ProfileScreenPage extends StatelessWidget {
+class ProfileScreenPage extends StatefulWidget {
   const ProfileScreenPage({super.key});
+
+  @override
+  State<ProfileScreenPage> createState() => _ProfileScreenPageState();
+}
+
+class _ProfileScreenPageState extends State<ProfileScreenPage> {
+  @override
+  didChangeDependencies() {
+    super.didChangeDependencies();
+    context.read<AuthBloc>().add(GetCurrentUserEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,29 +52,39 @@ class ProfileScreenPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Row(
-                      children: [
-                        Image.asset(AssetsConstant.profilePicture, width: 64.w),
-                        SizedBox(width: 12.w),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'John Doe',
-                              style: AppFonts.appFont.titleLarge!.copyWith(
-                                fontWeight: FontWeight.w700,
+                    BlocBuilder<AuthBloc, AuthState>(
+                      builder: (context, state) {
+                        if (state is CurrentUserState) {
+                          return Row(
+                            children: [
+                              Image.asset(AssetsConstant.profilePicture,
+                                  width: 64.w),
+                              SizedBox(width: 12.w),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    state.currentUser!.username,
+                                    style:
+                                        AppFonts.appFont.titleLarge!.copyWith(
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                  Text(
+                                    state.currentUser!.email,
+                                    style:
+                                        AppFonts.appFont.titleSmall!.copyWith(
+                                      fontWeight: FontWeight.w400,
+                                      color: AppColors.placeholder,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ),
-                            Text(
-                              '@jonnyjonnnydoe',
-                              style: AppFonts.appFont.titleSmall!.copyWith(
-                                fontWeight: FontWeight.w400,
-                                color: AppColors.placeholder,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                            ],
+                          );
+                        }
+                        return SizedBox(height: 60.h);
+                      },
                     ),
                     SizedBox(height: 12.h),
                     Text(
@@ -299,28 +323,44 @@ class ProfileScreenPage extends StatelessWidget {
                       color: AppColors.primary,
                     ),
                   ),
-                  ListTile(
-                    leading: Icon(
-                      Icons.logout,
-                      color: AppColors.primary,
-                      size: 24.sp,
-                    ),
-                    title: Text(
-                      'Log Out',
-                      style: AppFonts.appFont.bodySmall!.copyWith(
-                        fontWeight: FontWeight.w700,
+                  BlocListener<AuthBloc, AuthState>(
+                    listenWhen: (previous, current) {
+                      return previous != current;
+                    },
+                    listener: (context, state) {
+                      if (state is AuthNotAuthenticated) {
+                        context.go('/login');
+                      }
+                    },
+                    child: GestureDetector(
+                      onTap: () {
+                        // inspect(context.read<AuthBloc>());
+                        context.read<AuthBloc>().add(LogoutEvent());
+                      },
+                      child: ListTile(
+                        leading: Icon(
+                          Icons.logout,
+                          color: AppColors.primary,
+                          size: 24.sp,
+                        ),
+                        title: Text(
+                          'Log Out',
+                          style: AppFonts.appFont.bodySmall!.copyWith(
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        subtitle: Text(
+                          'Enable you to receive update and other important events information.',
+                          style: AppFonts.appFont.labelSmall!.copyWith(
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        trailing: Icon(
+                          Icons.arrow_forward_ios,
+                          color: AppColors.primary,
+                          size: 16.sp,
+                        ),
                       ),
-                    ),
-                    subtitle: Text(
-                      'Enable you to receive update and other important events information.',
-                      style: AppFonts.appFont.labelSmall!.copyWith(
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    trailing: Icon(
-                      Icons.arrow_forward_ios,
-                      color: AppColors.primary,
-                      size: 16.sp,
                     ),
                   ),
                   SizedBox(height: 16.h),

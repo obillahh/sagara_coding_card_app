@@ -6,8 +6,6 @@ import 'package:sagara_coding_card_application/presentation/utils/themes/app_col
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
 import 'package:sagara_coding_card_application/presentation/widgets/secondary_elevated_button_widget.dart';
 
-import '../widgets/primary_elevated_button_widget.dart';
-
 class VerificationScreenPage extends StatelessWidget {
   const VerificationScreenPage({super.key});
 

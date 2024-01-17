@@ -6,6 +6,6 @@ class GetListCardsUseCase {
 
   GetListCardsUseCase({required this.cardRepository});
 
-  Future<List<CardDataEntity>?> call() async =>
+  Future<List<CardListDataEntity>?> call() async =>
       await cardRepository.getListCards();
 }

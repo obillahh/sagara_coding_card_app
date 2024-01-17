@@ -1,15 +1,20 @@
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/login_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/repositories/auth_repository.dart';
 
+import '../data_sources/local/auth_local_data_source.dart';
 import '../data_sources/remote/auth_remote_data_source.dart';
 
 class AuthImplRepository extends AuthRepository {
   final AuthRemoteDataSource authRemoteDataSource;
+  final AuthLocalDataSource authLocalDataSource;
 
-  AuthImplRepository({required this.authRemoteDataSource});
+  AuthImplRepository({
+    required this.authRemoteDataSource,
+    required this.authLocalDataSource,
+  });
   @override
-  Future<LoginResponseEntity?> login(String username, String password) async {
-    final response = await authRemoteDataSource.login(username, password);
+  Future<LoginResponseEntity?> login(String identifier, String password) async {
+    final response = await authRemoteDataSource.login(identifier, password);
     if (response.user == null) {
       return null;
     }
@@ -27,6 +32,27 @@ class AuthImplRepository extends AuthRepository {
         collectionCard: response.user?.collectionCard ?? 0,
       ),
     );
+    await authLocalDataSource.saveToken(data.jwt);
+    await authLocalDataSource.saveUserData(data.user);
     return data;
+  }
+
+  @override
+  Future<bool> isLoggedIn() async {
+    return await authLocalDataSource.getToken() != null;
+  }
+
+  @override
+  Future<UserResponseEntity?> getCurrentUser() async {
+    final isLoggedIn = await authLocalDataSource.getToken() != null;
+    if (isLoggedIn) {
+      return await authLocalDataSource.getUserData();
+    }
+    return null;
+  }
+
+  @override
+  Future<void> logout() async {
+    await authLocalDataSource.removeToken();
   }
 }

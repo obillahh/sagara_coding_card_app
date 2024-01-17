@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,7 +9,7 @@ import 'package:sagara_coding_card_application/presentation/utils/constant/asset
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
 import 'package:sagara_coding_card_application/presentation/widgets/text_field_underline_widget.dart';
 
-import '../manager/auth_manage/bloc/auth_bloc.dart';
+import '../manager/auth_manage/login/auth_bloc.dart';
 import '../utils/themes/app_colors.dart';
 import '../widgets/primary_elevated_button_widget.dart';
 import '../widgets/secondary_elevated_button_widget.dart';
@@ -122,9 +124,10 @@ class _LoginScreenPageState extends State<LoginScreenPage> {
                   },
                   child: PrimaryElevatedButtonWidget(
                     onPressed: () {
+                      inspect(context.read<AuthBloc>());
                       context.read<AuthBloc>().add(
                             LoginEvent(
-                              username: usernameController.text,
+                              identifier: usernameController.text,
                               password: passwordController.text,
                             ),
                           );

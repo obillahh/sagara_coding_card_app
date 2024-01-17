@@ -1,41 +1,39 @@
-class CardResponseModel {
-  List<CardListDataModel>? data;
-  CardListMetaModel? meta;
+class CardIdResponseModel {
+  CardIdResponseDataModel? data;
+  CardIdResponseMetaModel? meta;
 
-  CardResponseModel({
+  CardIdResponseModel({
     this.data,
     this.meta,
   });
 
-  factory CardResponseModel.fromJson(Map<String, dynamic> json) =>
-      CardResponseModel(
+  factory CardIdResponseModel.fromJson(Map<String, dynamic> json) =>
+      CardIdResponseModel(
         data: json["data"] == null
-            ? []
-            : List<CardListDataModel>.from(
-                json["data"]!.map((x) => CardListDataModel.fromJson(x))),
-        meta:
-            json["meta"] == null ? null : CardListMetaModel.fromJson(json["meta"]),
+            ? null
+            : CardIdResponseDataModel.fromJson(json["data"]),
+        meta: json["meta"] == null
+            ? null
+            : CardIdResponseMetaModel.fromJson(json["meta"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data == null
-            ? []
-            : List<dynamic>.from(data!.map((x) => x.toJson())),
+        "data": data?.toJson(),
         "meta": meta?.toJson(),
       };
 }
 
-class CardListDataModel {
+class CardIdResponseDataModel {
   int? id;
   CardDataAttributesModel? attributes;
 
-  CardListDataModel({
+  CardIdResponseDataModel({
     this.id,
     this.attributes,
   });
 
-  factory CardListDataModel.fromJson(Map<String, dynamic> json) =>
-      CardListDataModel(
+  factory CardIdResponseDataModel.fromJson(Map<String, dynamic> json) =>
+      CardIdResponseDataModel(
         id: json["id"],
         attributes: json["attributes"] == null
             ? null
@@ -56,7 +54,7 @@ class CardDataAttributesModel {
   DateTime? createdAt;
   DateTime? updatedAt;
   DateTime? publishedAt;
-  AvatarCardModel? avatarCard;
+  AvatarCardIdResponseModel? avatarCard;
 
   CardDataAttributesModel({
     this.name,
@@ -86,7 +84,7 @@ class CardDataAttributesModel {
             : DateTime.parse(json["publishedAt"]),
         avatarCard: json["avatar_card"] == null
             ? null
-            : AvatarCardModel.fromJson(json["avatar_card"]),
+            : AvatarCardIdResponseModel.fromJson(json["avatar_card"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -101,18 +99,16 @@ class CardDataAttributesModel {
       };
 }
 
-class AvatarCardModel {
-  AvatarCardDataModel? data;
+class AvatarCardIdResponseModel {
+  AvatarCardIdDataModel? data;
 
-  AvatarCardModel({
+  AvatarCardIdResponseModel({
     this.data,
   });
 
-  factory AvatarCardModel.fromJson(Map<String, dynamic> json) =>
-      AvatarCardModel(
-        data: json["data"] == null
-            ? null
-            : AvatarCardDataModel.fromJson(json["data"]),
+  factory AvatarCardIdResponseModel.fromJson(Map<String, dynamic> json) => AvatarCardIdResponseModel(
+        data:
+            json["data"] == null ? null : AvatarCardIdDataModel.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -120,21 +116,20 @@ class AvatarCardModel {
       };
 }
 
-class AvatarCardDataModel {
+class AvatarCardIdDataModel {
   int? id;
-  AvatarCardDataAttributesModel? attributes;
+  AvatarCardIdAttributesModel? attributes;
 
-  AvatarCardDataModel({
+  AvatarCardIdDataModel({
     this.id,
     this.attributes,
   });
 
-  factory AvatarCardDataModel.fromJson(Map<String, dynamic> json) =>
-      AvatarCardDataModel(
+  factory AvatarCardIdDataModel.fromJson(Map<String, dynamic> json) => AvatarCardIdDataModel(
         id: json["id"],
         attributes: json["attributes"] == null
             ? null
-            : AvatarCardDataAttributesModel.fromJson(json["attributes"]),
+            : AvatarCardIdAttributesModel.fromJson(json["attributes"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -143,13 +138,13 @@ class AvatarCardDataModel {
       };
 }
 
-class AvatarCardDataAttributesModel {
+class AvatarCardIdAttributesModel {
   String? name;
   dynamic alternativeText;
   dynamic caption;
   int? width;
   int? height;
-  AvatarCardDataAttributeFormatsModel? formats;
+  FormatsIdModel? formats;
   String? hash;
   String? ext;
   String? mime;
@@ -157,11 +152,11 @@ class AvatarCardDataAttributesModel {
   String? url;
   dynamic previewUrl;
   String? provider;
-  dynamic providerMetadata;
+  ProviderMetadataModel? providerMetadata;
   DateTime? createdAt;
   DateTime? updatedAt;
 
-  AvatarCardDataAttributesModel({
+  AvatarCardIdAttributesModel({
     this.name,
     this.alternativeText,
     this.caption,
@@ -180,16 +175,15 @@ class AvatarCardDataAttributesModel {
     this.updatedAt,
   });
 
-  factory AvatarCardDataAttributesModel.fromJson(Map<String, dynamic> json) =>
-      AvatarCardDataAttributesModel(
+  factory AvatarCardIdAttributesModel.fromJson(Map<String, dynamic> json) =>
+      AvatarCardIdAttributesModel(
         name: json["name"],
         alternativeText: json["alternativeText"],
         caption: json["caption"],
         width: json["width"],
         height: json["height"],
-        formats: json["formats"] == null
-            ? null
-            : AvatarCardDataAttributeFormatsModel.fromJson(json["formats"]),
+        formats:
+            json["formats"] == null ? null : FormatsIdModel.fromJson(json["formats"]),
         hash: json["hash"],
         ext: json["ext"],
         mime: json["mime"],
@@ -197,7 +191,9 @@ class AvatarCardDataAttributesModel {
         url: json["url"],
         previewUrl: json["previewUrl"],
         provider: json["provider"],
-        providerMetadata: json["provider_metadata"],
+        providerMetadata: json["provider_metadata"] == null
+            ? null
+            : ProviderMetadataModel.fromJson(json["provider_metadata"]),
         createdAt: json["createdAt"] == null
             ? null
             : DateTime.parse(json["createdAt"]),
@@ -220,30 +216,26 @@ class AvatarCardDataAttributesModel {
         "url": url,
         "previewUrl": previewUrl,
         "provider": provider,
-        "provider_metadata": providerMetadata,
+        "provider_metadata": providerMetadata?.toJson(),
         "createdAt": createdAt?.toIso8601String(),
         "updatedAt": updatedAt?.toIso8601String(),
       };
 }
 
-class AvatarCardDataAttributeFormatsModel {
-  FormatDataModel? small;
-  FormatDataModel? thumbnail;
+class FormatsIdModel {
+  FormatIdDataModel? small;
+  FormatIdDataModel? thumbnail;
 
-  AvatarCardDataAttributeFormatsModel({
+  FormatsIdModel({
     this.small,
     this.thumbnail,
   });
 
-  factory AvatarCardDataAttributeFormatsModel.fromJson(
-          Map<String, dynamic> json) =>
-      AvatarCardDataAttributeFormatsModel(
-        small: json["small"] == null
-            ? null
-            : FormatDataModel.fromJson(json["small"]),
+  factory FormatsIdModel.fromJson(Map<String, dynamic> json) => FormatsIdModel(
+        small: json["small"] == null ? null : FormatIdDataModel.fromJson(json["small"]),
         thumbnail: json["thumbnail"] == null
             ? null
-            : FormatDataModel.fromJson(json["thumbnail"]),
+            : FormatIdDataModel.fromJson(json["thumbnail"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -252,7 +244,7 @@ class AvatarCardDataAttributeFormatsModel {
       };
 }
 
-class FormatDataModel {
+class FormatIdDataModel {
   String? ext;
   String? url;
   String? hash;
@@ -262,8 +254,9 @@ class FormatDataModel {
   double? size;
   int? width;
   int? height;
+  ProviderMetadataModel? providerMetadata;
 
-  FormatDataModel({
+  FormatIdDataModel({
     this.ext,
     this.url,
     this.hash,
@@ -273,10 +266,10 @@ class FormatDataModel {
     this.size,
     this.width,
     this.height,
+    this.providerMetadata,
   });
 
-  factory FormatDataModel.fromJson(Map<String, dynamic> json) =>
-      FormatDataModel(
+  factory FormatIdDataModel.fromJson(Map<String, dynamic> json) => FormatIdDataModel(
         ext: json["ext"],
         url: json["url"],
         hash: json["hash"],
@@ -286,6 +279,9 @@ class FormatDataModel {
         size: json["size"]?.toDouble(),
         width: json["width"],
         height: json["height"],
+        providerMetadata: json["provider_metadata"] == null
+            ? null
+            : ProviderMetadataModel.fromJson(json["provider_metadata"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -298,52 +294,36 @@ class FormatDataModel {
         "size": size,
         "width": width,
         "height": height,
+        "provider_metadata": providerMetadata?.toJson(),
       };
 }
 
-class CardListMetaModel {
-  CardPaginationModel? pagination;
+class ProviderMetadataModel {
+  String? publicId;
+  String? resourceType;
 
-  CardListMetaModel({
-    this.pagination,
+  ProviderMetadataModel({
+    this.publicId,
+    this.resourceType,
   });
 
-  factory CardListMetaModel.fromJson(Map<String, dynamic> json) => CardListMetaModel(
-        pagination: json["pagination"] == null
-            ? null
-            : CardPaginationModel.fromJson(json["pagination"]),
+  factory ProviderMetadataModel.fromJson(Map<String, dynamic> json) =>
+      ProviderMetadataModel(
+        publicId: json["public_id"],
+        resourceType: json["resource_type"],
       );
 
   Map<String, dynamic> toJson() => {
-        "pagination": pagination?.toJson(),
+        "public_id": publicId,
+        "resource_type": resourceType,
       };
 }
 
-class CardPaginationModel {
-  int? page;
-  int? pageSize;
-  int? pageCount;
-  int? total;
+class CardIdResponseMetaModel {
+  CardIdResponseMetaModel();
 
-  CardPaginationModel({
-    this.page,
-    this.pageSize,
-    this.pageCount,
-    this.total,
-  });
+  factory CardIdResponseMetaModel.fromJson(Map<String, dynamic> json) =>
+      CardIdResponseMetaModel();
 
-  factory CardPaginationModel.fromJson(Map<String, dynamic> json) =>
-      CardPaginationModel(
-        page: json["page"],
-        pageSize: json["pageSize"],
-        pageCount: json["pageCount"],
-        total: json["total"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "page": page,
-        "pageSize": pageSize,
-        "pageCount": pageCount,
-        "total": total,
-      };
+  Map<String, dynamic> toJson() => {};
 }

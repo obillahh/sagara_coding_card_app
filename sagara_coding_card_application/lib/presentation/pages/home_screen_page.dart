@@ -1,12 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/assets_constant.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_colors.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
 
-class HomeScreenPage extends StatelessWidget {
+import '../manager/auth_manage/login/auth_bloc.dart';
+
+class HomeScreenPage extends StatefulWidget {
   const HomeScreenPage({super.key});
+
+  @override
+  State<HomeScreenPage> createState() => _HomeScreenPageState();
+}
+
+class _HomeScreenPageState extends State<HomeScreenPage> {
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    context.read<AuthBloc>().add(GetCurrentUserEvent());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,26 +64,34 @@ class HomeScreenPage extends StatelessWidget {
               ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.sp),
-                child: Text.rich(
-                  TextSpan(
-                    text: 'John Doe',
-                    style: AppFonts.appFont.displaySmall!.copyWith(
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.primary,
-                      height: 0.h,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: '!!',
-                        style: AppFonts.appFont.displaySmall!.copyWith(
-                          fontWeight: FontWeight.w700,
-                          height: 0.h,
+                child: BlocBuilder<AuthBloc, AuthState>(
+                  builder: (context, state) {
+                    if (state is CurrentUserState) {
+                      return Text.rich(
+                        TextSpan(
+                          text: state.currentUser!.username,
+                          style: AppFonts.appFont.displaySmall!.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.primary,
+                            height: 0.h,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: '!!',
+                              style: AppFonts.appFont.displaySmall!.copyWith(
+                                fontWeight: FontWeight.w700,
+                                height: 0.h,
+                              ),
+                            )
+                          ],
                         ),
-                      )
-                    ],
-                  ),
+                      );
+                    }
+                    return SizedBox(height: 40.h);
+                  },
                 ),
               ),
+              SizedBox(height: 10.h),
               SizedBox(
                 height: 200.h,
                 child: ListView.separated(
@@ -86,7 +109,7 @@ class HomeScreenPage extends StatelessWidget {
                   itemCount: 3,
                 ),
               ),
-              SizedBox(height: 30.h),
+              SizedBox(height: 10.h),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.sp),
                 child: Column(
@@ -108,6 +131,7 @@ class HomeScreenPage extends StatelessWidget {
                   ],
                 ),
               ),
+              SizedBox(height: 10.h),
               SizedBox(
                 height: 200.h,
                 child: ListView.separated(

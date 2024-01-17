@@ -1,38 +1,37 @@
-class CardResponseEntity {
-  final List<CardListDataEntity> data;
-  final CardMetaEntity meta;
+class CardIdResponseEntity {
+  final CardIdResponseDataEntity data;
+  final CardIdResponseMetaEntity meta;
 
-  CardResponseEntity({
+  CardIdResponseEntity({
     required this.data,
     required this.meta,
   });
 
-  factory CardResponseEntity.fromJson(Map<String, dynamic> json) =>
-      CardResponseEntity(
-        data: List<CardListDataEntity>.from(
-            json["data"].map((x) => CardListDataEntity.fromJson(x))),
-        meta: CardMetaEntity.fromJson(json["meta"]),
+  factory CardIdResponseEntity.fromJson(Map<String, dynamic> json) =>
+      CardIdResponseEntity(
+        data: CardIdResponseDataEntity.fromJson(json["data"]),
+        meta: CardIdResponseMetaEntity.fromJson(json["meta"]),
       );
 
   Map<String, dynamic> toJson() => {
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
+        "data": data.toJson(),
         "meta": meta.toJson(),
       };
 }
 
-class CardListDataEntity {
+class CardIdResponseDataEntity {
   final int id;
-  final CardDataAttributesEntity attributes;
+  final CardIdDataAttributesEntity attributes;
 
-  CardListDataEntity({
+  CardIdResponseDataEntity({
     required this.id,
     required this.attributes,
   });
 
-  factory CardListDataEntity.fromJson(Map<String, dynamic> json) =>
-      CardListDataEntity(
+  factory CardIdResponseDataEntity.fromJson(Map<String, dynamic> json) =>
+      CardIdResponseDataEntity(
         id: json["id"],
-        attributes: CardDataAttributesEntity.fromJson(json["attributes"]),
+        attributes: CardIdDataAttributesEntity.fromJson(json["attributes"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -41,7 +40,7 @@ class CardListDataEntity {
       };
 }
 
-class CardDataAttributesEntity {
+class CardIdDataAttributesEntity {
   final String name;
   final String role;
   final String description;
@@ -49,9 +48,9 @@ class CardDataAttributesEntity {
   final DateTime createdAt;
   final DateTime updatedAt;
   final DateTime publishedAt;
-  final AvatarCardEntity avatarCard;
+  final AvatarCardIdResponseEntity avatarCard;
 
-  CardDataAttributesEntity({
+  CardIdDataAttributesEntity({
     required this.name,
     required this.role,
     required this.description,
@@ -62,8 +61,8 @@ class CardDataAttributesEntity {
     required this.avatarCard,
   });
 
-  factory CardDataAttributesEntity.fromJson(Map<String, dynamic> json) =>
-      CardDataAttributesEntity(
+  factory CardIdDataAttributesEntity.fromJson(Map<String, dynamic> json) =>
+      CardIdDataAttributesEntity(
         name: json["name"],
         role: json["role"],
         description: json["description"],
@@ -71,7 +70,7 @@ class CardDataAttributesEntity {
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
         publishedAt: DateTime.parse(json["publishedAt"]),
-        avatarCard: AvatarCardEntity.fromJson(json["avatar_card"]),
+        avatarCard: AvatarCardIdResponseEntity.fromJson(json["avatar_card"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -86,16 +85,16 @@ class CardDataAttributesEntity {
       };
 }
 
-class AvatarCardEntity {
-  final AvatarCardDataEntity data;
+class AvatarCardIdResponseEntity {
+  final AvatarCardIdDataModel data;
 
-  AvatarCardEntity({
+  AvatarCardIdResponseEntity({
     required this.data,
   });
 
-  factory AvatarCardEntity.fromJson(Map<String, dynamic> json) =>
-      AvatarCardEntity(
-        data: AvatarCardDataEntity.fromJson(json["data"]),
+  factory AvatarCardIdResponseEntity.fromJson(Map<String, dynamic> json) =>
+      AvatarCardIdResponseEntity(
+        data: AvatarCardIdDataModel.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -103,19 +102,19 @@ class AvatarCardEntity {
       };
 }
 
-class AvatarCardDataEntity {
+class AvatarCardIdDataModel {
   final int id;
-  final AvatarCardDataAttributesEntity attributes;
+  final AvatarCardIdAttributesEntity attributes;
 
-  AvatarCardDataEntity({
+  AvatarCardIdDataModel({
     required this.id,
     required this.attributes,
   });
 
-  factory AvatarCardDataEntity.fromJson(Map<String, dynamic> json) =>
-      AvatarCardDataEntity(
+  factory AvatarCardIdDataModel.fromJson(Map<String, dynamic> json) =>
+      AvatarCardIdDataModel(
         id: json["id"],
-        attributes: AvatarCardDataAttributesEntity.fromJson(json["attributes"]),
+        attributes: AvatarCardIdAttributesEntity.fromJson(json["attributes"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -124,13 +123,13 @@ class AvatarCardDataEntity {
       };
 }
 
-class AvatarCardDataAttributesEntity {
+class AvatarCardIdAttributesEntity {
   final String name;
   final dynamic alternativeText;
   final dynamic caption;
   final int width;
   final int height;
-  final AvatarCardDataAttributeFormatsEntity formats;
+  final FormatsIdEntity formats;
   final String hash;
   final String ext;
   final String mime;
@@ -138,11 +137,11 @@ class AvatarCardDataAttributesEntity {
   final String url;
   final dynamic previewUrl;
   final String provider;
-  final dynamic providerMetadata;
+  final ProviderMetadataEntity providerMetadata;
   final DateTime createdAt;
   final DateTime updatedAt;
 
-  AvatarCardDataAttributesEntity({
+  AvatarCardIdAttributesEntity({
     required this.name,
     required this.alternativeText,
     required this.caption,
@@ -161,14 +160,14 @@ class AvatarCardDataAttributesEntity {
     required this.updatedAt,
   });
 
-  factory AvatarCardDataAttributesEntity.fromJson(Map<String, dynamic> json) =>
-      AvatarCardDataAttributesEntity(
+  factory AvatarCardIdAttributesEntity.fromJson(Map<String, dynamic> json) =>
+      AvatarCardIdAttributesEntity(
         name: json["name"],
         alternativeText: json["alternativeText"],
         caption: json["caption"],
         width: json["width"],
         height: json["height"],
-        formats: AvatarCardDataAttributeFormatsEntity.fromJson(json["formats"]),
+        formats: FormatsIdEntity.fromJson(json["formats"]),
         hash: json["hash"],
         ext: json["ext"],
         mime: json["mime"],
@@ -176,7 +175,8 @@ class AvatarCardDataAttributesEntity {
         url: json["url"],
         previewUrl: json["previewUrl"],
         provider: json["provider"],
-        providerMetadata: json["provider_metadata"],
+        providerMetadata:
+            ProviderMetadataEntity.fromJson(json["provider_metadata"]),
         createdAt: DateTime.parse(json["createdAt"]),
         updatedAt: DateTime.parse(json["updatedAt"]),
       );
@@ -195,26 +195,25 @@ class AvatarCardDataAttributesEntity {
         "url": url,
         "previewUrl": previewUrl,
         "provider": provider,
-        "provider_metadata": providerMetadata,
+        "provider_metadata": providerMetadata.toJson(),
         "createdAt": createdAt.toIso8601String(),
         "updatedAt": updatedAt.toIso8601String(),
       };
 }
 
-class AvatarCardDataAttributeFormatsEntity {
-  final FormatDataEntity small;
-  final FormatDataEntity thumbnail;
+class FormatsIdEntity {
+  final FormatIdDataEntity small;
+  final FormatIdDataEntity thumbnail;
 
-  AvatarCardDataAttributeFormatsEntity({
+  FormatsIdEntity({
     required this.small,
     required this.thumbnail,
   });
 
-  factory AvatarCardDataAttributeFormatsEntity.fromJson(
-          Map<String, dynamic> json) =>
-      AvatarCardDataAttributeFormatsEntity(
-        small: FormatDataEntity.fromJson(json["small"]),
-        thumbnail: FormatDataEntity.fromJson(json["thumbnail"]),
+  factory FormatsIdEntity.fromJson(Map<String, dynamic> json) =>
+      FormatsIdEntity(
+        small: FormatIdDataEntity.fromJson(json["small"]),
+        thumbnail: FormatIdDataEntity.fromJson(json["thumbnail"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -223,7 +222,7 @@ class AvatarCardDataAttributeFormatsEntity {
       };
 }
 
-class FormatDataEntity {
+class FormatIdDataEntity {
   final String ext;
   final String url;
   final String hash;
@@ -233,8 +232,9 @@ class FormatDataEntity {
   final double size;
   final int width;
   final int height;
+  final ProviderMetadataEntity providerMetadata;
 
-  FormatDataEntity({
+  FormatIdDataEntity({
     required this.ext,
     required this.url,
     required this.hash,
@@ -244,10 +244,11 @@ class FormatDataEntity {
     required this.size,
     required this.width,
     required this.height,
+    required this.providerMetadata,
   });
 
-  factory FormatDataEntity.fromJson(Map<String, dynamic> json) =>
-      FormatDataEntity(
+  factory FormatIdDataEntity.fromJson(Map<String, dynamic> json) =>
+      FormatIdDataEntity(
         ext: json["ext"],
         url: json["url"],
         hash: json["hash"],
@@ -257,6 +258,8 @@ class FormatDataEntity {
         size: json["size"].toDouble(),
         width: json["width"],
         height: json["height"],
+        providerMetadata:
+            ProviderMetadataEntity.fromJson(json["provider_metadata"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -269,50 +272,36 @@ class FormatDataEntity {
         "size": size,
         "width": width,
         "height": height,
+        "provider_metadata": providerMetadata.toJson(),
       };
 }
 
-class CardMetaEntity {
-  final CardPaginationEntity pagination;
+class ProviderMetadataEntity {
+  final String publicId;
+  final String resourceType;
 
-  CardMetaEntity({
-    required this.pagination,
+  ProviderMetadataEntity({
+    required this.publicId,
+    required this.resourceType,
   });
 
-  factory CardMetaEntity.fromJson(Map<String, dynamic> json) => CardMetaEntity(
-        pagination: CardPaginationEntity.fromJson(json["pagination"]),
+  factory ProviderMetadataEntity.fromJson(Map<String, dynamic> json) =>
+      ProviderMetadataEntity(
+        publicId: json["public_id"],
+        resourceType: json["resource_type"],
       );
 
   Map<String, dynamic> toJson() => {
-        "pagination": pagination.toJson(),
+        "public_id": publicId,
+        "resource_type": resourceType,
       };
 }
 
-class CardPaginationEntity {
-  final int page;
-  final int pageSize;
-  final int pageCount;
-  final int total;
+class CardIdResponseMetaEntity {
+  CardIdResponseMetaEntity();
 
-  CardPaginationEntity({
-    required this.page,
-    required this.pageSize,
-    required this.pageCount,
-    required this.total,
-  });
+  factory CardIdResponseMetaEntity.fromJson(Map<String, dynamic> json) =>
+      CardIdResponseMetaEntity();
 
-  factory CardPaginationEntity.fromJson(Map<String, dynamic> json) =>
-      CardPaginationEntity(
-        page: json["page"],
-        pageSize: json["pageSize"],
-        pageCount: json["pageCount"],
-        total: json["total"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "page": page,
-        "pageSize": pageSize,
-        "pageCount": pageCount,
-        "total": total,
-      };
+  Map<String, dynamic> toJson() => {};
 }

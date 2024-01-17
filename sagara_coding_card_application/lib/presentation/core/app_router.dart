@@ -92,6 +92,7 @@ final GoRouter router = GoRouter(
                   name: RouterConstant.detail,
                   builder: (context, state) => DetailsCollectionScreenPage(
                     key: state.pageKey,
+                    id: state.extra as int,
                   ),
                 ),
               ],
