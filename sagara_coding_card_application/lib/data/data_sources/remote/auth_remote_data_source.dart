@@ -21,12 +21,12 @@ class AuthRemoteDataSource {
         options: Options(
           headers: {
             'Content-Type': 'application/json',
-            'Accept': 'application/json',
           },
         ),
       );
+      print('Response: ${result.data}');
       final loginData = LoginResponseModel.fromJson(result.data);
-      client.options.headers['Authorization'] = 'Bearer ${loginData.jwt}';
+      // client.options.headers['Authorization'] = 'Bearer ${loginData.jwt}';
       return loginData;
     } catch (e) {
       inspect('Error: $e');

@@ -5,5 +5,5 @@ class LogoutUseCase {
 
   LogoutUseCase({required this.authRepository});
 
-  Future<void> call() async => await authRepository.logout();
+  Future call() async => await authRepository.logout();
 }

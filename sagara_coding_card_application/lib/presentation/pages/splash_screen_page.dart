@@ -21,7 +21,6 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
     super.initState();
     Future.delayed(const Duration(seconds: 5)).then((value) {
       context.read<AuthBloc>().add(IsLoggedInEvent());
-      // context.go('/onboarding');
     });
   }
 

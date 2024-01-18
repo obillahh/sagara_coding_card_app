@@ -23,7 +23,7 @@ class CardRemoteDataSource {
         options: Options(
           headers: {
             'Accept': 'application/json',
-            'Authorization': 'Bearer ${await AuthLocalDataSource().getToken()}',
+            // 'Authorization': 'Bearer ${await AuthLocalDataSource().getToken()}',
           },
         ),
       );

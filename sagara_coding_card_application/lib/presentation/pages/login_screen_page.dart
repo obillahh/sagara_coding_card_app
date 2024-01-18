@@ -26,6 +26,13 @@ class _LoginScreenPageState extends State<LoginScreenPage> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
+  @override
+  void dispose() {
+    usernameController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   bool? rememberMe = false;
   bool obscureText = true;
 
@@ -118,7 +125,8 @@ class _LoginScreenPageState extends State<LoginScreenPage> {
                     return previous != current;
                   },
                   listener: (context, state) {
-                    if (state is AuthSuccess) {
+                    if (state is AuthLoginSuccess) {
+                      context.read<AuthBloc>().add(IsLoggedInEvent());
                       context.go('/home');
                     }
                   },

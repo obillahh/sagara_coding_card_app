@@ -14,27 +14,39 @@ class AuthImplRepository extends AuthRepository {
   });
   @override
   Future<LoginResponseEntity?> login(String identifier, String password) async {
-    final response = await authRemoteDataSource.login(identifier, password);
-    if (response.user == null) {
+    try {
+      final response = await authRemoteDataSource.login(identifier, password);
+
+      // Check if the response has a user field
+      if (response.user == null) {
+        print('Invalid response: user is null');
+        print('Response data: ${response.toJson()}');
+        return null; // Or handle this case as appropriate for your application
+      }
+
+      final data = LoginResponseEntity(
+        jwt: response.jwt ?? '',
+        user: UserResponseEntity(
+          id: response.user?.id ?? 0,
+          username: response.user?.username ?? '',
+          email: response.user?.email ?? '',
+          provider: response.user?.provider ?? '',
+          confirmed: response.user?.confirmed ?? false,
+          blocked: response.user?.blocked ?? false,
+          createdAt: response.user?.createdAt ?? DateTime.now(),
+          updatedAt: response.user?.updatedAt ?? DateTime.now(),
+          collectionCard: response.user?.collectionCard ?? 0,
+        ),
+      );
+
+      await authLocalDataSource.saveToken(data.jwt);
+      await authLocalDataSource.saveUserData(data.user);
+
+      return data;
+    } catch (e) {
+      print('Login error: $e');
       return null;
     }
-    final data = LoginResponseEntity(
-      jwt: response.jwt ?? '',
-      user: UserResponseEntity(
-        id: response.user?.id ?? 0,
-        username: response.user?.username ?? '',
-        email: response.user?.email ?? '',
-        provider: response.user?.provider ?? '',
-        confirmed: response.user?.confirmed ?? false,
-        blocked: response.user?.blocked ?? false,
-        createdAt: response.user?.createdAt ?? DateTime.now(),
-        updatedAt: response.user?.updatedAt ?? DateTime.now(),
-        collectionCard: response.user?.collectionCard ?? 0,
-      ),
-    );
-    await authLocalDataSource.saveToken(data.jwt);
-    await authLocalDataSource.saveUserData(data.user);
-    return data;
   }
 
   @override
@@ -52,7 +64,8 @@ class AuthImplRepository extends AuthRepository {
   }
 
   @override
-  Future<void> logout() async {
+  Future logout() async {
     await authLocalDataSource.removeToken();
+    await authLocalDataSource.removeUserData();
   }
 }

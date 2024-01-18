@@ -17,9 +17,9 @@ class HomeScreenPage extends StatefulWidget {
 
 class _HomeScreenPageState extends State<HomeScreenPage> {
   @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
+  void initState() {
+    // TODO: implement initState
+    super.initState();
     context.read<AuthBloc>().add(GetCurrentUserEvent());
   }
 

@@ -29,7 +29,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             event.password,
           );
           if (data != null) {
-            emit(AuthSuccess(login: data));
+            emit(AuthLoginSuccess(login: data));
           } else {
             emit(AuthFailure(error: 'Login Failed'));
           }
@@ -63,7 +63,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         }
         if (event is LogoutEvent) {
           await logoutUseCase();
-          emit(AuthNotAuthenticated());
+          emit(AuthLogoutSuccess());
         }
       },
     );

@@ -7,5 +7,5 @@ abstract class AuthRepository {
 
   Future<UserResponseEntity?> getCurrentUser();
 
-  Future<void> logout();
+  Future logout();
 }

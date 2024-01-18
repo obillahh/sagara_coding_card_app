@@ -18,8 +18,8 @@ class ProfileScreenPage extends StatefulWidget {
 
 class _ProfileScreenPageState extends State<ProfileScreenPage> {
   @override
-  didChangeDependencies() {
-    super.didChangeDependencies();
+  initState() {
+    super.initState();
     context.read<AuthBloc>().add(GetCurrentUserEvent());
   }
 
@@ -328,13 +328,13 @@ class _ProfileScreenPageState extends State<ProfileScreenPage> {
                       return previous != current;
                     },
                     listener: (context, state) {
-                      if (state is AuthNotAuthenticated) {
+                      if (state is AuthLogoutSuccess) {
+                        context.read<AuthBloc>().add(IsLoggedInEvent());
                         context.go('/login');
                       }
                     },
                     child: GestureDetector(
                       onTap: () {
-                        // inspect(context.read<AuthBloc>());
                         context.read<AuthBloc>().add(LogoutEvent());
                       },
                       child: ListTile(
