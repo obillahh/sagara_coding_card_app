@@ -1,10 +1,10 @@
-part of 'card_scanner_bloc.dart';
+// part of 'card_scanner_bloc.dart';
 
-@immutable
-sealed class CardScannerEvent {}
+// @immutable
+// sealed class CardScannerEvent {}
 
-class GetCardScannerEvent extends CardScannerEvent {
-  final String url;
+// class GetCardScannerEvent extends CardScannerEvent {
+//   final String url;
 
-  GetCardScannerEvent({required this.url});
-}
+//   GetCardScannerEvent({required this.url});
+// }

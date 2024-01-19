@@ -9,6 +9,7 @@ import 'package:go_router/go_router.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
 
+import '../manager/card_manage/get_card_id/bloc/card_id_bloc.dart';
 import '../manager/card_manage/get_card_scanner/card_scanner_bloc.dart';
 import '../utils/constant/assets_constant.dart';
 import '../utils/constant/router_constant.dart';
@@ -49,9 +50,8 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
       (Barcode barcode) {
         inspect('Scanned barcode: ${barcode.code}');
         scannedData = barcode.code!;
-        context.read<CardScannerBloc>().add(
-              GetCardScannerEvent(url: scannedData),
-            );
+        final contextBloc = context.read<CardIdBloc>();
+        contextBloc.add(GetCardScannerEvent(url: scannedData));
       },
     );
   }
@@ -111,20 +111,20 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
       ),
       body: Column(
         children: [
-          BlocConsumer<CardScannerBloc, CardScannerState>(
+          BlocConsumer<CardIdBloc, CardIdState>(
             listener: (context, state) {
-              if (state is CardScannerSuccessState) {
+              if (state is CardIdSuccessState) {
                 final cardId = state.card.id;
                 context.goNamed(
                   RouterConstant.detail,
                   extra: cardId,
                 );
-              } else if (state is CardScannerFailureState) {
+              } else if (state is CardIdFailureState) {
                 print('Error: ${state.message}');
               }
             },
             builder: (context, state) {
-              if (state is CardScannerLoadingState) {
+              if (state is CardIdLoadingState) {
                 return const Center(
                   child: CircularProgressIndicator(),
                 );

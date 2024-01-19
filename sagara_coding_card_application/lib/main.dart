@@ -54,10 +54,6 @@ class MyApp extends StatelessWidget {
                 remoteDataSource: CardRemoteDataSource(client: Dio()),
               ),
             ),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => CardScannerBloc(
             getCardByScannerUseCase: GetCardByScannerUseCase(
               cardRepository: CardImplRepository(
                 remoteDataSource: CardRemoteDataSource(client: Dio()),
@@ -65,6 +61,15 @@ class MyApp extends StatelessWidget {
             ),
           ),
         ),
+        // BlocProvider(
+        //   create: (context) => CardScannerBloc(
+        //     getCardByScannerUseCase: GetCardByScannerUseCase(
+        //       cardRepository: CardImplRepository(
+        //         remoteDataSource: CardRemoteDataSource(client: Dio()),
+        //       ),
+        //     ),
+        //   ),
+        // ),
         BlocProvider(
           create: (context) => AuthBloc(
             loginUseCase: LoginUseCase(

@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -6,7 +5,6 @@ import 'package:sagara_coding_card_application/data/models/card_model/cards_list
 import 'package:sagara_coding_card_application/presentation/utils/constant/api_constant.dart';
 
 import '../../models/card_model/card_id_response_model.dart';
-import '../local/auth_local_data_source.dart';
 
 class CardRemoteDataSource {
   final Dio client;
@@ -47,7 +45,6 @@ class CardRemoteDataSource {
         options: Options(
           headers: {
             'Accept': 'application/json',
-            'Authorization': 'Bearer ${await AuthLocalDataSource().getToken()}',
           },
         ),
       );
@@ -61,20 +58,21 @@ class CardRemoteDataSource {
 
   Future<CardIdResponseModel> getCardByScanner(String url) async {
     try {
-      final result = await client.get(url);
-      if (result.statusCode == 200) {
-        final decodedData = json.decode(result.data);
-        if (decodedData is Map<String, dynamic>) {
-          final cardData = CardIdResponseModel.fromJson(decodedData);
-          return cardData;
-        } else {
-          throw Exception('Invalid JSON format');
-        }
-      } else {
-        throw Exception('Invalid response status code: ${result.statusCode}');
-      }
+      final result = await client.get(
+        url,
+        queryParameters: {
+          "populate": "avatar_card",
+        },
+        options: Options(
+          headers: {
+            'Accept': 'application/json',
+          },
+        ),
+      );
+      final cardData = CardIdResponseModel.fromJson(result.data);
+      return cardData;
     } catch (e) {
-      print('Error: $e');
+      inspect('Error: $e');
       throw Exception('Failed to get card data');
     }
   }

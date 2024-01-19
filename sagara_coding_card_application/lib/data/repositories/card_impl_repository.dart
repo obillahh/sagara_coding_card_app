@@ -340,11 +340,9 @@ class CardImplRepository extends CardRepository {
   @override
   Future<CardIdResponseDataEntity?> getCardByScanner(String url) async {
     final response = await remoteDataSource.getCardByScanner(url);
-
     if (response.data == null) {
       return null;
     }
-
     final data = CardIdResponseDataEntity(
       id: response.data!.id ?? 0,
       attributes: CardIdDataAttributesEntity(

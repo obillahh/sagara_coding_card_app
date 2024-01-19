@@ -8,3 +8,9 @@ final class GetCardIdEvent extends CardIdEvent {
 
   GetCardIdEvent({required this.id});
 }
+
+class GetCardScannerEvent extends CardIdEvent {
+  final String url;
+
+  GetCardScannerEvent({required this.url});
+}
