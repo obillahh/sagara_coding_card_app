@@ -5,4 +5,5 @@ import '../entities/card_entity/card_id_response_entity.dart';
 abstract class CardRepository {
   Future<List<CardListDataEntity>?> getListCards();
   Future<CardIdResponseDataEntity?> getCardById(int id);
+  Future<CardIdResponseDataEntity?> getCardByScanner(String url);
 }

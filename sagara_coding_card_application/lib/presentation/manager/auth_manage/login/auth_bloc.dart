@@ -1,9 +1,12 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
-import 'package:sagara_coding_card_application/domain/entities/auth_entity/login_response_entity.dart';
+import 'package:sagara_coding_card_application/data/models/auth_model/login_request_model.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/is_logged_in_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/logout_use_case.dart';
+import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/register_use_case.dart';
 
+import '../../../../data/models/auth_model/register_request_model.dart';
+import '../../../../domain/entities/auth_entity/user_response_entity.dart';
 import '../../../../domain/use_cases/auth_use_case/get_current_user_use_case.dart';
 import '../../../../domain/use_cases/auth_use_case/login_use_case.dart';
 
@@ -12,10 +15,12 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUseCase loginUseCase;
+  final RegisterUseCase registerUseCase;
   final IsLoggedInUseCase isLoggedInUseCase;
   final LogoutUseCase logoutUseCase;
   final GetCurrentUserUseCase getCurrentUserUseCase;
   AuthBloc({
+    required this.registerUseCase,
     required this.loginUseCase,
     required this.isLoggedInUseCase,
     required this.logoutUseCase,
@@ -24,12 +29,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthEvent>(
       (event, emit) async {
         if (event is LoginEvent) {
-          final LoginResponseEntity? data = await loginUseCase(
-            event.identifier,
-            event.password,
+          final UserResponseEntity? data = await loginUseCase(
+            event.requestModel,
           );
           if (data != null) {
             emit(AuthLoginSuccess(login: data));
+          } else {
+            emit(AuthFailure(error: 'Login Failed'));
+          }
+        }
+        if (event is RegisterEvent) {
+          final UserResponseEntity? data = await registerUseCase(
+            event.requestModel,
+          );
+          if (data != null) {
+            emit(AuthRegisterSuccess(register: data));
           } else {
             emit(AuthFailure(error: 'Login Failed'));
           }
@@ -47,7 +61,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(
             CurrentUserState(
               currentUser: user ??
-                  UserResponseEntity(
+                  UserDataEntity(
                     id: 0,
                     username: 'Guest',
                     email: 'guest@example.com',

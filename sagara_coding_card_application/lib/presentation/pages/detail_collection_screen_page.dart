@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sagara_coding_card_application/presentation/manager/card_manage/get_card_id/bloc/card_id_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_colors.dart';
-import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
 
 import '../utils/constant/assets_constant.dart';
 import '../widgets/detail_card_sheet_widget.dart';

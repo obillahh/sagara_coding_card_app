@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -55,6 +56,26 @@ class CardRemoteDataSource {
     } catch (e) {
       inspect('Error: $e');
       return CardIdResponseModel();
+    }
+  }
+
+  Future<CardIdResponseModel> getCardByScanner(String url) async {
+    try {
+      final result = await client.get(url);
+      if (result.statusCode == 200) {
+        final decodedData = json.decode(result.data);
+        if (decodedData is Map<String, dynamic>) {
+          final cardData = CardIdResponseModel.fromJson(decodedData);
+          return cardData;
+        } else {
+          throw Exception('Invalid JSON format');
+        }
+      } else {
+        throw Exception('Invalid response status code: ${result.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+      throw Exception('Failed to get card data');
     }
   }
 }

@@ -4,10 +4,15 @@ part of 'auth_bloc.dart';
 sealed class AuthEvent {}
 
 class LoginEvent extends AuthEvent {
-  final String identifier;
-  final String password;
+  final LoginRequestModel requestModel;
 
-  LoginEvent({required this.identifier, required this.password});
+  LoginEvent({required this.requestModel});
+}
+
+class RegisterEvent extends AuthEvent {
+  final RegisterRequestModel requestModel;
+
+  RegisterEvent({required this.requestModel});
 }
 
 class IsLoggedInEvent extends AuthEvent {}

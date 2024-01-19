@@ -1,23 +1,24 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:sagara_coding_card_application/data/models/auth_model/login_response_model.dart';
+import 'package:sagara_coding_card_application/data/models/auth_model/register_request_model.dart';
+import 'package:sagara_coding_card_application/data/models/auth_model/user_response_model.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/api_constant.dart';
+
+import '../../models/auth_model/login_request_model.dart';
 
 class AuthRemoteDataSource {
   final Dio client;
 
   AuthRemoteDataSource({required this.client});
 
-  Future<LoginResponseModel> login(String identifier, String password) async {
+  Future<UserResponseModel> login(
+      {required LoginRequestModel loginRequestModel}) async {
     try {
       const url = ApiConstant.login;
       final result = await client.post(
         url,
-        data: {
-          'identifier': identifier,
-          'password': password,
-        },
+        data: loginRequestModel.toJson(),
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -25,12 +26,32 @@ class AuthRemoteDataSource {
         ),
       );
       print('Response: ${result.data}');
-      final loginData = LoginResponseModel.fromJson(result.data);
-      // client.options.headers['Authorization'] = 'Bearer ${loginData.jwt}';
+      final loginData = UserResponseModel.fromJson(result.data);
       return loginData;
     } catch (e) {
       inspect('Error: $e');
-      return LoginResponseModel();
+      return UserResponseModel();
+    }
+  }
+
+  Future<UserResponseModel> register(
+      {required RegisterRequestModel registerRequestModel}) async {
+    try {
+      const url = ApiConstant.register;
+      final result = await client.post(
+        url,
+        data: registerRequestModel.toJson(),
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+      final regisData = UserResponseModel.fromJson(result.data);
+      return regisData;
+    } catch (e) {
+      inspect('Error: $e');
+      return UserResponseModel();
     }
   }
 }

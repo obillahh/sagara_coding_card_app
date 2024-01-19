@@ -10,15 +10,21 @@ class AuthAuthenticated extends AuthState {}
 class AuthNotAuthenticated extends AuthState {}
 
 class AuthLoginSuccess extends AuthState {
-  final LoginResponseEntity login;
+  final UserResponseEntity login;
 
   AuthLoginSuccess({required this.login});
+}
+
+class AuthRegisterSuccess extends AuthState {
+  final UserResponseEntity register;
+
+  AuthRegisterSuccess({required this.register});
 }
 
 class AuthLogoutSuccess extends AuthState {}
 
 class CurrentUserState extends AuthState {
-  final UserResponseEntity? currentUser;
+  final UserDataEntity? currentUser;
 
   CurrentUserState({required this.currentUser});
 }

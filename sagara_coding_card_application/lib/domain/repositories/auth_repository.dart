@@ -1,11 +1,16 @@
-import 'package:sagara_coding_card_application/domain/entities/auth_entity/login_response_entity.dart';
+import 'package:sagara_coding_card_application/data/models/auth_model/login_request_model.dart';
+import 'package:sagara_coding_card_application/data/models/auth_model/register_request_model.dart';
+import 'package:sagara_coding_card_application/domain/entities/auth_entity/user_response_entity.dart';
 
 abstract class AuthRepository {
-  Future<LoginResponseEntity?> login(String identifier, String password);
+  Future<UserResponseEntity?> login({required LoginRequestModel loginRequest});
+
+  Future<UserResponseEntity?> register(
+      {required RegisterRequestModel registerRequest});
 
   Future<bool> isLoggedIn();
 
-  Future<UserResponseEntity?> getCurrentUser();
+  Future<UserDataEntity?> getCurrentUser();
 
   Future logout();
 }

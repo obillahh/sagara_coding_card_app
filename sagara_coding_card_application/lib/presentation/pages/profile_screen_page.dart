@@ -112,7 +112,7 @@ class _ProfileScreenPageState extends State<ProfileScreenPage> {
                                 children: [
                                   SvgPicture.asset(
                                     AssetsConstant.cardCollectionIcon,
-                                    width: 28.w,
+                                    width: 24.w,
                                   ),
                                   SizedBox(width: 8.w),
                                   Column(
@@ -172,7 +172,7 @@ class _ProfileScreenPageState extends State<ProfileScreenPage> {
                                 children: [
                                   SvgPicture.asset(
                                     AssetsConstant.cardCollectionIcon,
-                                    width: 28.w,
+                                    width: 24.w,
                                   ),
                                   SizedBox(width: 8.w),
                                   Column(

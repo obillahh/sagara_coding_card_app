@@ -1,12 +1,17 @@
+import 'dart:developer';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:qr_scanner_overlay/qr_scanner_overlay.dart';
+import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
 
+import '../manager/card_manage/get_card_scanner/card_scanner_bloc.dart';
 import '../utils/constant/assets_constant.dart';
+import '../utils/constant/router_constant.dart';
 import '../utils/themes/app_colors.dart';
 
 class ScannerScreenPage extends StatefulWidget {
@@ -17,105 +22,128 @@ class ScannerScreenPage extends StatefulWidget {
 }
 
 class _ScannerScreenPageState extends State<ScannerScreenPage> {
-  GlobalKey commentsHeaderKey = GlobalKey();
-  MobileScannerController flashController = MobileScannerController();
-  bool isScanComplete = false;
+  late final GlobalKey _qrKey = GlobalKey(debugLabel: 'QR');
+  QRViewController? qrController;
   bool isFlashOn = false;
-  double commentsHeaderHeight = 0;
+  late String scannedData;
+
+  @override
+  void dispose() {
+    qrController?.dispose();
+    super.dispose();
+  }
+
+  @override
+  void reassemble() {
+    super.reassemble();
+    if (Platform.isAndroid) {
+      qrController?.pauseCamera();
+    } else if (Platform.isIOS) {
+      qrController?.resumeCamera();
+    }
+  }
+
+  void _onQRViewCreated(QRViewController controller) {
+    qrController = controller;
+    controller.scannedDataStream.listen(
+      (Barcode barcode) {
+        inspect('Scanned barcode: ${barcode.code}');
+        scannedData = barcode.code!;
+        context.read<CardScannerBloc>().add(
+              GetCardScannerEvent(url: scannedData),
+            );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      extendBodyBehindAppBar:
-          true, // This allows the body to be drawn behind the AppBar
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: Container(
-          margin: const EdgeInsets.all(4),
-          decoration: BoxDecoration(
-            color: AppColors.primary,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: IconButton(
-            onPressed: () {
-              context.pop();
-            },
-            icon: Container(
-              decoration: BoxDecoration(
-                color: AppColors.primary,
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: const Icon(
-                Icons.arrow_back,
-                color: AppColors.text,
-              ),
+        leading: IconButton(
+          onPressed: () {
+            context.pop();
+          },
+          icon: Container(
+            decoration: BoxDecoration(
+              color: AppColors.primary,
+              borderRadius: BorderRadius.circular(30),
+            ),
+            child: const Icon(
+              Icons.arrow_back,
+              color: AppColors.text,
             ),
           ),
         ),
         actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 8),
-            decoration: BoxDecoration(
-              color: AppColors.text,
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.help_outline,
-                size: 28,
-                color: AppColors.background,
-              ),
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.help_outline,
+              size: 28,
+              color: AppColors.background,
             ),
           ),
-          Container(
-            margin: const EdgeInsets.only(right: 8),
-            decoration: BoxDecoration(
-              color: AppColors.text,
-              borderRadius: BorderRadius.circular(30),
-            ),
-            child: IconButton(
-              onPressed: () {
-                setState(() {
-                  isFlashOn = !isFlashOn;
-                });
-                print(isFlashOn);
-                flashController.toggleTorch();
-              },
-              icon: isFlashOn == true
-                  ? const Icon(
-                      Icons.flash_on,
-                      size: 28,
-                      color: AppColors.primary,
-                    )
-                  : const Icon(
-                      Icons.flash_off,
-                      size: 28,
-                      color: AppColors.background,
-                    ),
-            ),
+          IconButton(
+            onPressed: () {
+              setState(() {
+                isFlashOn = !isFlashOn;
+              });
+              print('Flash is ${isFlashOn ? 'on' : 'off'}');
+              qrController?.toggleFlash();
+            },
+            icon: isFlashOn
+                ? const Icon(
+                    Icons.flash_on,
+                    size: 28,
+                    color: AppColors.primary,
+                  )
+                : const Icon(
+                    Icons.flash_off,
+                    size: 28,
+                    color: AppColors.background,
+                  ),
           ),
         ],
       ),
       body: Column(
         children: [
-          Expanded(
-            child: MobileScanner(
-              onDetect: (barcodes) {
-                if (!isScanComplete) {
-                  // Handle barcode detection logic
-                }
-              },
-              controller: flashController,
-              overlay: QRScannerOverlay(
-                borderColor: AppColors.primary,
-                scanAreaWidth: 280.w,
-                scanAreaHeight: 320.h,
-                overlayColor: AppColors.background.withOpacity(0.1),
-                borderRadius: 32.r,
-              ),
-            ),
+          BlocConsumer<CardScannerBloc, CardScannerState>(
+            listener: (context, state) {
+              if (state is CardScannerSuccessState) {
+                final cardId = state.card.id;
+                context.goNamed(
+                  RouterConstant.detail,
+                  extra: cardId,
+                );
+              } else if (state is CardScannerFailureState) {
+                print('Error: ${state.message}');
+              }
+            },
+            builder: (context, state) {
+              if (state is CardScannerLoadingState) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              } else {
+                return Expanded(
+                  child: QRView(
+                    key: _qrKey,
+                    onQRViewCreated: _onQRViewCreated,
+                    overlay: QrScannerOverlayShape(
+                      borderColor: AppColors.primary,
+                      borderRadius: 10,
+                      borderLength: 30,
+                      borderWidth: 10,
+                      cutOutSize: 300,
+                    ),
+                  ),
+                );
+              }
+            },
           ),
         ],
       ),

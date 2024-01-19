@@ -1,4 +1,6 @@
-import 'package:sagara_coding_card_application/domain/entities/auth_entity/login_response_entity.dart';
+import 'package:sagara_coding_card_application/data/models/auth_model/login_request_model.dart';
+import 'package:sagara_coding_card_application/data/models/auth_model/register_request_model.dart';
+import 'package:sagara_coding_card_application/domain/entities/auth_entity/user_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/repositories/auth_repository.dart';
 
 import '../data_sources/local/auth_local_data_source.dart';
@@ -13,20 +15,21 @@ class AuthImplRepository extends AuthRepository {
     required this.authLocalDataSource,
   });
   @override
-  Future<LoginResponseEntity?> login(String identifier, String password) async {
+  Future<UserResponseEntity?> login(
+      {required LoginRequestModel loginRequest}) async {
     try {
-      final response = await authRemoteDataSource.login(identifier, password);
+      final response =
+          await authRemoteDataSource.login(loginRequestModel: loginRequest);
 
-      // Check if the response has a user field
       if (response.user == null) {
         print('Invalid response: user is null');
         print('Response data: ${response.toJson()}');
-        return null; // Or handle this case as appropriate for your application
+        return null;
       }
 
-      final data = LoginResponseEntity(
+      final data = UserResponseEntity(
         jwt: response.jwt ?? '',
-        user: UserResponseEntity(
+        user: UserDataEntity(
           id: response.user?.id ?? 0,
           username: response.user?.username ?? '',
           email: response.user?.email ?? '',
@@ -55,7 +58,7 @@ class AuthImplRepository extends AuthRepository {
   }
 
   @override
-  Future<UserResponseEntity?> getCurrentUser() async {
+  Future<UserDataEntity?> getCurrentUser() async {
     final isLoggedIn = await authLocalDataSource.getToken() != null;
     if (isLoggedIn) {
       return await authLocalDataSource.getUserData();
@@ -67,5 +70,37 @@ class AuthImplRepository extends AuthRepository {
   Future logout() async {
     await authLocalDataSource.removeToken();
     await authLocalDataSource.removeUserData();
+  }
+
+  @override
+  Future<UserResponseEntity?> register(
+      {required RegisterRequestModel registerRequest}) async {
+    try {
+      final response = await authRemoteDataSource.register(
+          registerRequestModel: registerRequest);
+      if (response.user == null) {
+        print('Invalid response: user is null');
+        print('Response data: ${response.toJson()}');
+        return null;
+      }
+      final data = UserResponseEntity(
+        jwt: response.jwt ?? '',
+        user: UserDataEntity(
+          id: response.user?.id ?? 0,
+          username: response.user?.username ?? '',
+          email: response.user?.email ?? '',
+          provider: response.user?.provider ?? '',
+          confirmed: response.user?.confirmed ?? false,
+          blocked: response.user?.blocked ?? false,
+          createdAt: response.user?.createdAt ?? DateTime.now(),
+          updatedAt: response.user?.updatedAt ?? DateTime.now(),
+          collectionCard: response.user?.collectionCard ?? 0,
+        ),
+      );
+      return data;
+    } catch (e) {
+      print('Login error: $e');
+      return null;
+    }
   }
 }

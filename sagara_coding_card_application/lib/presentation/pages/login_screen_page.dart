@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sagara_coding_card_application/data/models/auth_model/login_request_model.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/assets_constant.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
 import 'package:sagara_coding_card_application/presentation/widgets/text_field_underline_widget.dart';
@@ -135,8 +136,10 @@ class _LoginScreenPageState extends State<LoginScreenPage> {
                       inspect(context.read<AuthBloc>());
                       context.read<AuthBloc>().add(
                             LoginEvent(
-                              identifier: usernameController.text,
-                              password: passwordController.text,
+                              requestModel: LoginRequestModel(
+                                identifier: usernameController.text,
+                                password: passwordController.text,
+                              ),
                             ),
                           );
                     },
