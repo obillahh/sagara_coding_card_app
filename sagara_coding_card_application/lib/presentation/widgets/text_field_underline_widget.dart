@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../utils/constant/assets_constant.dart';
 import '../utils/themes/app_colors.dart';
 import '../utils/themes/app_fonts.dart';
 
@@ -13,13 +12,13 @@ class TextFieldUnderlineWidget extends StatelessWidget {
   final String prefixIcon;
   final IconButton? suffixIcon;
   const TextFieldUnderlineWidget({
-    Key? key,
+    super.key,
     this.obscureText,
     required this.hintText,
     required this.prefixIcon,
     this.suffixIcon,
     required this.controller,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

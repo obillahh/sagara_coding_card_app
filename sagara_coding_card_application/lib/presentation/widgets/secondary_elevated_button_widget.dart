@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../utils/constant/assets_constant.dart';
 import '../utils/themes/app_colors.dart';
 import '../utils/themes/app_fonts.dart';
 
@@ -11,11 +10,11 @@ class SecondaryElevatedButtonWidget extends StatelessWidget {
   final String text;
   final SvgPicture? icon;
   const SecondaryElevatedButtonWidget({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.text,
     this.icon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

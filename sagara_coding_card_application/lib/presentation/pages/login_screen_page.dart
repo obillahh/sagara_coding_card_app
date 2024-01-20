@@ -133,6 +133,13 @@ class _LoginScreenPageState extends State<LoginScreenPage> {
                   },
                   child: PrimaryElevatedButtonWidget(
                     onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        },
+                      );
                       inspect(context.read<AuthBloc>());
                       context.read<AuthBloc>().add(
                             LoginEvent(

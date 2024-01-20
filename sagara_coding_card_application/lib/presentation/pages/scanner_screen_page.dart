@@ -10,7 +10,6 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
 
 import '../manager/card_manage/get_card_id/bloc/card_id_bloc.dart';
-import '../manager/card_manage/get_card_scanner/card_scanner_bloc.dart';
 import '../utils/constant/assets_constant.dart';
 import '../utils/constant/router_constant.dart';
 import '../utils/themes/app_colors.dart';
