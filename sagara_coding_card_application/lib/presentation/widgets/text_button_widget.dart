@@ -7,11 +7,11 @@ class TextButtonWidget extends StatelessWidget {
   final String text;
   final Color? color;
   const TextButtonWidget({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.text,
     this.color,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

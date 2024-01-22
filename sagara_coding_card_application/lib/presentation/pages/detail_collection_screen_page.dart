@@ -49,9 +49,9 @@ class _DetailsCollectionScreenPageState
             onPressed: () {
               Navigator.of(context).pop();
             },
-            icon: const Icon(
+            icon: Icon(
               Icons.arrow_circle_left,
-              size: 50,
+              size: 40.sp,
               color: AppColors.text,
             ),
           ),

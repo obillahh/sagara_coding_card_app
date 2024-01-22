@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/assets_constant.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../manager/auth_manage/login/auth_bloc.dart';
 import '../utils/themes/app_colors.dart';
@@ -119,12 +120,31 @@ class _ProfileScreenPageState extends State<ProfileScreenPage> {
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
-                                      Text(
-                                        '102',
-                                        style: AppFonts.appFont.titleLarge!
-                                            .copyWith(
-                                          fontWeight: FontWeight.w700,
-                                        ),
+                                      BlocBuilder<AuthBloc, AuthState>(
+                                        builder: (context, state) {
+                                          if (state is CurrentUserState) {
+                                            return Text(
+                                              state.currentUser!.collectionCard
+                                                  .toString(),
+                                              style: AppFonts
+                                                  .appFont.titleLarge!
+                                                  .copyWith(
+                                                fontWeight: FontWeight.w700,
+                                              ),
+                                            );
+                                          } else {
+                                            return Shimmer.fromColors(
+                                              baseColor: Colors.grey.shade200,
+                                              highlightColor:
+                                                  Colors.grey.shade300,
+                                              child: Container(
+                                                height: 16.h,
+                                                width: 32.w,
+                                                color: AppColors.primary,
+                                              ),
+                                            );
+                                          }
+                                        },
                                       ),
                                       Text(
                                         'Card Collection'.toUpperCase(),

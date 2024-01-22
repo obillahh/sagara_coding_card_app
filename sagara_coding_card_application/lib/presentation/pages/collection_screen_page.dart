@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sagara_coding_card_application/presentation/manager/card_manage/get_card_id/bloc/card_id_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/router_constant.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../manager/card_manage/get_card_list/bloc/card_list_bloc.dart';
 import '../utils/themes/app_colors.dart';
@@ -57,6 +58,7 @@ class _CollectionScreenPageState extends State<CollectionScreenPage> {
                     height: 0.h,
                   ),
                 ),
+                SizedBox(height: 6.h),
                 TextField(
                   decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
@@ -102,6 +104,7 @@ class _CollectionScreenPageState extends State<CollectionScreenPage> {
                     ),
                   ],
                 ),
+                SizedBox(height: 4.h),
                 BlocBuilder<CardListBloc, CardListState>(
                   builder: (context, state) {
                     if (state is CardListSuccessState) {
@@ -127,17 +130,43 @@ class _CollectionScreenPageState extends State<CollectionScreenPage> {
                               state.cardList[index].attributes.avatarCard.data
                                   .attributes.formats.thumbnail.url,
                               width: state.cardList[index].attributes.avatarCard
-                                  .data.attributes.formats.thumbnail.width
+                                  .data.attributes.width
                                   .toDouble(),
                             ),
                           );
                         },
                         itemCount: state.cardList.length,
                       );
+                    } else {
+                      return GridView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          crossAxisSpacing: 12,
+                          mainAxisSpacing: 12,
+                          childAspectRatio: .8,
+                        ),
+                        itemBuilder: (context, index) {
+                          return Shimmer.fromColors(
+                            baseColor: Colors.grey.shade800,
+                            highlightColor: Colors.grey.shade700,
+                            direction: ShimmerDirection.ttb,
+                            // period: const Duration(milliseconds: 800),
+                            child: Container(
+                              height: 200.h,
+                              width: 100.w,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4),
+                                color: AppColors.primary,
+                              ),
+                            ),
+                          );
+                        },
+                        itemCount: 6,
+                      );
                     }
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
                   },
                 ),
                 SizedBox(height: 32.h),

@@ -66,13 +66,14 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
           onPressed: () {
             context.pop();
           },
-          icon: Container(
-            decoration: BoxDecoration(
+          icon: DecoratedBox(
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
               color: AppColors.primary,
-              borderRadius: BorderRadius.circular(30),
             ),
-            child: const Icon(
+            child: Icon(
               Icons.arrow_back,
+              size: 32.sp,
               color: AppColors.text,
             ),
           ),
@@ -80,10 +81,16 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
         actions: [
           IconButton(
             onPressed: () {},
-            icon: const Icon(
-              Icons.help_outline,
-              size: 28,
-              color: AppColors.background,
+            icon: DecoratedBox(
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: AppColors.text,
+              ),
+              child: Icon(
+                Icons.help_sharp,
+                size: 32.sp,
+                color: AppColors.background,
+              ),
             ),
           ),
           IconButton(
@@ -95,15 +102,27 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
               qrController?.toggleFlash();
             },
             icon: isFlashOn
-                ? const Icon(
-                    Icons.flash_on,
-                    size: 28,
-                    color: AppColors.primary,
+                ? DecoratedBox(
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.text,
+                    ),
+                    child: Icon(
+                      Icons.flash_on,
+                      size: 28.sp,
+                      color: AppColors.primary,
+                    ),
                   )
-                : const Icon(
-                    Icons.flash_off,
-                    size: 28,
-                    color: AppColors.background,
+                : DecoratedBox(
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: AppColors.text,
+                    ),
+                    child: Icon(
+                      Icons.flash_off,
+                      size: 28.sp,
+                      color: AppColors.background,
+                    ),
                   ),
           ),
         ],
@@ -134,10 +153,12 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
                     onQRViewCreated: _onQRViewCreated,
                     overlay: QrScannerOverlayShape(
                       borderColor: AppColors.primary,
-                      borderRadius: 10,
-                      borderLength: 30,
-                      borderWidth: 10,
-                      cutOutSize: 300,
+                      overlayColor: AppColors.background.withOpacity(0.5),
+                      borderRadius: 6.r,
+                      borderLength: 80.r,
+                      borderWidth: 12.w,
+                      cutOutWidth: 280.w,
+                      cutOutHeight: 320.h,
                     ),
                   ),
                 );
@@ -148,9 +169,9 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
       ),
       bottomSheet: DraggableScrollableSheet(
         expand: false,
-        initialChildSize: 0.1.h,
-        minChildSize: 0.1.h,
-        maxChildSize: 0.2.h,
+        initialChildSize: 0.05.h,
+        minChildSize: 0.05.h,
+        maxChildSize: 0.15.h,
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
             decoration: const BoxDecoration(

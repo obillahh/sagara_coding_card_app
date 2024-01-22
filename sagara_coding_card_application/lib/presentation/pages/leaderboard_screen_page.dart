@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sagara_coding_card_application/presentation/manager/leaderboard_manage/get_leaderboard_bloc/leaderboard_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/assets_constant.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../utils/themes/app_colors.dart';
 
@@ -158,9 +159,11 @@ class _LeaderboardScreenPageState extends State<LeaderboardScreenPage> {
                           ),
                           title: Row(
                             children: [
-                              Image.asset(
-                                AssetsConstant.profilePicture,
-                                width: 40.w,
+                              CircleAvatar(
+                                child: Image.asset(
+                                  AssetsConstant.profilePicture,
+                                  width: 40.w,
+                                ),
                               ),
                               SizedBox(width: 12.w),
                               Text(
@@ -182,10 +185,53 @@ class _LeaderboardScreenPageState extends State<LeaderboardScreenPage> {
                       },
                       itemCount: state.leaderboard.length,
                     );
+                  } else {
+                    return ListView.separated(
+                      physics: const NeverScrollableScrollPhysics(),
+                      shrinkWrap: true,
+                      padding: EdgeInsets.symmetric(horizontal: 20.sp),
+                      itemBuilder: (context, index) {
+                        return Shimmer.fromColors(
+                          baseColor: Colors.grey.shade800,
+                          highlightColor: Colors.grey.shade700,
+                          child: ListTile(
+                            leading: Text(
+                              '${index + 1}',
+                              style: AppFonts.appFont.bodyMedium!.copyWith(
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            title: Row(
+                              children: [
+                                const CircleAvatar(
+                                  backgroundColor: AppColors.primary,
+                                ),
+                                SizedBox(width: 12.w),
+                                Container(
+                                  width: 120.w,
+                                  height: 12.h,
+                                  decoration: const BoxDecoration(
+                                    color: AppColors.primary,
+                                  ),
+                                )
+                              ],
+                            ),
+                            trailing: Container(
+                              width: 60.w,
+                              height: 12.h,
+                              decoration: const BoxDecoration(
+                                color: AppColors.primary,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                      separatorBuilder: (context, index) {
+                        return SizedBox(height: 8.h);
+                      },
+                      itemCount: 12,
+                    );
                   }
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
                 },
               ),
               SizedBox(height: 32.h),
