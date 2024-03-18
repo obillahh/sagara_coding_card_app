@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sagara_coding_card_application/data/models/auth_model/register_request_model.dart';
+import 'package:sagara_coding_card_application/presentation/manager/auth_manage/login/auth_bloc.dart';
 
 import '../utils/constant/assets_constant.dart';
 import '../utils/themes/app_colors.dart';
@@ -20,7 +23,7 @@ class RegisterScreenPage extends StatefulWidget {
 
 class _RegisterScreenPageState extends State<RegisterScreenPage> {
   final formKey = GlobalKey<FormBuilderState>();
-  final nameController = TextEditingController();
+  // final nameController = TextEditingController();
   final usernameController = TextEditingController();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
@@ -28,7 +31,7 @@ class _RegisterScreenPageState extends State<RegisterScreenPage> {
 
   @override
   void dispose() {
-    nameController.dispose();
+    // nameController.dispose();
     usernameController.dispose();
     emailController.dispose();
     passwordController.dispose();
@@ -71,13 +74,13 @@ class _RegisterScreenPageState extends State<RegisterScreenPage> {
                       fontWeight: FontWeight.w100,
                     ),
                   ),
-                  TextFieldUnderlineWidget(
-                    nameTextField: 'name',
-                    validators: FormBuilderValidators.required(),
-                    controller: nameController,
-                    hintText: 'Name',
-                    prefixIcon: AssetsConstant.nameIcon,
-                  ),
+                  // TextFieldUnderlineWidget(
+                  //   nameTextField: 'name',
+                  //   validators: FormBuilderValidators.required(),
+                  //   controller: nameController,
+                  //   hintText: 'Name',
+                  //   prefixIcon: AssetsConstant.nameIcon,
+                  // ),
                   TextFieldUnderlineWidget(
                     nameTextField: 'email',
                     validators: (p0) {
@@ -107,8 +110,6 @@ class _RegisterScreenPageState extends State<RegisterScreenPage> {
                       } else if (FormBuilderValidators.minLength(8)(p0) !=
                           null) {
                         return 'Password must be at least 8 characters long';
-                      } else if (FormBuilderValidators.numeric()(p0) != null) {
-                        return 'Password must contain at least one number';
                       }
                       // if (p0 == null || p0.isEmpty) {
                       //   return 'Password is required';
@@ -143,42 +144,65 @@ class _RegisterScreenPageState extends State<RegisterScreenPage> {
                     ),
                     obscureText: obscureText,
                   ),
-                  TextFieldUnderlineWidget(
-                    nameTextField: 're-enter-password',
-                    validators: (p0) {
-                      if (FormBuilderValidators.required()(p0) != null) {
-                        return 'Enter your password again';
-                      } else if (p0 != passwordController.text) {
-                        return 'Password does not match';
-                      }
-                      return null;
-                    },
-                    controller: confirmPasswordController,
-                    hintText: 'Re-enter Password',
-                    prefixIcon: AssetsConstant.passwordIcon,
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(
-                          () {
-                            obscureText = !obscureText;
-                          },
-                        );
-                      },
-                      icon: Icon(
-                        obscureText ? Icons.visibility_off : Icons.visibility,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    obscureText: obscureText,
-                  ),
+                  // TextFieldUnderlineWidget(
+                  //   nameTextField: 're-enter-password',
+                  //   validators: (p0) {
+                  //     if (FormBuilderValidators.required()(p0) != null) {
+                  //       return 'Enter your password again';
+                  //     } else if (p0 != passwordController.text) {
+                  //       return 'Password does not match';
+                  //     }
+                  //     return null;
+                  //   },
+                  //   controller: confirmPasswordController,
+                  //   hintText: 'Re-enter Password',
+                  //   prefixIcon: AssetsConstant.passwordIcon,
+                  //   suffixIcon: IconButton(
+                  //     onPressed: () {
+                  //       setState(
+                  //         () {
+                  //           obscureText = !obscureText;
+                  //         },
+                  //       );
+                  //     },
+                  //     icon: Icon(
+                  //       obscureText ? Icons.visibility_off : Icons.visibility,
+                  //       color: AppColors.primary,
+                  //     ),
+                  //   ),
+                  //   obscureText: obscureText,
+                  // ),
                   SizedBox(height: 16.h),
-                  PrimaryElevatedButtonWidget(
-                    onPressed: () {
-                      if (formKey.currentState!.saveAndValidate()) {
+                  BlocListener<AuthBloc, AuthState>(
+                    listener: (context, state) {
+                      if (state is AuthRegisterSuccess) {
                         context.go('/login');
                       }
                     },
-                    text: 'Sign Up',
+                    child: PrimaryElevatedButtonWidget(
+                      onPressed: () {
+                        if (formKey.currentState!.saveAndValidate()) {
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            },
+                          );
+                          context.read<AuthBloc>().add(
+                                RegisterEvent(
+                                  requestModel: RegisterRequestModel(
+                                    email: emailController.text,
+                                    password: passwordController.text,
+                                    username: usernameController.text,
+                                  ),
+                                ),
+                              );
+                        }
+                      },
+                      text: 'Sign Up',
+                    ),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
