@@ -175,8 +175,17 @@ class _RegisterScreenPageState extends State<RegisterScreenPage> {
                   SizedBox(height: 16.h),
                   BlocListener<AuthBloc, AuthState>(
                     listener: (context, state) {
-                      if (state is AuthRegisterSuccess) {
-                        context.go('/login');
+                      try {
+                        if (state is AuthRegisterSuccess) {
+                          context.go('/login');
+                        }
+                      } catch (e) {
+                        if (state is AuthErrorState) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(state.error),
+                          ));
+                          print(e);
+                        }
                       }
                     },
                     child: PrimaryElevatedButtonWidget(
