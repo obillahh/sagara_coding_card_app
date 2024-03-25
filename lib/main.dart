@@ -14,6 +14,7 @@ import 'package:sagara_coding_card_application/domain/use_cases/card_use_case/ge
 import 'package:sagara_coding_card_application/presentation/manager/card_manage/get_card_id/bloc/card_id_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/manager/card_manage/get_card_list/bloc/card_list_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/manager/leaderboard_manage/get_leaderboard_bloc/leaderboard_bloc.dart';
+import 'package:sagara_coding_card_application/presentation/utils/themes/app_colors.dart';
 
 import 'data/data_sources/local/auth_local_data_source.dart';
 import 'data/data_sources/remote/card_remote_data_source.dart';
@@ -116,6 +117,9 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           title: 'Flutter Demo',
           theme: ThemeData(
+            bottomSheetTheme: const BottomSheetThemeData(
+              surfaceTintColor: AppColors.text,
+            ),
             colorScheme: ColorScheme.fromSeed(
               seedColor: const Color(0xffC5233A),
             ),

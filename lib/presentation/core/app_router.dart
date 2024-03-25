@@ -3,7 +3,9 @@ import 'package:go_router/go_router.dart';
 import 'package:sagara_coding_card_application/presentation/pages/collection_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/detail_collection_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/leaderboard_screen_page.dart';
+import 'package:sagara_coding_card_application/presentation/pages/loading_quiz_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/onboarding_screen_page.dart';
+import 'package:sagara_coding_card_application/presentation/pages/quiz_card_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/scanner_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/verification_scren_page.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/router_constant.dart';
@@ -26,7 +28,7 @@ final _rootNavigatorProfile =
     GlobalKey<NavigatorState>(debugLabel: 'shellProfile');
 
 final GoRouter router = GoRouter(
-  initialLocation: '/splash',
+  initialLocation: '/login',
   navigatorKey: _rootNavigatorKey,
   routes: [
     GoRoute(
@@ -130,6 +132,18 @@ final GoRouter router = GoRouter(
       path: '/scanner',
       name: RouterConstant.scanner,
       builder: (context, state) => const ScannerScreenPage(),
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: '/quiz_card',
+      name: RouterConstant.quizCard,
+      builder: (context, state) => const QuizCardScreenPage(),
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: '/quiz_loading',
+      name: RouterConstant.quizLoading,
+      builder: (context, state) => const LoadingQuizScreenPage(),
     ),
   ],
 );

@@ -111,21 +111,7 @@ class _RegisterScreenPageState extends State<RegisterScreenPage> {
                           null) {
                         return 'Password must be at least 8 characters long';
                       }
-                      // if (p0 == null || p0.isEmpty) {
-                      //   return 'Password is required';
-                      // }
-                      // if (!p0.contains(RegExp(r'[A-Z]'))) {
-                      //   return 'Password must contain at least one uppercase letter';
-                      // }
-                      // if (!p0.contains(RegExp(r'[a-z]'))) {
-                      //   return 'Password must contain at least one lowercase letter';
-                      // }
-                      // if (!p0.contains(RegExp(r'[0-9]'))) {
-                      //   return 'Password must contain at least one number';
-                      // }
-                      // if (p0.length < 8) {
-                      //   return 'Password must be at least 8 characters long';
-                      // }
+
                       return null;
                     },
                     controller: passwordController,
@@ -182,9 +168,8 @@ class _RegisterScreenPageState extends State<RegisterScreenPage> {
                       } catch (e) {
                         if (state is AuthErrorState) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(state.error),
+                            content: Text('Registration failed: $e'),
                           ));
-                          print(e);
                         }
                       }
                     },

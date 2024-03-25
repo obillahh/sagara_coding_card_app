@@ -10,4 +10,6 @@ class RouterConstant {
   static const String leaderboard = 'leaderboard';
   static const String profile = 'profile';
   static const String scanner = 'scanner';
+  static const String quizCard = 'quiz_card';
+  static const String quizLoading = 'quiz_loading';
 }
