@@ -11,11 +11,13 @@ import '../utils/themes/app_fonts.dart';
 class DetailCardSheetWidget extends StatelessWidget {
   final CardIdResponseDataEntity card;
   final AnimationController _animationController;
+  final bool isFromScanner;
 
   const DetailCardSheetWidget({
     super.key,
     required AnimationController animationController,
     required this.card,
+    required this.isFromScanner,
   }) : _animationController = animationController;
 
   @override
@@ -133,13 +135,17 @@ class DetailCardSheetWidget extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        if (isFromScanner) {
+                          context.go('/quiz_card');
+                        } else {}
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         minimumSize: Size(260.w, 48.h),
                       ),
                       child: Text(
-                        'Choose as Avatar',
+                        isFromScanner ? 'Take Quiz' : 'Choose as Avatar',
                         style: AppFonts.appFont.labelLarge!.copyWith(
                           fontWeight: FontWeight.w700,
                         ),

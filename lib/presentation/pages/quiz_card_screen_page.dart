@@ -35,7 +35,7 @@ class QuizCardScreenPage extends StatelessWidget {
         backgroundColor: Colors.white,
         builder: (context) {
           return SizedBox(
-            height: 280.h,
+            height: 300.h,
             child: Padding(
               padding: const EdgeInsets.all(32),
               child: Column(
@@ -165,7 +165,9 @@ class QuizCardScreenPage extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          context.go('/home');
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.text,
                           minimumSize: Size(150.w, 36.h),

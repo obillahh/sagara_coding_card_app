@@ -134,7 +134,7 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
               if (state is CardIdSuccessState) {
                 final cardId = state.card.id;
                 context.goNamed(
-                  RouterConstant.detail,
+                  RouterConstant.detailScanner,
                   extra: cardId,
                 );
               } else if (state is CardIdFailureState) {

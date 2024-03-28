@@ -34,7 +34,7 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
           padding: const EdgeInsets.only(left: 8),
           child: IconButton(
             onPressed: () {
-              Navigator.of(context).pop();
+              context.go('/home');
             },
             icon: Icon(
               Icons.arrow_circle_left,

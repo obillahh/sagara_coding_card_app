@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sagara_coding_card_application/presentation/pages/collection_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/detail_collection_screen_page.dart';
+import 'package:sagara_coding_card_application/presentation/pages/detail_scanner_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/leaderboard_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/loading_quiz_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/onboarding_screen_page.dart';
@@ -29,7 +30,7 @@ final _rootNavigatorProfile =
     GlobalKey<NavigatorState>(debugLabel: 'shellProfile');
 
 final GoRouter router = GoRouter(
-  initialLocation: '/quiz_game',
+  initialLocation: '/splash',
   navigatorKey: _rootNavigatorKey,
   routes: [
     GoRoute(
@@ -91,8 +92,8 @@ final GoRouter router = GoRouter(
               routes: [
                 GoRoute(
                   parentNavigatorKey: _rootNavigatorKey,
-                  path: 'detail',
-                  name: RouterConstant.detail,
+                  path: 'detail_collection',
+                  name: RouterConstant.detailCollection,
                   builder: (context, state) => DetailsCollectionScreenPage(
                     key: state.pageKey,
                     id: state.extra as int,
@@ -133,6 +134,15 @@ final GoRouter router = GoRouter(
       path: '/scanner',
       name: RouterConstant.scanner,
       builder: (context, state) => const ScannerScreenPage(),
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: '/detail_scanner',
+      name: RouterConstant.detailScanner,
+      builder: (context, state) => DetailScannerScreenPage(
+        key: state.pageKey,
+        id: state.extra as int,
+      ),
     ),
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,

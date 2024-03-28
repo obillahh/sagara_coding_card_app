@@ -4,23 +4,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sagara_coding_card_application/presentation/manager/card_manage/get_card_id/bloc/card_id_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_colors.dart';
+import 'package:sagara_coding_card_application/presentation/widgets/detail_card_sheet_widget.dart';
 
-import '../widgets/detail_card_sheet_widget.dart';
-
-class DetailsCollectionScreenPage extends StatefulWidget {
+class DetailScannerScreenPage extends StatefulWidget {
   final int id;
-  const DetailsCollectionScreenPage({
-    super.key,
-    required this.id,
-  });
+  const DetailScannerScreenPage({super.key, required this.id});
 
   @override
-  State<DetailsCollectionScreenPage> createState() =>
-      _DetailsCollectionScreenPageState();
+  State<DetailScannerScreenPage> createState() =>
+      _DetailScannerScreenPageState();
 }
 
-class _DetailsCollectionScreenPageState
-    extends State<DetailsCollectionScreenPage> with TickerProviderStateMixin {
+class _DetailScannerScreenPageState extends State<DetailScannerScreenPage>
+    with TickerProviderStateMixin {
   late AnimationController _animationController;
 
   @override
@@ -49,7 +45,7 @@ class _DetailsCollectionScreenPageState
           padding: const EdgeInsets.only(left: 8),
           child: IconButton(
             onPressed: () {
-              Navigator.of(context).pop();
+              context.go('/home');
             },
             icon: Icon(
               Icons.arrow_circle_left,
@@ -96,7 +92,8 @@ class _DetailsCollectionScreenPageState
             final card = state.card;
             return DetailCardSheetWidget(
               animationController: _animationController,
-              card: card, isFromScanner: false,
+              card: card,
+              isFromScanner: true,
             );
           }
           return BottomSheet(

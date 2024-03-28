@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/assets_constant.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_colors.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
 
-class LoadingQuizScreenPage extends StatelessWidget {
+class LoadingQuizScreenPage extends StatefulWidget {
   const LoadingQuizScreenPage({super.key});
+
+  @override
+  State<LoadingQuizScreenPage> createState() => _LoadingQuizScreenPageState();
+}
+
+class _LoadingQuizScreenPageState extends State<LoadingQuizScreenPage> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    Future.delayed(const Duration(seconds: 3))
+        .then((value) => context.push('/quiz_game'));
+  }
 
   @override
   Widget build(BuildContext context) {

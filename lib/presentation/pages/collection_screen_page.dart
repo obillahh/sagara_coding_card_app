@@ -127,13 +127,13 @@ class _CollectionScreenPageState extends State<CollectionScreenPage> {
                               context.read<CardIdBloc>().add(
                                   GetCardIdEvent(id: state.cardList[index].id));
                               context.pushNamed(
-                                RouterConstant.detail,
+                                RouterConstant.detailCollection,
                                 extra: state.cardList[index].id,
                               );
                             },
                             child: Image.network(
                               state.cardList[index].attributes.avatarCard.data
-                                  .attributes.formats.thumbnail.url,
+                                  .attributes.url,
                               width: state.cardList[index].attributes.avatarCard
                                   .data.attributes.width
                                   .toDouble(),
