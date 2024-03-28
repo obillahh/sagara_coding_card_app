@@ -5,15 +5,19 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:sagara_coding_card_application/data/data_sources/remote/auth_remote_data_source.dart';
 import 'package:sagara_coding_card_application/data/data_sources/remote/leaderboard_remote_data_source.dart';
+import 'package:sagara_coding_card_application/data/data_sources/remote/quiz_remote_data_source.dart';
 import 'package:sagara_coding_card_application/data/repositories/auth_impl_repository.dart';
+import 'package:sagara_coding_card_application/data/repositories/quiz_impl_repository.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/get_current_user_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/is_first_entry_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/is_logged_in_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/login_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/card_use_case/get_list_card_use_case.dart';
+import 'package:sagara_coding_card_application/domain/use_cases/quiz_use_case/get_quiz_use_case.dart';
 import 'package:sagara_coding_card_application/presentation/manager/card_manage/get_card_id/bloc/card_id_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/manager/card_manage/get_card_list/bloc/card_list_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/manager/leaderboard_manage/get_leaderboard_bloc/leaderboard_bloc.dart';
+import 'package:sagara_coding_card_application/presentation/manager/quiz_manage/bloc/quiz_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_colors.dart';
 
 import 'data/data_sources/local/auth_local_data_source.dart';
@@ -107,6 +111,15 @@ class MyApp extends StatelessWidget {
             getLeaderboardUseCase: GetLeaderboardUseCase(
               leaderboardRepository: LeaderboardImplRepository(
                 remoteDataSource: LeaderboardRemoteDataSource(client: Dio()),
+              ),
+            ),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => QuizBloc(
+            getQuizUseCase: GetQuizUseCase(
+              quizRepository: QuizImplRepository(
+                remoteDataSource: QuizRemoteDataSource(client: Dio()),
               ),
             ),
           ),

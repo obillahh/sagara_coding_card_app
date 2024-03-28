@@ -70,9 +70,23 @@ class _DetailsCollectionScreenPageState
           ),
         ],
       ),
-      body: Image.asset(
-        AssetsConstant.character,
-        fit: BoxFit.fitWidth,
+      body: BlocBuilder<CardIdBloc, CardIdState>(
+        builder: (context, state) {
+          if (state is CardIdSuccessState) {
+            return SizedBox(
+              width: double.infinity.w,
+              height: double.infinity.h,
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Image.network(
+                  state.card.attributes.avatarCard.data.attributes.url,
+                  fit: BoxFit.fitWidth,
+                ),
+              ),
+            );
+          }
+          return Container();
+        },
       ),
       bottomSheet: BlocBuilder<CardIdBloc, CardIdState>(
         builder: (context, state) {

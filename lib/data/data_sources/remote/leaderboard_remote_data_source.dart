@@ -18,11 +18,10 @@ class LeaderboardRemoteDataSource {
       //   final result = await client.get(
       //     url,
       //     queryParameters: {
-      //       "populate": "avatar",
+      //       "populate": "avatar",  
       //     },
       //     options: Options(
       //       headers: {
-      //         'Accept': 'application/json',
       //         'Authorization': 'Bearer $token',
       //       },
       //     ),
