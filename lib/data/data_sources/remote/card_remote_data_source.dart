@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:sagara_coding_card_application/data/data_sources/local/auth_local_data_source.dart';
 import 'package:sagara_coding_card_application/data/models/card_model/cards_list_response_model.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/api_constant.dart';
 
@@ -61,9 +60,6 @@ class CardRemoteDataSource {
     try {
       final result = await client.get(
         url,
-        queryParameters: {
-          "populate": "avatar_card",
-        },
         options: Options(
           headers: {
             'Accept': 'application/json',
