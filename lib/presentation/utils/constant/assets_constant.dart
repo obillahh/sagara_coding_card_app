@@ -51,4 +51,5 @@ class AssetsConstant {
   static const String myLeaderboardIcon =
       'assets/icons/my_leaderboard_icon.svg';
   static const String characterLevelIcon = 'assets/icons/char_level_icon.svg';
+  static const String correctIcon = 'assets/icons/correct.svg';
 }

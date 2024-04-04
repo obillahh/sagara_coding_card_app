@@ -8,34 +8,32 @@ class OptionWidget extends StatelessWidget {
     super.key,
     required this.option,
     required this.optionValue,
-    // required this.isCorrect,
-    // required this.onOptionSelected,
+    required this.isSelected,
+    required this.isCorrect,
+    required this.onOptionSelected,
   });
 
   final String option;
   final String optionValue;
-  // final bool isCorrect;
-  // final Function(bool) onOptionSelected;
+  final bool isSelected;
+  final bool isCorrect;
+  final VoidCallback onOptionSelected;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        // onOptionSelected(optionValue == correctOption);
+        onOptionSelected();
       },
       child: Container(
-        width: double.infinity.w,
-        padding: EdgeInsets.symmetric(
-          horizontal: 20.w,
-          vertical: 10.h,
-        ),
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
         decoration: BoxDecoration(
-          // color: isCorrect ? Colors.green : optionValue == correctOption ? Colors.red : Colors.transparent,
+          color: isSelected
+              ? (isCorrect ? Colors.green : Colors.red)
+              : (isCorrect ? Colors.green : null),
           borderRadius: BorderRadius.circular(12.r),
-          border: Border.all(
-            color: AppColors.text,
-            width: 2.w,
-          ),
+          border: Border.all(color: AppColors.text, width: 1.6.w),
         ),
         child: Row(
           children: [
