@@ -7,6 +7,7 @@ import 'package:sagara_coding_card_application/presentation/pages/leaderboard_sc
 import 'package:sagara_coding_card_application/presentation/pages/loading_quiz_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/onboarding_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/quiz_card_screen_page.dart';
+import 'package:sagara_coding_card_application/presentation/pages/quiz_done_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/quiz_game_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/scanner_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/verification_scren_page.dart';
@@ -22,10 +23,12 @@ import '../widgets/navbar_bottom_widget.dart';
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 final _rootNavigatorHome = GlobalKey<NavigatorState>(debugLabel: 'shellHome');
-final _rootNavigatorCollection = GlobalKey<NavigatorState>(debugLabel: 'shellCollection');
+final _rootNavigatorCollection =
+    GlobalKey<NavigatorState>(debugLabel: 'shellCollection');
 final _rootNavigatorLeaderboard =
     GlobalKey<NavigatorState>(debugLabel: 'shellLeaderboard');
-final _rootNavigatorProfile = GlobalKey<NavigatorState>(debugLabel: 'shellProfile');
+final _rootNavigatorProfile =
+    GlobalKey<NavigatorState>(debugLabel: 'shellProfile');
 
 final GoRouter router = GoRouter(
   initialLocation: '/quiz_game',
@@ -159,6 +162,12 @@ final GoRouter router = GoRouter(
       path: '/quiz_game',
       name: RouterConstant.quizGame,
       builder: (context, state) => const QuizGameScreenPage(),
+    ),
+    GoRoute(
+      parentNavigatorKey: _rootNavigatorKey,
+      path: '/quiz_done',
+      name: RouterConstant.quizDone,
+      builder: (context, state) => const QuizDonePage(),
     ),
   ],
 );

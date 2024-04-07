@@ -14,4 +14,5 @@ class RouterConstant {
   static const String quizCard = 'quiz_card';
   static const String quizLoading = 'quiz_loading';
   static const String quizGame = 'quiz_game';
+  static const String quizDone = 'quiz_done';
 }
