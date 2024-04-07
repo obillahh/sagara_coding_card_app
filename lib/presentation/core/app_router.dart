@@ -22,15 +22,13 @@ import '../widgets/navbar_bottom_widget.dart';
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 final _rootNavigatorHome = GlobalKey<NavigatorState>(debugLabel: 'shellHome');
-final _rootNavigatorCollection =
-    GlobalKey<NavigatorState>(debugLabel: 'shellCollection');
+final _rootNavigatorCollection = GlobalKey<NavigatorState>(debugLabel: 'shellCollection');
 final _rootNavigatorLeaderboard =
     GlobalKey<NavigatorState>(debugLabel: 'shellLeaderboard');
-final _rootNavigatorProfile =
-    GlobalKey<NavigatorState>(debugLabel: 'shellProfile');
+final _rootNavigatorProfile = GlobalKey<NavigatorState>(debugLabel: 'shellProfile');
 
 final GoRouter router = GoRouter(
-  initialLocation: '/splash',
+  initialLocation: '/quiz_game',
   navigatorKey: _rootNavigatorKey,
   routes: [
     GoRoute(

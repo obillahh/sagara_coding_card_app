@@ -20,6 +20,7 @@ class CardRemoteDataSource {
           "populate": "avatar_card",
         },
         options: Options(
+          // responseType: ResponseType.stream,
           headers: {
             'Accept': 'application/json',
             // 'Authorization': 'Bearer ${await AuthLocalDataSource().getToken()}',

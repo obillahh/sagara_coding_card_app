@@ -31,7 +31,7 @@ class OptionWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: isSelected
               ? (isCorrect ? Colors.green : Colors.red)
-              : (isCorrect ? Colors.green : null),
+              : null, // Removed redundant condition for isCorrect
           borderRadius: BorderRadius.circular(12.r),
           border: Border.all(color: AppColors.text, width: 1.6.w),
         ),

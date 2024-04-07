@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -20,15 +19,20 @@ class QuizGameScreenPage extends StatefulWidget {
 }
 
 class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
-  String? selectedOption;
-  String? correctOption;
+  late List<String?> selectedOptions;
+  late PageController _pageController;
   Timer? _timer;
   int _secondsRemaining = 60;
+  int _questionIndex = 0;
 
   @override
   void initState() {
     super.initState();
     context.read<QuizBloc>().add(GetQuizEvent());
+    selectedOptions =
+        List<String?>.filled(5, null); // Assuming there are 5 questions initially
+
+    _pageController = PageController(initialPage: _questionIndex);
 
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
@@ -45,6 +49,7 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
   @override
   void dispose() {
     _timer?.cancel();
+    _pageController.dispose();
     super.dispose();
   }
 
@@ -127,8 +132,7 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
                                   SizedBox(width: 12.w),
                                   Text(
                                     '$_secondsRemaining s',
-                                    style:
-                                        AppFonts.appFont.titleLarge!.copyWith(
+                                    style: AppFonts.appFont.titleLarge!.copyWith(
                                       fontWeight: FontWeight.w800,
                                       color: AppColors.text,
                                     ),
@@ -164,9 +168,9 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
                               borderRadius: BorderRadius.circular(16.r),
                               color: AppColors.background,
                             ),
-                            child: const Text(
-                              '01 of 05 Questions',
-                              style: TextStyle(
+                            child: Text(
+                              '${_questionIndex + 1} of ${state.quizList.length} Questions',
+                              style: const TextStyle(
                                 color: AppColors.text,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -177,244 +181,17 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
                             height: 400.h,
                             child: PageView.builder(
                               itemCount: state.quizList.length,
+                              controller: _pageController,
+                              physics:
+                                  const NeverScrollableScrollPhysics(), // Disable scrolling
+                              onPageChanged: (index) {
+                                setState(() {
+                                  _questionIndex = index;
+                                });
+                              },
                               itemBuilder: (context, index) {
-                                return Column(
-                                  children: [
-                                    Text(
-                                      state.quizList[index].attributes
-                                          .quizQuestion,
-                                      style: TextStyle(
-                                        fontSize: 18.sp,
-                                        fontWeight: FontWeight.bold,
-                                        color: AppColors.text,
-                                      ),
-                                    ),
-                                    SizedBox(height: 12.h),
-                                    OptionWidget(
-                                      option: 'A)',
-                                      optionValue: state
-                                          .quizList[index].attributes.optionOne,
-                                      isSelected: selectedOption ==
-                                          state.quizList[index].attributes
-                                              .optionOne,
-                                      isCorrect: correctOption ==
-                                          state.quizList[index].attributes
-                                              .optionOne,
-                                      onOptionSelected: () {
-                                        setState(
-                                          () {
-                                            selectedOption = state
-                                                .quizList[index]
-                                                .attributes
-                                                .optionOne;
-                                            correctOption = state
-                                                .quizList[index]
-                                                .attributes
-                                                .correctOption;
-                                            if (correctOption ==
-                                                selectedOption) {
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) => Center(
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      SvgPicture.asset(
-                                                        AssetsConstant
-                                                            .correctIcon,
-                                                      ),
-                                                      Text(
-                                                        'Great Job!!!',
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 32.sp,
-                                                          color: AppColors.text,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                            } else {
-                                              null;
-                                            }
-                                          },
-                                        );
-                                      },
-                                    ),
-                                    SizedBox(height: 12.h),
-                                    OptionWidget(
-                                      option: 'B)',
-                                      optionValue: state
-                                          .quizList[index].attributes.optionTwo,
-                                      isSelected: selectedOption ==
-                                          state.quizList[index].attributes
-                                              .optionTwo,
-                                      isCorrect: correctOption ==
-                                          state.quizList[index].attributes
-                                              .optionTwo,
-                                      onOptionSelected: () {
-                                        setState(
-                                          () {
-                                            selectedOption = state
-                                                .quizList[index]
-                                                .attributes
-                                                .optionTwo;
-                                            correctOption = state
-                                                .quizList[index]
-                                                .attributes
-                                                .correctOption;
-                                            if (correctOption ==
-                                                selectedOption) {
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) => Center(
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      SvgPicture.asset(
-                                                        AssetsConstant
-                                                            .correctIcon,
-                                                      ),
-                                                      Text(
-                                                        'Great Job!!!',
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.w900,
-                                                          fontSize: 32.sp,
-                                                          color: AppColors.text,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                            } else {
-                                              null;
-                                            }
-                                          },
-                                        );
-                                      },
-                                    ),
-                                    SizedBox(height: 12.h),
-                                    OptionWidget(
-                                      option: 'C)',
-                                      optionValue: state.quizList[index]
-                                          .attributes.optionThree,
-                                      isSelected: selectedOption ==
-                                          state.quizList[index].attributes
-                                              .optionThree,
-                                      isCorrect: correctOption ==
-                                          state.quizList[index].attributes
-                                              .optionThree,
-                                      onOptionSelected: () {
-                                        setState(
-                                          () {
-                                            selectedOption = state
-                                                .quizList[index]
-                                                .attributes
-                                                .optionThree;
-                                            correctOption = state
-                                                .quizList[index]
-                                                .attributes
-                                                .correctOption;
-                                            if (correctOption ==
-                                                selectedOption) {
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) => Center(
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      SvgPicture.asset(
-                                                        AssetsConstant
-                                                            .correctIcon,
-                                                      ),
-                                                      Text(
-                                                        'Great Job!!!',
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 32.sp,
-                                                          color: AppColors.text,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                            } else {
-                                              null;
-                                            }
-                                          },
-                                        );
-                                      },
-                                    ),
-                                    SizedBox(height: 12.h),
-                                    OptionWidget(
-                                      option: 'D)',
-                                      optionValue: state.quizList[index]
-                                          .attributes.optionFour,
-                                      isSelected: selectedOption ==
-                                          state.quizList[index].attributes
-                                              .optionFour,
-                                      isCorrect: correctOption ==
-                                          state.quizList[index].attributes
-                                              .optionFour,
-                                      onOptionSelected: () {
-                                        setState(
-                                          () {
-                                            selectedOption = state
-                                                .quizList[index]
-                                                .attributes
-                                                .optionFour;
-                                            correctOption = state
-                                                .quizList[index]
-                                                .attributes
-                                                .correctOption;
-                                            if (correctOption ==
-                                                selectedOption) {
-                                              showDialog(
-                                                context: context,
-                                                builder: (context) => Center(
-                                                  child: Column(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      SvgPicture.asset(
-                                                        AssetsConstant
-                                                            .correctIcon,
-                                                      ),
-                                                      Text(
-                                                        'Great Job!!!',
-                                                        style: TextStyle(
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          fontSize: 32.sp,
-                                                          color: AppColors.text,
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              );
-                                            } else {
-                                              null;
-                                            }
-                                          },
-                                        );
-                                      },
-                                    ),
-                                  ],
-                                );
+                                return buildQuestionWidget(state.quizList[index], index,
+                                    state.quizList[index].attributes.correctOption);
                               },
                             ),
                           ),
@@ -431,6 +208,205 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
           );
         },
       ),
+    );
+  }
+
+  Widget buildQuestionWidget(dynamic quizItem, int index, String correctOption) {
+    return Column(
+      children: [
+        Text(
+          quizItem.attributes.quizQuestion,
+          style: TextStyle(
+            fontSize: 18.sp,
+            fontWeight: FontWeight.bold,
+            color: AppColors.text,
+          ),
+        ),
+        SizedBox(height: 12.h),
+        OptionWidget(
+          option: 'A)',
+          optionValue: quizItem.attributes.optionOne,
+          isSelected: selectedOptions[index] == quizItem.attributes.optionOne,
+          isCorrect: correctOption == quizItem.attributes.optionOne,
+          onOptionSelected: () {
+            setState(() {
+              selectedOptions[index] = quizItem.attributes.optionOne;
+            });
+            if (correctOption == quizItem.attributes.optionOne) {
+              showDialog(
+                context: context,
+                builder: (context) => Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        AssetsConstant.correctIcon,
+                      ),
+                      SizedBox(height: 12.h),
+                      Text(
+                        'Great Job!!!',
+                        style: TextStyle(
+                          decoration: TextDecoration.none,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 32.sp,
+                          color: AppColors.text,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+              Future.delayed(const Duration(seconds: 3), () {
+                context.pop();
+                _pageController.nextPage(
+                    duration: const Duration(milliseconds: 500), curve: Curves.ease);
+              });
+            }
+            Future.delayed(const Duration(seconds: 2), () {
+              _pageController.nextPage(
+                  duration: const Duration(milliseconds: 500), curve: Curves.ease);
+            });
+          },
+        ),
+        SizedBox(height: 12.h),
+        OptionWidget(
+          option: 'B)',
+          optionValue: quizItem.attributes.optionTwo,
+          isSelected: selectedOptions[index] == quizItem.attributes.optionTwo,
+          isCorrect: correctOption == quizItem.attributes.optionTwo,
+          onOptionSelected: () {
+            setState(() {
+              selectedOptions[index] = quizItem.attributes.optionTwo;
+            });
+            if (correctOption == quizItem.attributes.optionTwo) {
+              showDialog(
+                context: context,
+                builder: (context) => Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        AssetsConstant.correctIcon,
+                      ),
+                      SizedBox(height: 12.h),
+                      Text(
+                        'Great Job!!!',
+                        style: TextStyle(
+                          decoration: TextDecoration.none,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 32.sp,
+                          color: AppColors.text,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+              Future.delayed(const Duration(seconds: 3), () {
+                context.pop();
+                _pageController.nextPage(
+                    duration: const Duration(milliseconds: 500), curve: Curves.ease);
+              });
+            }
+            Future.delayed(const Duration(seconds: 2), () {
+              _pageController.nextPage(
+                  duration: const Duration(milliseconds: 500), curve: Curves.ease);
+            });
+          },
+        ),
+        SizedBox(height: 12.h),
+        OptionWidget(
+          option: 'C)',
+          optionValue: quizItem.attributes.optionThree,
+          isSelected: selectedOptions[index] == quizItem.attributes.optionThree,
+          isCorrect: correctOption == quizItem.attributes.optionThree,
+          onOptionSelected: () {
+            setState(() {
+              selectedOptions[index] = quizItem.attributes.optionThree;
+            });
+            if (correctOption == quizItem.attributes.optionThree) {
+              showDialog(
+                context: context,
+                builder: (context) => Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        AssetsConstant.correctIcon,
+                      ),
+                      SizedBox(height: 12.h),
+                      Text(
+                        'Great Job!!!',
+                        style: TextStyle(
+                          decoration: TextDecoration.none,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 32.sp,
+                          color: AppColors.text,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+              Future.delayed(const Duration(seconds: 3), () {
+                context.pop();
+                _pageController.nextPage(
+                    duration: const Duration(milliseconds: 500), curve: Curves.ease);
+              });
+            }
+            Future.delayed(const Duration(seconds: 2), () {
+              _pageController.nextPage(
+                  duration: const Duration(milliseconds: 500), curve: Curves.ease);
+            });
+          },
+        ),
+        SizedBox(height: 12.h),
+        OptionWidget(
+          option: 'D)',
+          optionValue: quizItem.attributes.optionFour,
+          isSelected: selectedOptions[index] == quizItem.attributes.optionFour,
+          isCorrect: correctOption == quizItem.attributes.optionFour,
+          onOptionSelected: () {
+            setState(() {
+              selectedOptions[index] = quizItem.attributes.optionFour;
+            });
+            if (correctOption == quizItem.attributes.optionFour) {
+              showDialog(
+                context: context,
+                builder: (context) => Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(
+                        AssetsConstant.correctIcon,
+                      ),
+                      SizedBox(height: 12.h),
+                      Text(
+                        'Great Job!!!',
+                        style: TextStyle(
+                          decoration: TextDecoration.none,
+                          fontWeight: FontWeight.w900,
+                          fontSize: 32.sp,
+                          color: AppColors.text,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+              Future.delayed(const Duration(seconds: 3), () {
+                context.pop();
+                _pageController.nextPage(
+                    duration: const Duration(milliseconds: 500), curve: Curves.ease);
+              });
+            }
+            Future.delayed(const Duration(seconds: 2), () {
+              _pageController.nextPage(
+                  duration: const Duration(milliseconds: 500), curve: Curves.ease);
+            });
+          },
+        ),
+      ],
     );
   }
 }
