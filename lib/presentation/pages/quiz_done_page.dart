@@ -11,10 +11,10 @@ class QuizDonePage extends StatelessWidget {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 80,
               ),
-              Center(
+              const Center(
                 child: Text(
                   "You’ve Complete\nyour quiz!",
                   style: TextStyle(
@@ -24,7 +24,7 @@ class QuizDonePage extends StatelessWidget {
                   textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 32,
               ),
               Center(
@@ -32,7 +32,7 @@ class QuizDonePage extends StatelessWidget {
                 "assets/icons/quiz_done.svg",
                 height: 300,
               )),
-              SizedBox(
+              const SizedBox(
                 height: 48,
               ),
               Padding(
@@ -42,12 +42,12 @@ class QuizDonePage extends StatelessWidget {
                     SvgPicture.asset(
                       "assets/icons/card_collection_icon.svg",
                       height: 40,
-                      color: Color(0xffC5233A),
+                      color: const Color(0xffC5233A),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 12,
                     ),
-                    Text(
+                    const Text(
                       "Back End Engineer",
                       style: TextStyle(
                           color: Color(0xffC5233A),
@@ -57,7 +57,7 @@ class QuizDonePage extends StatelessWidget {
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               Padding(
@@ -69,8 +69,8 @@ class QuizDonePage extends StatelessWidget {
                       width: 120,
                       height: 80,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(12)),
-                          border: Border.all(color: Color(0xffC5233A))),
+                          borderRadius: const BorderRadius.all(Radius.circular(12)),
+                          border: Border.all(color: const Color(0xffC5233A))),
                       child: Column(
                         children: [
                           Stack(
@@ -79,12 +79,12 @@ class QuizDonePage extends StatelessWidget {
                               Container(
                                 width: double.infinity,
                                 height: 20,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                     color: Color(0xff1A1A1A),
                                     borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(10),
                                         topRight: Radius.circular(10))),
-                                child: Text(
+                                child: const Text(
                                   "Points",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(color: Colors.white),
@@ -92,7 +92,7 @@ class QuizDonePage extends StatelessWidget {
                               ),
                             ],
                           ),
-                          Spacer(),
+                          const Spacer(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -101,18 +101,18 @@ class QuizDonePage extends StatelessWidget {
                                 "assets/icons/point.svg",
                                 height: 20,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 4,
                               ),
-                              Text("+9000",
+                              const Text("+9000",
                                   style: TextStyle(
                                       color: Color(0xff333333),
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold))
                             ],
                           ),
-                          Spacer(),
-                          Spacer(),
+                          const Spacer(),
+                          const Spacer(),
                         ],
                       ),
                     ),
@@ -120,8 +120,8 @@ class QuizDonePage extends StatelessWidget {
                       width: 120,
                       height: 80,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(12)),
-                          border: Border.all(color: Color(0xffC5233A))),
+                          borderRadius: const BorderRadius.all(Radius.circular(12)),
+                          border: Border.all(color: const Color(0xffC5233A))),
                       child: Column(
                         children: [
                           Stack(
@@ -130,12 +130,12 @@ class QuizDonePage extends StatelessWidget {
                               Container(
                                 width: double.infinity,
                                 height: 20,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                     color: Color(0xff1A1A1A),
                                     borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(10),
                                         topRight: Radius.circular(10))),
-                                child: Text(
+                                child: const Text(
                                   "Time",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(color: Colors.white),
@@ -143,7 +143,7 @@ class QuizDonePage extends StatelessWidget {
                               ),
                             ],
                           ),
-                          Spacer(),
+                          const Spacer(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -152,18 +152,18 @@ class QuizDonePage extends StatelessWidget {
                                 "assets/icons/time.svg",
                                 height: 20,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 4,
                               ),
-                              Text("01:49",
+                              const Text("01:49",
                                   style: TextStyle(
                                       color: Color(0xff333333),
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold))
                             ],
                           ),
-                          Spacer(),
-                          Spacer(),
+                          const Spacer(),
+                          const Spacer(),
                         ],
                       ),
                     ),
@@ -171,8 +171,8 @@ class QuizDonePage extends StatelessWidget {
                       width: 120,
                       height: 80,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(12)),
-                          border: Border.all(color: Color(0xffC5233A))),
+                          borderRadius: const BorderRadius.all(Radius.circular(12)),
+                          border: Border.all(color: const Color(0xffC5233A))),
                       child: Column(
                         children: [
                           Stack(
@@ -181,12 +181,12 @@ class QuizDonePage extends StatelessWidget {
                               Container(
                                 width: double.infinity,
                                 height: 20,
-                                decoration: BoxDecoration(
+                                decoration: const BoxDecoration(
                                     color: Color(0xff1A1A1A),
                                     borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(10),
                                         topRight: Radius.circular(10))),
-                                child: Text(
+                                child: const Text(
                                   "Score",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(color: Colors.white),
@@ -194,7 +194,7 @@ class QuizDonePage extends StatelessWidget {
                               ),
                             ],
                           ),
-                          Spacer(),
+                          const Spacer(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
@@ -203,47 +203,43 @@ class QuizDonePage extends StatelessWidget {
                                 "assets/icons/score.svg",
                                 height: 20,
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 width: 4,
                               ),
-                              Text("80%",
+                              const Text("80%",
                                   style: TextStyle(
                                       color: Color(0xff333333),
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold))
                             ],
                           ),
-                          Spacer(),
-                          Spacer(),
+                          const Spacer(),
+                          const Spacer(),
                         ],
                       ),
                     ),
                   ],
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 16,
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ElevatedButton(
                   onPressed: () => {},
-                  child: Text(
+                  style: ElevatedButton.styleFrom(
+                    shape:
+                        RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.0)),
+                    minimumSize: const Size(double.infinity, 40),
+                    backgroundColor: const Color(0xffC5233A),
+                    textStyle: const TextStyle(
+                        color: Colors.white, fontSize: 10, fontStyle: FontStyle.normal),
+                  ),
+                  child: const Text(
                     "Continue",
                     style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12.0)),
-                    minimumSize: Size(double.infinity, 40),
-                    backgroundColor: Color(0xffC5233A),
-                    textStyle: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
-                        fontStyle: FontStyle.normal),
+                        color: Colors.white, fontWeight: FontWeight.w600, fontSize: 16),
                   ),
                 ),
               )

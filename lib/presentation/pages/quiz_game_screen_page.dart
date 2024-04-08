@@ -29,8 +29,7 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
   void initState() {
     super.initState();
     context.read<QuizBloc>().add(GetQuizEvent());
-    selectedOptions =
-        List<String?>.filled(5, null); // Assuming there are 5 questions initially
+    selectedOptions = List<String?>.filled(10, null);
 
     _pageController = PageController(initialPage: _questionIndex);
 
@@ -182,16 +181,19 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
                             child: PageView.builder(
                               itemCount: state.quizList.length,
                               controller: _pageController,
-                              physics:
-                                  const NeverScrollableScrollPhysics(), // Disable scrolling
+                              physics: const NeverScrollableScrollPhysics(),
                               onPageChanged: (index) {
                                 setState(() {
                                   _questionIndex = index;
                                 });
                               },
                               itemBuilder: (context, index) {
-                                return buildQuestionWidget(state.quizList[index], index,
-                                    state.quizList[index].attributes.correctOption);
+                                return buildQuestionWidget(
+                                  state.quizList[index],
+                                  index,
+                                  state.quizList[index].attributes.correctOption,
+                                  state,
+                                );
                               },
                             ),
                           ),
@@ -211,7 +213,12 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
     );
   }
 
-  Widget buildQuestionWidget(dynamic quizItem, int index, String correctOption) {
+  Widget buildQuestionWidget(
+    dynamic quizItem,
+    int index,
+    String correctOption,
+    QuizSuccessState state,
+  ) {
     return Column(
       children: [
         Text(
@@ -258,13 +265,21 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
               );
               Future.delayed(const Duration(seconds: 3), () {
                 context.pop();
-                _pageController.nextPage(
-                    duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                if (_questionIndex == state.quizList.length - 1) {
+                  context.go("/quiz_done");
+                } else {
+                  _pageController.nextPage(
+                      duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                }
               });
             }
             Future.delayed(const Duration(seconds: 2), () {
-              _pageController.nextPage(
-                  duration: const Duration(milliseconds: 500), curve: Curves.ease);
+              if (_questionIndex == state.quizList.length - 1) {
+                context.go("/quiz_done");
+              } else {
+                _pageController.nextPage(
+                    duration: const Duration(milliseconds: 500), curve: Curves.ease);
+              }
             });
           },
         ),
@@ -304,13 +319,21 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
               );
               Future.delayed(const Duration(seconds: 3), () {
                 context.pop();
-                _pageController.nextPage(
-                    duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                if (_questionIndex == state.quizList.length - 1) {
+                  context.go("/quiz_done");
+                } else {
+                  _pageController.nextPage(
+                      duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                }
               });
             }
             Future.delayed(const Duration(seconds: 2), () {
-              _pageController.nextPage(
-                  duration: const Duration(milliseconds: 500), curve: Curves.ease);
+              if (_questionIndex == state.quizList.length - 1) {
+                context.go("/quiz_done");
+              } else {
+                _pageController.nextPage(
+                    duration: const Duration(milliseconds: 500), curve: Curves.ease);
+              }
             });
           },
         ),
@@ -350,13 +373,21 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
               );
               Future.delayed(const Duration(seconds: 3), () {
                 context.pop();
-                _pageController.nextPage(
-                    duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                if (_questionIndex == state.quizList.length - 1) {
+                  context.go("/quiz_done");
+                } else {
+                  _pageController.nextPage(
+                      duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                }
               });
             }
             Future.delayed(const Duration(seconds: 2), () {
-              _pageController.nextPage(
-                  duration: const Duration(milliseconds: 500), curve: Curves.ease);
+              if (_questionIndex == state.quizList.length - 1) {
+                context.go("/quiz_done");
+              } else {
+                _pageController.nextPage(
+                    duration: const Duration(milliseconds: 500), curve: Curves.ease);
+              }
             });
           },
         ),
@@ -396,13 +427,21 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
               );
               Future.delayed(const Duration(seconds: 3), () {
                 context.pop();
-                _pageController.nextPage(
-                    duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                if (_questionIndex == state.quizList.length - 1) {
+                  context.go("/quiz_done");
+                } else {
+                  _pageController.nextPage(
+                      duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                }
               });
             }
             Future.delayed(const Duration(seconds: 2), () {
-              _pageController.nextPage(
-                  duration: const Duration(milliseconds: 500), curve: Curves.ease);
+              if (_questionIndex == state.quizList.length - 1) {
+                context.go("/quiz_done");
+              } else {
+                _pageController.nextPage(
+                    duration: const Duration(milliseconds: 500), curve: Curves.ease);
+              }
             });
           },
         ),
