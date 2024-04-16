@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sagara_coding_card_application/presentation/manager/card_manage/get_card_id/bloc/card_id_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/manager/quiz_manage/bloc/quiz_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/assets_constant.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_colors.dart';
@@ -86,16 +87,26 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
           ),
         ],
       ),
-      body: SizedBox(
-        width: double.infinity.w,
-        height: double.infinity.h,
-        child: Align(
-          alignment: Alignment.topCenter,
-          child: Image.asset(
-            AssetsConstant.character,
-            fit: BoxFit.fitWidth,
-          ),
-        ),
+      body: BlocBuilder<CardIdBloc, CardIdState>(
+        builder: (context, state) {
+          if (state is CardIdSuccessState) {
+            return SizedBox(
+              width: double.infinity.w,
+              height: double.infinity.h,
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: Image.network(
+                  state.card.attributes.avatarCard.data.attributes.url,
+                  fit: BoxFit.fitWidth,
+                ),
+              ),
+            );
+          }
+          return SizedBox(
+            width: double.infinity.w,
+            height: double.infinity.h,
+          );
+        },
       ),
       bottomSheet: BottomSheet(
         onClosing: () {
@@ -107,9 +118,10 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
             height: 380.h,
             child: Padding(
               padding: EdgeInsets.only(left: 16.w, right: 16.w, top: 16.w),
-              child: BlocBuilder<QuizBloc, QuizState>(
+              child: BlocBuilder<CardIdBloc, CardIdState>(
                 builder: (context, state) {
-                  if (state is QuizSuccessState) {
+                  if (state is CardIdSuccessState) {
+                    final quizzes = state.card.attributes.quizzes;
                     return SingleChildScrollView(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -168,7 +180,7 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
                               color: AppColors.background,
                             ),
                             child: Text(
-                              '${_questionIndex + 1} of ${state.quizList.length} Questions',
+                              '${_questionIndex + 1} of ${quizzes.data.length} Questions',
                               style: const TextStyle(
                                 color: AppColors.text,
                                 fontWeight: FontWeight.w600,
@@ -179,7 +191,7 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
                           SizedBox(
                             height: 400.h,
                             child: PageView.builder(
-                              itemCount: state.quizList.length,
+                              itemCount: quizzes.data.length,
                               controller: _pageController,
                               physics: const NeverScrollableScrollPhysics(),
                               onPageChanged: (index) {
@@ -189,9 +201,9 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
                               },
                               itemBuilder: (context, index) {
                                 return buildQuestionWidget(
-                                  state.quizList[index],
+                                  quizzes.data[index],
                                   index,
-                                  state.quizList[index].attributes.correctOption,
+                                  quizzes.data[index].attributes.correctOption,
                                   state,
                                 );
                               },
@@ -217,8 +229,9 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
     dynamic quizItem,
     int index,
     String correctOption,
-    QuizSuccessState state,
+    CardIdSuccessState state,
   ) {
+    final quizzes = state.card.attributes.quizzes;
     return Column(
       children: [
         Text(
@@ -264,17 +277,17 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
                 ),
               );
               Future.delayed(const Duration(seconds: 3), () {
-                context.pop();
-                if (_questionIndex == state.quizList.length - 1) {
+                if (_questionIndex == quizzes.data.length - 1) {
                   context.go("/quiz_done");
                 } else {
+                  context.pop();
                   _pageController.nextPage(
                       duration: const Duration(milliseconds: 500), curve: Curves.ease);
                 }
               });
             }
             Future.delayed(const Duration(seconds: 2), () {
-              if (_questionIndex == state.quizList.length - 1) {
+              if (_questionIndex == quizzes.data.length - 1) {
                 context.go("/quiz_done");
               } else {
                 _pageController.nextPage(
@@ -318,17 +331,18 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
                 ),
               );
               Future.delayed(const Duration(seconds: 3), () {
-                context.pop();
-                if (_questionIndex == state.quizList.length - 1) {
+                if (_questionIndex == quizzes.data.length - 1) {
                   context.go("/quiz_done");
                 } else {
+                  context.pop();
+
                   _pageController.nextPage(
                       duration: const Duration(milliseconds: 500), curve: Curves.ease);
                 }
               });
             }
             Future.delayed(const Duration(seconds: 2), () {
-              if (_questionIndex == state.quizList.length - 1) {
+              if (_questionIndex == quizzes.data.length - 1) {
                 context.go("/quiz_done");
               } else {
                 _pageController.nextPage(
@@ -372,17 +386,18 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
                 ),
               );
               Future.delayed(const Duration(seconds: 3), () {
-                context.pop();
-                if (_questionIndex == state.quizList.length - 1) {
+                if (_questionIndex == quizzes.data.length - 1) {
                   context.go("/quiz_done");
                 } else {
+                  context.pop();
+
                   _pageController.nextPage(
                       duration: const Duration(milliseconds: 500), curve: Curves.ease);
                 }
               });
             }
             Future.delayed(const Duration(seconds: 2), () {
-              if (_questionIndex == state.quizList.length - 1) {
+              if (_questionIndex == quizzes.data.length - 1) {
                 context.go("/quiz_done");
               } else {
                 _pageController.nextPage(
@@ -426,17 +441,17 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
                 ),
               );
               Future.delayed(const Duration(seconds: 3), () {
-                context.pop();
-                if (_questionIndex == state.quizList.length - 1) {
+                if (_questionIndex == quizzes.data.length - 1) {
                   context.go("/quiz_done");
                 } else {
+                  context.pop();
                   _pageController.nextPage(
                       duration: const Duration(milliseconds: 500), curve: Curves.ease);
                 }
               });
             }
             Future.delayed(const Duration(seconds: 2), () {
-              if (_questionIndex == state.quizList.length - 1) {
+              if (_questionIndex == quizzes.data.length - 1) {
                 context.go("/quiz_done");
               } else {
                 _pageController.nextPage(

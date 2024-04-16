@@ -41,7 +41,7 @@ class CardRemoteDataSource {
       final result = await client.get(
         url,
         queryParameters: {
-          "populate": "avatar_card",
+          "populate": "*",
         },
         options: Options(
           headers: {

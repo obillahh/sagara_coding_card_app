@@ -4,13 +4,13 @@ import 'package:sagara_coding_card_application/presentation/pages/collection_scr
 import 'package:sagara_coding_card_application/presentation/pages/detail_collection_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/detail_scanner_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/leaderboard_screen_page.dart';
-import 'package:sagara_coding_card_application/presentation/pages/loading_quiz_screen_page.dart';
+import 'package:sagara_coding_card_application/presentation/pages/quiz_loading_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/onboarding_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/quiz_card_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/quiz_done_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/quiz_game_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/pages/scanner_screen_page.dart';
-import 'package:sagara_coding_card_application/presentation/pages/verification_scren_page.dart';
+import 'package:sagara_coding_card_application/presentation/pages/verification_screen_page.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/router_constant.dart';
 
 import '../pages/home_screen_page.dart';
@@ -23,15 +23,13 @@ import '../widgets/navbar_bottom_widget.dart';
 final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 final _rootNavigatorHome = GlobalKey<NavigatorState>(debugLabel: 'shellHome');
-final _rootNavigatorCollection =
-    GlobalKey<NavigatorState>(debugLabel: 'shellCollection');
+final _rootNavigatorCollection = GlobalKey<NavigatorState>(debugLabel: 'shellCollection');
 final _rootNavigatorLeaderboard =
     GlobalKey<NavigatorState>(debugLabel: 'shellLeaderboard');
-final _rootNavigatorProfile =
-    GlobalKey<NavigatorState>(debugLabel: 'shellProfile');
+final _rootNavigatorProfile = GlobalKey<NavigatorState>(debugLabel: 'shellProfile');
 
 final GoRouter router = GoRouter(
-  initialLocation: '/quiz_game',
+  initialLocation: '/splash',
   navigatorKey: _rootNavigatorKey,
   routes: [
     GoRoute(

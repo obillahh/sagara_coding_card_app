@@ -7,14 +7,11 @@ class CardIdResponseModel {
     this.meta,
   });
 
-  factory CardIdResponseModel.fromJson(Map<String, dynamic> json) =>
-      CardIdResponseModel(
-        data: json["data"] == null
-            ? null
-            : CardIdResponseDataModel.fromJson(json["data"]),
-        meta: json["meta"] == null
-            ? null
-            : CardIdResponseMetaModel.fromJson(json["meta"]),
+  factory CardIdResponseModel.fromJson(Map<String, dynamic> json) => CardIdResponseModel(
+        data:
+            json["data"] == null ? null : CardIdResponseDataModel.fromJson(json["data"]),
+        meta:
+            json["meta"] == null ? null : CardIdResponseMetaModel.fromJson(json["meta"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -55,6 +52,7 @@ class CardDataAttributesModel {
   DateTime? updatedAt;
   DateTime? publishedAt;
   AvatarCardIdResponseModel? avatarCard;
+  QuizCardResponseModel? quizzes;
 
   CardDataAttributesModel({
     this.name,
@@ -65,6 +63,7 @@ class CardDataAttributesModel {
     this.updatedAt,
     this.publishedAt,
     this.avatarCard,
+    this.quizzes,
   });
 
   factory CardDataAttributesModel.fromJson(Map<String, dynamic> json) =>
@@ -73,18 +72,16 @@ class CardDataAttributesModel {
         role: json["role"],
         description: json["description"],
         level: json["level"],
-        createdAt: json["createdAt"] == null
-            ? null
-            : DateTime.parse(json["createdAt"]),
-        updatedAt: json["updatedAt"] == null
-            ? null
-            : DateTime.parse(json["updatedAt"]),
-        publishedAt: json["publishedAt"] == null
-            ? null
-            : DateTime.parse(json["publishedAt"]),
+        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
+        publishedAt:
+            json["publishedAt"] == null ? null : DateTime.parse(json["publishedAt"]),
         avatarCard: json["avatar_card"] == null
             ? null
             : AvatarCardIdResponseModel.fromJson(json["avatar_card"]),
+        quizzes: json["quizzes"] == null
+            ? null
+            : QuizCardResponseModel.fromJson(json["quizzes"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -96,6 +93,7 @@ class CardDataAttributesModel {
         "updatedAt": updatedAt?.toIso8601String(),
         "publishedAt": publishedAt?.toIso8601String(),
         "avatar_card": avatarCard?.toJson(),
+        "quizzes": quizzes?.toJson(),
       };
 }
 
@@ -106,9 +104,9 @@ class AvatarCardIdResponseModel {
     this.data,
   });
 
-  factory AvatarCardIdResponseModel.fromJson(Map<String, dynamic> json) => AvatarCardIdResponseModel(
-        data:
-            json["data"] == null ? null : AvatarCardIdDataModel.fromJson(json["data"]),
+  factory AvatarCardIdResponseModel.fromJson(Map<String, dynamic> json) =>
+      AvatarCardIdResponseModel(
+        data: json["data"] == null ? null : AvatarCardIdDataModel.fromJson(json["data"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -125,7 +123,8 @@ class AvatarCardIdDataModel {
     this.attributes,
   });
 
-  factory AvatarCardIdDataModel.fromJson(Map<String, dynamic> json) => AvatarCardIdDataModel(
+  factory AvatarCardIdDataModel.fromJson(Map<String, dynamic> json) =>
+      AvatarCardIdDataModel(
         id: json["id"],
         attributes: json["attributes"] == null
             ? null
@@ -194,12 +193,8 @@ class AvatarCardIdAttributesModel {
         providerMetadata: json["provider_metadata"] == null
             ? null
             : ProviderMetadataModel.fromJson(json["provider_metadata"]),
-        createdAt: json["createdAt"] == null
-            ? null
-            : DateTime.parse(json["createdAt"]),
-        updatedAt: json["updatedAt"] == null
-            ? null
-            : DateTime.parse(json["updatedAt"]),
+        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -326,4 +321,100 @@ class CardIdResponseMetaModel {
       CardIdResponseMetaModel();
 
   Map<String, dynamic> toJson() => {};
+}
+
+class QuizCardResponseModel {
+  List<QuizCardDataModel>? data;
+
+  QuizCardResponseModel({
+    this.data,
+  });
+
+  factory QuizCardResponseModel.fromJson(Map<String, dynamic> json) =>
+      QuizCardResponseModel(
+        data: json["data"] == null
+            ? []
+            : List<QuizCardDataModel>.from(
+                json["data"]!.map((x) => QuizCardDataModel.fromJson(x))),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+      };
+}
+
+class QuizCardDataModel {
+  int? id;
+  QuizCardDataAttributesModel? attributes;
+
+  QuizCardDataModel({
+    this.id,
+    this.attributes,
+  });
+
+  factory QuizCardDataModel.fromJson(Map<String, dynamic> json) => QuizCardDataModel(
+        id: json["id"],
+        attributes: json["attributes"] == null
+            ? null
+            : QuizCardDataAttributesModel.fromJson(json["attributes"]),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "attributes": attributes?.toJson(),
+      };
+}
+
+class QuizCardDataAttributesModel {
+  String? quizQuestion;
+  String? optionOne;
+  String? optionTwo;
+  String? optionThree;
+  String? optionFour;
+  String? correctOption;
+  DateTime? createdAt;
+  DateTime? updatedAt;
+  DateTime? publishedAt;
+  int? score;
+
+  QuizCardDataAttributesModel({
+    this.quizQuestion,
+    this.optionOne,
+    this.optionTwo,
+    this.optionThree,
+    this.optionFour,
+    this.correctOption,
+    this.createdAt,
+    this.updatedAt,
+    this.publishedAt,
+    this.score,
+  });
+
+  factory QuizCardDataAttributesModel.fromJson(Map<String, dynamic> json) =>
+      QuizCardDataAttributesModel(
+        quizQuestion: json["quiz_question"],
+        optionOne: json["option_one"],
+        optionTwo: json["option_two"],
+        optionThree: json["option_three"],
+        optionFour: json["option_four"],
+        correctOption: json["correct_option"],
+        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
+        publishedAt:
+            json["publishedAt"] == null ? null : DateTime.parse(json["publishedAt"]),
+        score: json["score"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "quiz_question": quizQuestion,
+        "option_one": optionOne,
+        "option_two": optionTwo,
+        "option_three": optionThree,
+        "option_four": optionFour,
+        "correct_option": correctOption,
+        "createdAt": createdAt?.toIso8601String(),
+        "updatedAt": updatedAt?.toIso8601String(),
+        "publishedAt": publishedAt?.toIso8601String(),
+        "score": score,
+      };
 }
