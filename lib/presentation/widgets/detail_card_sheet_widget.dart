@@ -112,8 +112,7 @@ class DetailCardSheetWidget extends StatelessWidget {
                                 SizedBox(width: 8.w),
                                 Text(
                                   card.attributes.level,
-                                  style:
-                                      AppFonts.appFont.headlineSmall!.copyWith(
+                                  style: AppFonts.appFont.headlineSmall!.copyWith(
                                     fontWeight: FontWeight.w400,
                                   ),
                                 ),
@@ -138,11 +137,11 @@ class DetailCardSheetWidget extends StatelessWidget {
                       onPressed: () {
                         if (isFromScanner) {
                           context.go('/quiz_card');
-                        } else {}
+                        }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
-                        minimumSize: Size(260.w, 48.h),
+                        minimumSize: Size(260.w, 40.h),
                       ),
                       child: Text(
                         isFromScanner ? 'Take Quiz' : 'Choose as Avatar',
@@ -157,7 +156,7 @@ class DetailCardSheetWidget extends StatelessWidget {
                         side: const BorderSide(
                           color: AppColors.primary,
                         ),
-                        minimumSize: Size(48.w, 48.h),
+                        minimumSize: Size(40.w, 40.h),
                       ),
                       child: const Icon(Icons.share),
                     ),

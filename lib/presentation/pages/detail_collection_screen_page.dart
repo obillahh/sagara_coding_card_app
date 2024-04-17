@@ -15,12 +15,11 @@ class DetailsCollectionScreenPage extends StatefulWidget {
   });
 
   @override
-  State<DetailsCollectionScreenPage> createState() =>
-      _DetailsCollectionScreenPageState();
+  State<DetailsCollectionScreenPage> createState() => _DetailsCollectionScreenPageState();
 }
 
-class _DetailsCollectionScreenPageState
-    extends State<DetailsCollectionScreenPage> with TickerProviderStateMixin {
+class _DetailsCollectionScreenPageState extends State<DetailsCollectionScreenPage>
+    with TickerProviderStateMixin {
   late AnimationController _animationController;
 
   @override
@@ -82,7 +81,7 @@ class _DetailsCollectionScreenPageState
                 alignment: Alignment.topCenter,
                 child: Image.network(
                   state.card.attributes.avatarCard.data.attributes.url,
-                  fit: BoxFit.fitWidth,
+                  fit: BoxFit.fitHeight,
                 ),
               ),
             );
@@ -96,7 +95,8 @@ class _DetailsCollectionScreenPageState
             final card = state.card;
             return DetailCardSheetWidget(
               animationController: _animationController,
-              card: card, isFromScanner: false,
+              card: card,
+              isFromScanner: false,
             );
           }
           return BottomSheet(

@@ -276,24 +276,31 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
                   ),
                 ),
               );
-              Future.delayed(const Duration(seconds: 3), () {
+              Future.delayed(
+                const Duration(seconds: 3),
+                () {
+                  context.pop();
+                  if (_questionIndex == quizzes.data.length - 1) {
+                    context.go("/quiz_done");
+                  }
+                  // else {
+                  //   _pageController.nextPage(
+                  //       duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                  // }
+                },
+              );
+            }
+            Future.delayed(
+              const Duration(seconds: 2),
+              () {
                 if (_questionIndex == quizzes.data.length - 1) {
                   context.go("/quiz_done");
                 } else {
-                  context.pop();
                   _pageController.nextPage(
                       duration: const Duration(milliseconds: 500), curve: Curves.ease);
                 }
-              });
-            }
-            Future.delayed(const Duration(seconds: 2), () {
-              if (_questionIndex == quizzes.data.length - 1) {
-                context.go("/quiz_done");
-              } else {
-                _pageController.nextPage(
-                    duration: const Duration(milliseconds: 500), curve: Curves.ease);
-              }
-            });
+              },
+            );
           },
         ),
         SizedBox(height: 12.h),
@@ -331,14 +338,14 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
                 ),
               );
               Future.delayed(const Duration(seconds: 3), () {
+                context.pop();
                 if (_questionIndex == quizzes.data.length - 1) {
                   context.go("/quiz_done");
-                } else {
-                  context.pop();
-
-                  _pageController.nextPage(
-                      duration: const Duration(milliseconds: 500), curve: Curves.ease);
                 }
+                // else {
+                //   _pageController.nextPage(
+                //       duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                // }
               });
             }
             Future.delayed(const Duration(seconds: 2), () {
@@ -386,14 +393,14 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
                 ),
               );
               Future.delayed(const Duration(seconds: 3), () {
+                context.pop();
                 if (_questionIndex == quizzes.data.length - 1) {
                   context.go("/quiz_done");
-                } else {
-                  context.pop();
-
-                  _pageController.nextPage(
-                      duration: const Duration(milliseconds: 500), curve: Curves.ease);
                 }
+                // else {
+                //   _pageController.nextPage(
+                //       duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                // }
               });
             }
             Future.delayed(const Duration(seconds: 2), () {
@@ -441,13 +448,14 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
                 ),
               );
               Future.delayed(const Duration(seconds: 3), () {
+                context.pop();
                 if (_questionIndex == quizzes.data.length - 1) {
                   context.go("/quiz_done");
-                } else {
-                  context.pop();
-                  _pageController.nextPage(
-                      duration: const Duration(milliseconds: 500), curve: Curves.ease);
                 }
+                // else {
+                //   _pageController.nextPage(
+                //       duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                // }
               });
             }
             Future.delayed(const Duration(seconds: 2), () {

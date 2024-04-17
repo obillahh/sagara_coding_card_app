@@ -29,7 +29,7 @@ final _rootNavigatorLeaderboard =
 final _rootNavigatorProfile = GlobalKey<NavigatorState>(debugLabel: 'shellProfile');
 
 final GoRouter router = GoRouter(
-  initialLocation: '/splash',
+  initialLocation: '/quiz_done',
   navigatorKey: _rootNavigatorKey,
   routes: [
     GoRoute(

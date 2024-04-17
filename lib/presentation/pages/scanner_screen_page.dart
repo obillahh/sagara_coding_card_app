@@ -63,24 +63,25 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
+          iconSize: 35.sp,
           onPressed: () {
             context.pop();
           },
-          icon: DecoratedBox(
-            decoration: const BoxDecoration(
+          icon: const DecoratedBox(
+            decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.primary,
+              color: Colors.white,
             ),
             child: Icon(
-              Icons.arrow_back,
-              size: 32.sp,
-              color: AppColors.text,
+              Icons.arrow_circle_left,
+              color: AppColors.primary,
             ),
           ),
         ),
         actions: [
           IconButton(
             onPressed: () {},
+            // iconSize: 40.sp,
             icon: DecoratedBox(
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
@@ -88,7 +89,7 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
               ),
               child: Icon(
                 Icons.help_sharp,
-                size: 32.sp,
+                size: 35.sp,
                 color: AppColors.background,
               ),
             ),
@@ -109,8 +110,8 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
                     ),
                     child: Icon(
                       Icons.flash_on,
-                      size: 28.sp,
-                      color: AppColors.primary,
+                      size: 35.sp,
+                      color: AppColors.background,
                     ),
                   )
                 : DecoratedBox(
@@ -120,7 +121,7 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
                     ),
                     child: Icon(
                       Icons.flash_off,
-                      size: 28.sp,
+                      size: 35.sp,
                       color: AppColors.background,
                     ),
                   ),
