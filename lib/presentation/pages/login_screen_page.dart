@@ -145,8 +145,7 @@ class _LoginScreenPageState extends State<LoginScreenPage> {
                           showDialog(
                             context: context,
                             builder: (context) {
-                              return const Center(
-                                  child: CircularProgressIndicator());
+                              return const Center(child: CircularProgressIndicator());
                             },
                           );
                           context.read<AuthBloc>().add(

@@ -31,9 +31,7 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
     super.initState();
     context.read<QuizBloc>().add(GetQuizEvent());
     selectedOptions = List<String?>.filled(10, null);
-
     _pageController = PageController(initialPage: _questionIndex);
-
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         if (_secondsRemaining > 0) {
@@ -61,7 +59,7 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
         elevation: 0,
         backgroundColor: AppColors.background,
         leading: Padding(
-          padding: const EdgeInsets.only(left: 8),
+          padding: EdgeInsets.only(left: 8.w),
           child: IconButton(
             onPressed: () {
               context.go('/home');
@@ -75,7 +73,7 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 8),
+            padding: EdgeInsets.only(right: 8.w),
             child: IconButton(
               onPressed: () {},
               icon: const Icon(
@@ -151,9 +149,9 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
                                 ],
                               ),
                               Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 18,
-                                  vertical: 4,
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 18.h,
+                                  vertical: 4.w,
                                 ),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
@@ -255,6 +253,7 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
             if (correctOption == quizItem.attributes.optionOne) {
               showDialog(
                 context: context,
+                barrierDismissible: false,
                 builder: (context) => Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -276,31 +275,20 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
                   ),
                 ),
               );
-              Future.delayed(
-                const Duration(seconds: 3),
-                () {
-                  context.pop();
-                  if (_questionIndex == quizzes.data.length - 1) {
-                    context.go("/quiz_done");
-                  }
-                  // else {
-                  //   _pageController.nextPage(
-                  //       duration: const Duration(milliseconds: 500), curve: Curves.ease);
-                  // }
-                },
-              );
+              Future.delayed(const Duration(seconds: 3), () {
+                context.pop();
+              });
             }
-            Future.delayed(
-              const Duration(seconds: 2),
-              () {
-                if (_questionIndex == quizzes.data.length - 1) {
-                  context.go("/quiz_done");
-                } else {
-                  _pageController.nextPage(
-                      duration: const Duration(milliseconds: 500), curve: Curves.ease);
-                }
-              },
-            );
+            Future.delayed(const Duration(seconds: 3), () {
+              if (_questionIndex == quizzes.data.length - 1) {
+                context.go("/quiz_done");
+              } else {
+                _pageController.nextPage(
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.ease,
+                );
+              }
+            });
           },
         ),
         SizedBox(height: 12.h),
@@ -316,6 +304,7 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
             if (correctOption == quizItem.attributes.optionTwo) {
               showDialog(
                 context: context,
+                barrierDismissible: false,
                 builder: (context) => Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -339,21 +328,25 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
               );
               Future.delayed(const Duration(seconds: 3), () {
                 context.pop();
-                if (_questionIndex == quizzes.data.length - 1) {
-                  context.go("/quiz_done");
-                }
+                // if (_questionIndex == quizzes.data.length - 1) {
+                //   context.go("/quiz_done");
+                // } else {
+                //   context.pop();
+                // }
                 // else {
                 //   _pageController.nextPage(
                 //       duration: const Duration(milliseconds: 500), curve: Curves.ease);
                 // }
               });
             }
-            Future.delayed(const Duration(seconds: 2), () {
+            Future.delayed(const Duration(seconds: 3), () {
               if (_questionIndex == quizzes.data.length - 1) {
                 context.go("/quiz_done");
               } else {
                 _pageController.nextPage(
-                    duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.ease,
+                );
               }
             });
           },
@@ -371,6 +364,7 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
             if (correctOption == quizItem.attributes.optionThree) {
               showDialog(
                 context: context,
+                barrierDismissible: false,
                 builder: (context) => Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -394,21 +388,25 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
               );
               Future.delayed(const Duration(seconds: 3), () {
                 context.pop();
-                if (_questionIndex == quizzes.data.length - 1) {
-                  context.go("/quiz_done");
-                }
+                // if (_questionIndex == quizzes.data.length - 1) {
+                //   context.go("/quiz_done");
+                // } else {
+                //   context.pop();
+                // }
                 // else {
                 //   _pageController.nextPage(
                 //       duration: const Duration(milliseconds: 500), curve: Curves.ease);
                 // }
               });
             }
-            Future.delayed(const Duration(seconds: 2), () {
+            Future.delayed(const Duration(seconds: 3), () {
               if (_questionIndex == quizzes.data.length - 1) {
                 context.go("/quiz_done");
               } else {
                 _pageController.nextPage(
-                    duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.ease,
+                );
               }
             });
           },
@@ -426,6 +424,7 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
             if (correctOption == quizItem.attributes.optionFour) {
               showDialog(
                 context: context,
+                barrierDismissible: false,
                 builder: (context) => Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -449,21 +448,25 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
               );
               Future.delayed(const Duration(seconds: 3), () {
                 context.pop();
-                if (_questionIndex == quizzes.data.length - 1) {
-                  context.go("/quiz_done");
-                }
+                // if (_questionIndex == quizzes.data.length - 1) {
+                //   context.go("/quiz_done");
+                // } else {
+                //   context.pop();
+                // }
                 // else {
                 //   _pageController.nextPage(
                 //       duration: const Duration(milliseconds: 500), curve: Curves.ease);
                 // }
               });
             }
-            Future.delayed(const Duration(seconds: 2), () {
+            Future.delayed(const Duration(seconds: 3), () {
               if (_questionIndex == quizzes.data.length - 1) {
                 context.go("/quiz_done");
               } else {
                 _pageController.nextPage(
-                    duration: const Duration(milliseconds: 500), curve: Curves.ease);
+                  duration: const Duration(milliseconds: 500),
+                  curve: Curves.ease,
+                );
               }
             });
           },
