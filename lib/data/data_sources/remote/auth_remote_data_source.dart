@@ -12,8 +12,7 @@ class AuthRemoteDataSource {
 
   AuthRemoteDataSource({required this.client});
 
-  Future<UserResponseModel> login(
-      {required LoginRequestModel loginRequestModel}) async {
+  Future<UserResponseModel> login({required LoginRequestModel loginRequestModel}) async {
     try {
       const url = ApiConstant.login;
       final result = await client.post(

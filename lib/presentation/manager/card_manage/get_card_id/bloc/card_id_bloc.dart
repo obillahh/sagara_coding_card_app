@@ -11,27 +11,29 @@ part 'card_id_state.dart';
 class CardIdBloc extends Bloc<CardIdEvent, CardIdState> {
   final GetCardByIdUseCase getCardByIdUseCase;
   final GetCardByScannerUseCase getCardByScannerUseCase;
-  CardIdBloc({required this.getCardByIdUseCase, required this.getCardByScannerUseCase}) : super(CardIdInitialState()) {
-    on<CardIdEvent>((event, emit) async {
-      if (event is GetCardIdEvent) {
-        emit(CardIdLoadingState());
-        final CardIdResponseDataEntity? data = await getCardByIdUseCase(event.id);
-        if (data != null) {
-          emit(CardIdSuccessState(card: data));
-        } else {
-          emit(CardIdFailureState(message: 'Something went wrong'));
-        }
-      }
-      if (event is GetCardScannerEvent) {
+  CardIdBloc({required this.getCardByIdUseCase, required this.getCardByScannerUseCase})
+      : super(CardIdInitialState()) {
+    on<CardIdEvent>(
+      (event, emit) async {
+        if (event is GetCardIdEvent) {
           emit(CardIdLoadingState());
-          final CardIdResponseDataEntity? data =
-              await getCardByScannerUseCase(event.url);
+          final CardIdResponseDataEntity? data = await getCardByIdUseCase(event.id);
           if (data != null) {
             emit(CardIdSuccessState(card: data));
           } else {
             emit(CardIdFailureState(message: 'Something went wrong'));
           }
         }
-    });
+        if (event is GetCardScannerEvent) {
+          emit(CardIdLoadingState());
+          final CardIdResponseDataEntity? data = await getCardByScannerUseCase(event.url);
+          if (data != null) {
+            emit(CardIdSuccessState(card: data));
+          } else {
+            emit(CardIdFailureState(message: 'Something went wrong'));
+          }
+        }
+      },
+    );
   }
 }

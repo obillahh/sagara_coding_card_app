@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sagara_coding_card_application/presentation/manager/auth_manage/auth/auth_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/manager/leaderboard_manage/get_leaderboard_bloc/leaderboard_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/assets_constant.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
@@ -21,6 +22,7 @@ class _LeaderboardScreenPageState extends State<LeaderboardScreenPage> {
   void initState() {
     super.initState();
     context.read<LeaderboardBloc>().add(GetLeaderboardEvent());
+    context.read<AuthBloc>().add(GetCurrentUserEvent());
   }
 
   @override
@@ -77,17 +79,23 @@ class _LeaderboardScreenPageState extends State<LeaderboardScreenPage> {
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    Text(
-                                      '102',
-                                      style:
-                                          AppFonts.appFont.titleLarge!.copyWith(
-                                        fontWeight: FontWeight.w700,
-                                      ),
+                                    BlocBuilder<AuthBloc, AuthState>(
+                                      builder: (context, state) {
+                                        if (state is CurrentUserState) {
+                                          return Text(
+                                            state.currentUser!.collectionCard.toString(),
+                                            style: AppFonts.appFont.titleLarge!.copyWith(
+                                              fontWeight: FontWeight.w700,
+                                            ),
+                                          );
+                                        } else {
+                                          return const Text('');
+                                        }
+                                      },
                                     ),
                                     Text(
                                       'Card Collection'.toUpperCase(),
-                                      style:
-                                          AppFonts.appFont.labelSmall!.copyWith(
+                                      style: AppFonts.appFont.labelSmall!.copyWith(
                                         fontWeight: FontWeight.w600,
                                         color: AppColors.background,
                                       ),
@@ -114,15 +122,13 @@ class _LeaderboardScreenPageState extends State<LeaderboardScreenPage> {
                                   children: [
                                     Text(
                                       'TOP 10%',
-                                      style:
-                                          AppFonts.appFont.titleLarge!.copyWith(
+                                      style: AppFonts.appFont.titleLarge!.copyWith(
                                         fontWeight: FontWeight.w700,
                                       ),
                                     ),
                                     Text(
                                       'Rank'.toUpperCase(),
-                                      style:
-                                          AppFonts.appFont.labelSmall!.copyWith(
+                                      style: AppFonts.appFont.labelSmall!.copyWith(
                                         fontWeight: FontWeight.w600,
                                         color: AppColors.background,
                                       ),

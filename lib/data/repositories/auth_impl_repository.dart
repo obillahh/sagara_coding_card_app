@@ -8,20 +8,64 @@ import '../data_sources/local/auth_local_data_source.dart';
 import '../data_sources/remote/auth_remote_data_source.dart';
 
 class AuthImplRepository extends AuthRepository {
-  final AuthRemoteDataSource authRemoteDataSource;
-  final AuthLocalDataSource authLocalDataSource;
-
   AuthImplRepository({
     required this.authRemoteDataSource,
     required this.authLocalDataSource,
   });
 
+  final AuthLocalDataSource authLocalDataSource;
+  final AuthRemoteDataSource authRemoteDataSource;
+
   @override
-  Future<UserResponseEntity?> login(
-      {required LoginRequestModel loginRequest}) async {
+  Future<void> changeAvatar({required String avatarUrl}) async {
     try {
-      final response =
-          await authRemoteDataSource.login(loginRequestModel: loginRequest);
+      await authLocalDataSource.setAvatarProfile(avatarUrl);
+    } catch (e) {
+      print('Error changing avatar: $e');
+      throw Exception('Failed to change avatar');
+    }
+  }
+
+  @override
+  Future<UserDataEntity?> getCurrentUser() async {
+    final isLoggedIn = await authLocalDataSource.getToken() != null;
+    if (isLoggedIn) {
+      return await authLocalDataSource.getUserData();
+    }
+    return null;
+  }
+
+  @override
+  Future<String?> isAvatarChanged() async {
+    try {
+      final storedAvatarUrl = await authLocalDataSource.getAvatarProfile();
+      return storedAvatarUrl;
+    } catch (e) {
+      print('Error getting stored avatar URL: $e');
+      throw Exception('Failed to get stored avatar URL');
+    }
+  }
+
+  @override
+  Future<bool> isFirstEntry() async {
+    return await authLocalDataSource.isFirstEntry();
+  }
+
+  @override
+  Future<bool> isLoggedIn() async {
+    return await authLocalDataSource.getToken() != null;
+  }
+
+  @override
+  bool isSignedInWithGoogle() {
+    // TODO: implement isSignedInWithGoogle
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<UserResponseEntity?> login({required LoginRequestModel loginRequest}) async {
+    try {
+      final response = await authRemoteDataSource.login(loginRequestModel: loginRequest);
 
       if (response.user == null) {
         print('Invalid response: user is null');
@@ -55,20 +99,6 @@ class AuthImplRepository extends AuthRepository {
   }
 
   @override
-  Future<bool> isLoggedIn() async {
-    return await authLocalDataSource.getToken() != null;
-  }
-
-  @override
-  Future<UserDataEntity?> getCurrentUser() async {
-    final isLoggedIn = await authLocalDataSource.getToken() != null;
-    if (isLoggedIn) {
-      return await authLocalDataSource.getUserData();
-    }
-    return null;
-  }
-
-  @override
   Future logout() async {
     await authLocalDataSource.removeToken();
     await authLocalDataSource.removeUserData();
@@ -78,8 +108,8 @@ class AuthImplRepository extends AuthRepository {
   Future<UserResponseEntity?> register(
       {required RegisterRequestModel registerRequest}) async {
     try {
-      final response = await authRemoteDataSource.register(
-          registerRequestModel: registerRequest);
+      final response =
+          await authRemoteDataSource.register(registerRequestModel: registerRequest);
       if (response.user == null) {
         print('Invalid response: user is null');
         print('Response data: ${response.toJson()}');
@@ -104,12 +134,6 @@ class AuthImplRepository extends AuthRepository {
       print('Login error: $e');
       return null;
     }
-  }
-
-  @override
-  bool isSignedInWithGoogle() {
-    // TODO: implement isSignedInWithGoogle
-    throw UnimplementedError();
   }
 
   @override
@@ -139,7 +163,12 @@ class AuthImplRepository extends AuthRepository {
   }
 
   @override
-  Future<bool> isFirstEntry() async {
-    return await authLocalDataSource.isFirstEntry();
+  Future<void> increaseCollectionCard() async {
+    try {
+      await authLocalDataSource.increaseCollectionCard();
+    } catch (e) {
+      print('Error increasing collection card: $e');
+    }
   }
+
 }

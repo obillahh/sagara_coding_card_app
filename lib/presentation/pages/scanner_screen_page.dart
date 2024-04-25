@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:sagara_coding_card_application/presentation/manager/auth_manage/auth/auth_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
 
 import '../manager/card_manage/get_card_id/bloc/card_id_bloc.dart';
@@ -51,6 +52,7 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
         scannedData = barcode.code!;
         final contextBloc = context.read<CardIdBloc>();
         contextBloc.add(GetCardScannerEvent(url: scannedData));
+        context.read<AuthBloc>().add(IncreaseCollectionCardEvent(addCollection: 1));
       },
     );
   }
@@ -63,35 +65,30 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          iconSize: 35.sp,
+          padding: const EdgeInsets.all(0),
+          style: IconButton.styleFrom(
+            backgroundColor: AppColors.text,
+            iconSize: 46.sp,
+          ),
           onPressed: () {
             context.pop();
           },
-          icon: const DecoratedBox(
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: Colors.white,
-            ),
-            child: Icon(
-              Icons.arrow_circle_left,
-              color: AppColors.primary,
-            ),
+          icon: const Icon(
+            Icons.arrow_circle_left_rounded,
+            color: AppColors.primary,
           ),
         ),
         actions: [
           IconButton(
             onPressed: () {},
-            // iconSize: 40.sp,
-            icon: DecoratedBox(
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.text,
-              ),
-              child: Icon(
-                Icons.help_sharp,
-                size: 35.sp,
-                color: AppColors.background,
-              ),
+            padding: const EdgeInsets.all(0),
+            style: IconButton.styleFrom(
+              backgroundColor: AppColors.text,
+              iconSize: 46.sp,
+            ),
+            icon: const Icon(
+              Icons.help_rounded,
+              color: AppColors.background,
             ),
           ),
           IconButton(
@@ -102,28 +99,19 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
               print('Flash is ${isFlashOn ? 'on' : 'off'}');
               qrController?.toggleFlash();
             },
+            padding: const EdgeInsets.all(0),
+            style: IconButton.styleFrom(
+              backgroundColor: AppColors.text,
+              iconSize: 46.sp,
+            ),
             icon: isFlashOn
-                ? DecoratedBox(
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.text,
-                    ),
-                    child: Icon(
-                      Icons.flash_on,
-                      size: 35.sp,
-                      color: AppColors.background,
-                    ),
+                ? const Icon(
+                    Icons.flash_on_rounded,
+                    color: AppColors.background,
                   )
-                : DecoratedBox(
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColors.text,
-                    ),
-                    child: Icon(
-                      Icons.flash_off,
-                      size: 35.sp,
-                      color: AppColors.background,
-                    ),
+                : const Icon(
+                    Icons.flash_off_rounded,
+                    color: AppColors.background,
                   ),
           ),
         ],
@@ -144,8 +132,10 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
             },
             builder: (context, state) {
               if (state is CardIdLoadingState) {
-                return const Center(
-                  child: CircularProgressIndicator(),
+                return const Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
                 );
               } else {
                 return Expanded(
@@ -154,10 +144,10 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
                     onQRViewCreated: _onQRViewCreated,
                     overlay: QrScannerOverlayShape(
                       borderColor: AppColors.primary,
-                      overlayColor: AppColors.background.withOpacity(0.5),
+                      overlayColor: AppColors.background.withOpacity(0.5.r),
                       borderRadius: 6.r,
                       borderLength: 80.r,
-                      borderWidth: 12.w,
+                      borderWidth: 8.w,
                       cutOutWidth: 280.w,
                       cutOutHeight: 320.h,
                     ),
@@ -170,15 +160,15 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
       ),
       bottomSheet: DraggableScrollableSheet(
         expand: false,
-        initialChildSize: 0.05.h,
-        minChildSize: 0.05.h,
-        maxChildSize: 0.15.h,
+        initialChildSize: 0.06.h,
+        minChildSize: 0.06.h,
+        maxChildSize: 0.18.h,
         builder: (BuildContext context, ScrollController scrollController) {
           return Container(
-            decoration: const BoxDecoration(
-              color: Color(0xff333030),
+            decoration: BoxDecoration(
+              color: const Color(0xff333030),
               borderRadius: BorderRadius.vertical(
-                top: Radius.circular(20),
+                top: Radius.circular(20.r),
               ),
             ),
             child: SingleChildScrollView(
@@ -187,14 +177,14 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
               child: Column(
                 children: [
                   Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: const BoxDecoration(
+                    padding: EdgeInsets.all(16.w),
+                    decoration: BoxDecoration(
                       color: AppColors.primary,
                       borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(20),
+                        top: Radius.circular(20.r),
                       ),
                     ),
-                    width: double.infinity,
+                    width: double.infinity.w,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
@@ -207,14 +197,14 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(16.0),
+                    padding: EdgeInsets.all(16.0.w),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
                           height: 64.h,
                           width: 105.w,
-                          padding: const EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(8.0.w),
                           decoration: BoxDecoration(
                             border: Border.all(
                               color: AppColors.primary,
@@ -237,7 +227,7 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
                         Container(
                           height: 64.h,
                           width: 105.w,
-                          padding: const EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(8.0.w),
                           decoration: BoxDecoration(
                             border: Border.all(
                               color: AppColors.primary,
@@ -260,7 +250,7 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
                         Container(
                           height: 64.h,
                           width: 105.w,
-                          padding: const EdgeInsets.all(8.0),
+                          padding: EdgeInsets.all(8.0.w),
                           decoration: BoxDecoration(
                             border: Border.all(
                               color: AppColors.primary,

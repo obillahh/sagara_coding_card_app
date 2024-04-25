@@ -25,6 +25,7 @@ class _DetailsCollectionScreenPageState extends State<DetailsCollectionScreenPag
   @override
   void initState() {
     super.initState();
+    context.read<CardIdBloc>().add(GetCardIdEvent(id: widget.id));
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
@@ -59,12 +60,12 @@ class _DetailsCollectionScreenPageState extends State<DetailsCollectionScreenPag
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 8),
+            padding: EdgeInsets.only(right: 8.w),
             child: IconButton(
               onPressed: () {},
-              icon: const Icon(
+              icon: Icon(
                 Icons.help_outline_sharp,
-                size: 30,
+                size: 30.sp,
                 color: AppColors.text,
               ),
             ),
@@ -81,7 +82,8 @@ class _DetailsCollectionScreenPageState extends State<DetailsCollectionScreenPag
                 alignment: Alignment.topCenter,
                 child: Image.network(
                   state.card.attributes.avatarCard.data.attributes.url,
-                  fit: BoxFit.fitHeight,
+                  fit: BoxFit.fitWidth,
+                  width: double.infinity.w,
                 ),
               ),
             );

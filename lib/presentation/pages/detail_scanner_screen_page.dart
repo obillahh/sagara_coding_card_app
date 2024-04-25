@@ -11,8 +11,7 @@ class DetailScannerScreenPage extends StatefulWidget {
   const DetailScannerScreenPage({super.key, required this.id});
 
   @override
-  State<DetailScannerScreenPage> createState() =>
-      _DetailScannerScreenPageState();
+  State<DetailScannerScreenPage> createState() => _DetailScannerScreenPageState();
 }
 
 class _DetailScannerScreenPageState extends State<DetailScannerScreenPage>
@@ -22,6 +21,7 @@ class _DetailScannerScreenPageState extends State<DetailScannerScreenPage>
   @override
   void initState() {
     super.initState();
+    context.read<CardIdBloc>().add(GetCardIdEvent(id: widget.id));
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
@@ -56,12 +56,12 @@ class _DetailScannerScreenPageState extends State<DetailScannerScreenPage>
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.only(right: 8),
+            padding: EdgeInsets.only(right: 8.w),
             child: IconButton(
               onPressed: () {},
-              icon: const Icon(
+              icon: Icon(
                 Icons.help_outline_sharp,
-                size: 30,
+                size: 30.sp,
                 color: AppColors.text,
               ),
             ),
@@ -79,6 +79,7 @@ class _DetailScannerScreenPageState extends State<DetailScannerScreenPage>
                 child: Image.network(
                   state.card.attributes.avatarCard.data.attributes.url,
                   fit: BoxFit.fitWidth,
+                  width: double.infinity.w,
                 ),
               ),
             );

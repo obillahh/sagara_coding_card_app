@@ -7,11 +7,9 @@ class UserResponseModel {
     this.user,
   });
 
-  factory UserResponseModel.fromJson(Map<String, dynamic> json) =>
-      UserResponseModel(
+  factory UserResponseModel.fromJson(Map<String, dynamic> json) => UserResponseModel(
         jwt: json["jwt"],
-        user:
-            json["user"] == null ? null : UserDataModel.fromJson(json["user"]),
+        user: json["user"] == null ? null : UserDataModel.fromJson(json["user"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -29,7 +27,7 @@ class UserDataModel {
   bool? blocked;
   DateTime? createdAt;
   DateTime? updatedAt;
-  dynamic collectionCard;
+  int? collectionCard;
 
   UserDataModel({
     this.id,
@@ -50,12 +48,8 @@ class UserDataModel {
         provider: json["provider"],
         confirmed: json["confirmed"],
         blocked: json["blocked"],
-        createdAt: json["createdAt"] == null
-            ? null
-            : DateTime.parse(json["createdAt"]),
-        updatedAt: json["updatedAt"] == null
-            ? null
-            : DateTime.parse(json["updatedAt"]),
+        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
+        updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
         collectionCard: json["collection_card"],
       );
 

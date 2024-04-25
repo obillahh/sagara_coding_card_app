@@ -6,7 +6,7 @@ import 'package:sagara_coding_card_application/presentation/utils/constant/asset
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_colors.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
 
-import '../manager/auth_manage/login/auth_bloc.dart';
+import '../manager/auth_manage/auth/auth_bloc.dart';
 
 class HomeScreenPage extends StatefulWidget {
   const HomeScreenPage({super.key});
@@ -18,7 +18,6 @@ class HomeScreenPage extends StatefulWidget {
 class _HomeScreenPageState extends State<HomeScreenPage> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     context.read<AuthBloc>().add(GetCurrentUserEvent());
   }

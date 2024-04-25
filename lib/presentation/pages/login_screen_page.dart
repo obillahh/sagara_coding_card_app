@@ -10,7 +10,7 @@ import 'package:sagara_coding_card_application/presentation/utils/constant/asset
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
 import 'package:sagara_coding_card_application/presentation/widgets/text_field_underline_widget.dart';
 
-import '../manager/auth_manage/login/auth_bloc.dart';
+import '../manager/auth_manage/auth/auth_bloc.dart';
 import '../utils/themes/app_colors.dart';
 import '../widgets/primary_elevated_button_widget.dart';
 import '../widgets/secondary_elevated_button_widget.dart';
@@ -137,6 +137,8 @@ class _LoginScreenPageState extends State<LoginScreenPage> {
                       if (state is AuthLoginSuccess) {
                         context.read<AuthBloc>().add(IsLoggedInEvent());
                         context.go('/home');
+                      } else {
+                        context.pop();
                       }
                     },
                     child: PrimaryElevatedButtonWidget(

@@ -6,4 +6,5 @@ abstract class CardRepository {
   Future<List<CardListDataEntity>?> getListCards();
   Future<CardIdResponseDataEntity?> getCardById(int id);
   Future<CardIdResponseDataEntity?> getCardByScanner(String url);
+  Future<void> addCollectionCard(int userId, int cardId);
 }

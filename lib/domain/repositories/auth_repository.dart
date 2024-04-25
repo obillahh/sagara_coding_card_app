@@ -7,8 +7,7 @@ abstract class AuthRepository {
 
   Future<UserResponseEntity?> signInWithGoogle();
 
-  Future<UserResponseEntity?> register(
-      {required RegisterRequestModel registerRequest});
+  Future<UserResponseEntity?> register({required RegisterRequestModel registerRequest});
 
   Future<bool> isLoggedIn();
 
@@ -19,4 +18,10 @@ abstract class AuthRepository {
   Future<UserDataEntity?> getCurrentUser();
 
   Future logout();
+
+  Future<void> changeAvatar({required String avatarUrl});
+
+  Future<String?> isAvatarChanged();
+
+  Future<void> increaseCollectionCard();
 }

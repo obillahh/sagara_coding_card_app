@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 class UserResponseEntity {
   final String jwt;
   final UserDataEntity user;
@@ -7,8 +8,7 @@ class UserResponseEntity {
     required this.user,
   });
 
-  factory UserResponseEntity.fromJson(Map<String, dynamic> json) =>
-      UserResponseEntity(
+  factory UserResponseEntity.fromJson(Map<String, dynamic> json) => UserResponseEntity(
         jwt: json["jwt"],
         user: UserDataEntity.fromJson(json["user"]),
       );
@@ -17,6 +17,16 @@ class UserResponseEntity {
         "jwt": jwt,
         "user": user.toJson(),
       };
+
+  UserResponseEntity copyWith({
+    String? jwt,
+    UserDataEntity? user,
+  }) {
+    return UserResponseEntity(
+      jwt: jwt ?? this.jwt,
+      user: user ?? this.user,
+    );
+  }
 }
 
 class UserDataEntity {
@@ -28,7 +38,7 @@ class UserDataEntity {
   final bool blocked;
   final DateTime createdAt;
   final DateTime updatedAt;
-  final dynamic collectionCard;
+  final int collectionCard;
 
   UserDataEntity({
     required this.id,
@@ -65,4 +75,28 @@ class UserDataEntity {
         "updatedAt": updatedAt.toIso8601String(),
         "collection_card": collectionCard,
       };
+
+  UserDataEntity copyWith({
+    int? id,
+    String? username,
+    String? email,
+    String? provider,
+    bool? confirmed,
+    bool? blocked,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    int? collectionCard,
+  }) {
+    return UserDataEntity(
+      id: id ?? this.id,
+      username: username ?? this.username,
+      email: email ?? this.email,
+      provider: provider ?? this.provider,
+      confirmed: confirmed ?? this.confirmed,
+      blocked: blocked ?? this.blocked,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      collectionCard: collectionCard ?? this.collectionCard,
+    );
+  }
 }

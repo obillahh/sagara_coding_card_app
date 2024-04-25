@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/register_request_model.dart';
-import 'package:sagara_coding_card_application/presentation/manager/auth_manage/login/auth_bloc.dart';
+import 'package:sagara_coding_card_application/presentation/manager/auth_manage/auth/auth_bloc.dart';
 
 import '../utils/constant/assets_constant.dart';
 import '../utils/themes/app_colors.dart';

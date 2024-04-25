@@ -37,6 +37,7 @@ class QuizCardScreenPage extends StatelessWidget {
                 child: Image.network(
                   state.card.attributes.avatarCard.data.attributes.url,
                   fit: BoxFit.fitWidth,
+                  width: double.infinity.w,
                 ),
               ),
             );

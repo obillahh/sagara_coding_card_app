@@ -46,8 +46,18 @@ class _LoadingQuizScreenPageState extends State<LoadingQuizScreenPage> {
                             color: AppColors.primary,
                           ),
                         ),
-                        const SizedBox(height: 20),
-                        const CircularProgressIndicator(),
+                        SizedBox(height: 20.h),
+                        Stack(
+                          children: [
+                            SizedBox(
+                              width: 200.w,
+                              child: const CircularProgressIndicator(),
+                            ),
+                            const Text(
+                              '3',
+                            )
+                          ],
+                        ),
                         SizedBox(height: 16.h),
                         Row(
                           children: [

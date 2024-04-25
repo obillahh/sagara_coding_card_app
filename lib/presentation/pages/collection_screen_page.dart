@@ -24,6 +24,12 @@ class _CollectionScreenPageState extends State<CollectionScreenPage> {
     context.read<CardListBloc>().add(GetCardListEvent());
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    context.read<CardListBloc>().add(GetCardListEvent());
+  }
+
   Future<void> _refresh() async {
     context.read<CardListBloc>().add(GetCardListEvent());
   }
@@ -122,8 +128,11 @@ class _CollectionScreenPageState extends State<CollectionScreenPage> {
                         return GridView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
+                            crossAxisSpacing: 8.sp,
+                            mainAxisSpacing: 4.sp,
+                            childAspectRatio: 0.56.r,
                             // childAspectRatio: .6,
                           ),
                           itemBuilder: (context, index) {
@@ -138,25 +147,30 @@ class _CollectionScreenPageState extends State<CollectionScreenPage> {
                                 );
                               },
                               child: Image.network(
-                                state.cardList[index].attributes.avatarCard.data
-                                    .attributes.url,
-                                width: state.cardList[index].attributes.avatarCard.data
-                                    .attributes.width
+                                state.cardList[index].attributes.avatarCard.data.attributes.formats
+                                    .small.url,
+                                width: state
+                                    .cardList[index].attributes.avatarCard.data.attributes.width
                                     .toDouble(),
                               ),
                             );
                           },
                           itemCount: state.cardList.length,
                         );
+                      }
+                      if (state is CardListFailureState) {
+                        return const Center(
+                          child: Text('Card Collection Empty'),
+                        );
                       } else {
                         return GridView.builder(
                           physics: const NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
-                            crossAxisSpacing: 12,
-                            mainAxisSpacing: 12,
-                            childAspectRatio: .8,
+                            crossAxisSpacing: 8.sp,
+                            mainAxisSpacing: 4.sp,
+                            childAspectRatio: 0.56.r,
                           ),
                           itemBuilder: (context, index) {
                             return Shimmer.fromColors(

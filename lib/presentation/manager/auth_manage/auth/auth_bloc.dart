@@ -1,6 +1,8 @@
 import 'package:bloc/bloc.dart';
+import 'package:equatable/equatable.dart';
 import 'package:meta/meta.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/login_request_model.dart';
+import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/increase_collection_card_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/is_first_entry_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/is_logged_in_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/logout_use_case.dart';
@@ -21,6 +23,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final IsFirstEntryUseCase isFirstEntryUseCase;
   final LogoutUseCase logoutUseCase;
   final GetCurrentUserUseCase getCurrentUserUseCase;
+  final IncreaseCollectionCardUseCase increaseCollectionCardUseCase;
   AuthBloc({
     required this.registerUseCase,
     required this.loginUseCase,
@@ -28,6 +31,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.isFirstEntryUseCase,
     required this.logoutUseCase,
     required this.getCurrentUserUseCase,
+    required this.increaseCollectionCardUseCase,
   }) : super(AuthInitial()) {
     on<AuthEvent>(
       (event, emit) async {
@@ -81,7 +85,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
                     blocked: false,
                     createdAt: DateTime.now(),
                     updatedAt: DateTime.now(),
-                    collectionCard: null,
+                    collectionCard: 0,
                   ),
             ),
           );
@@ -89,6 +93,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         if (event is LogoutEvent) {
           await logoutUseCase();
           emit(AuthLogoutSuccess());
+        }
+        if (event is IncreaseCollectionCardEvent) {
+          try {
+            await increaseCollectionCardUseCase();
+            emit(CollectionCardIncreased(collectionCard: event.addCollection));
+          } catch (e) {
+            emit(AuthErrorState('Failed to increase collection card: $e'));
+          }
         }
       },
     );

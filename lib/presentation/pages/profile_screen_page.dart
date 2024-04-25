@@ -1,13 +1,17 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+
+import 'package:sagara_coding_card_application/presentation/manager/profile_manage/bloc/profile_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/assets_constant.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../manager/auth_manage/login/auth_bloc.dart';
+import '../manager/auth_manage/auth/auth_bloc.dart';
 import '../utils/themes/app_colors.dart';
 
 class ProfileScreenPage extends StatefulWidget {
@@ -22,6 +26,7 @@ class _ProfileScreenPageState extends State<ProfileScreenPage> {
   initState() {
     super.initState();
     context.read<AuthBloc>().add(GetCurrentUserEvent());
+    context.read<ProfileBloc>().add(RestoreAvatarProfileEvent());
   }
 
   @override
@@ -44,7 +49,7 @@ class _ProfileScreenPageState extends State<ProfileScreenPage> {
                 ),
                 Container(
                   width: double.infinity,
-                  padding: const EdgeInsets.all(12),
+                  padding: EdgeInsets.all(12.w),
                   decoration: BoxDecoration(
                     border: Border.all(
                       color: AppColors.primary,
@@ -54,39 +59,64 @@ class _ProfileScreenPageState extends State<ProfileScreenPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      BlocBuilder<AuthBloc, AuthState>(
-                        builder: (context, state) {
-                          if (state is CurrentUserState) {
-                            return Row(
-                              children: [
-                                Image.asset(AssetsConstant.profilePicture,
-                                    width: 64.w),
-                                SizedBox(width: 12.w),
-                                Column(
+                      Row(
+                        children: [
+                          BlocConsumer<ProfileBloc, ProfileState>(
+                            listener: (context, state) {
+                              if (state is AvatarProfileSet) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Avatar profile Changed'),
+                                  ),
+                                );
+                              }
+                            },
+                            builder: (context, state) {
+                              if (state is AvatarProfileSet) {
+                                inspect(state.avatar);
+                                return CircleAvatar(
+                                  radius: 32.r,
+                                  backgroundImage: NetworkImage(
+                                    state.avatar,
+                                  ),
+                                );
+                              } else {
+                                return CircleAvatar(
+                                  backgroundImage: const AssetImage(
+                                    AssetsConstant.profilePicture,
+                                  ),
+                                  radius: 32.r,
+                                );
+                              }
+                            },
+                          ),
+                          SizedBox(width: 12.w),
+                          BlocBuilder<AuthBloc, AuthState>(
+                            builder: (context, state) {
+                              if (state is CurrentUserState) {
+                                return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
                                       state.currentUser!.username,
-                                      style:
-                                          AppFonts.appFont.titleLarge!.copyWith(
+                                      style: AppFonts.appFont.titleLarge!.copyWith(
                                         fontWeight: FontWeight.w700,
                                       ),
                                     ),
                                     Text(
                                       state.currentUser!.email,
-                                      style:
-                                          AppFonts.appFont.titleSmall!.copyWith(
+                                      style: AppFonts.appFont.titleSmall!.copyWith(
                                         fontWeight: FontWeight.w400,
                                         color: AppColors.placeholder,
                                       ),
                                     ),
                                   ],
-                                ),
-                              ],
-                            );
-                          }
-                          return SizedBox(height: 60.h);
-                        },
+                                );
+                              }
+                              return SizedBox(height: 60.h);
+                            },
+                          ),
+                        ],
                       ),
                       SizedBox(height: 12.h),
                       Text(
@@ -118,27 +148,23 @@ class _ProfileScreenPageState extends State<ProfileScreenPage> {
                                     ),
                                     SizedBox(width: 8.w),
                                     Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         BlocBuilder<AuthBloc, AuthState>(
                                           builder: (context, state) {
                                             if (state is CurrentUserState) {
                                               return Text(
-                                                state
-                                                    .currentUser!.collectionCard
+                                                state.currentUser!.collectionCard
                                                     .toString(),
-                                                style: AppFonts
-                                                    .appFont.titleLarge!
-                                                    .copyWith(
+                                                style:
+                                                    AppFonts.appFont.titleLarge!.copyWith(
                                                   fontWeight: FontWeight.w700,
                                                 ),
                                               );
                                             } else {
                                               return Shimmer.fromColors(
                                                 baseColor: Colors.grey.shade200,
-                                                highlightColor:
-                                                    Colors.grey.shade300,
+                                                highlightColor: Colors.grey.shade300,
                                                 child: Container(
                                                   height: 16.h,
                                                   width: 32.w,
@@ -150,8 +176,7 @@ class _ProfileScreenPageState extends State<ProfileScreenPage> {
                                         ),
                                         Text(
                                           'Card Collection'.toUpperCase(),
-                                          style: AppFonts.appFont.labelSmall!
-                                              .copyWith(
+                                          style: AppFonts.appFont.labelSmall!.copyWith(
                                             fontWeight: FontWeight.w600,
                                             color: AppColors.background,
                                           ),
@@ -161,13 +186,11 @@ class _ProfileScreenPageState extends State<ProfileScreenPage> {
                                   ],
                                 ),
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       'View Collection',
-                                      style:
-                                          AppFonts.appFont.labelSmall!.copyWith(
+                                      style: AppFonts.appFont.labelSmall!.copyWith(
                                         fontWeight: FontWeight.w700,
                                       ),
                                     ),
@@ -198,20 +221,17 @@ class _ProfileScreenPageState extends State<ProfileScreenPage> {
                                     ),
                                     SizedBox(width: 8.w),
                                     Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           'TOP 10%',
-                                          style: AppFonts.appFont.titleLarge!
-                                              .copyWith(
+                                          style: AppFonts.appFont.titleLarge!.copyWith(
                                             fontWeight: FontWeight.w700,
                                           ),
                                         ),
                                         Text(
                                           'Rank'.toUpperCase(),
-                                          style: AppFonts.appFont.labelSmall!
-                                              .copyWith(
+                                          style: AppFonts.appFont.labelSmall!.copyWith(
                                             fontWeight: FontWeight.w600,
                                             color: AppColors.background,
                                           ),
@@ -221,13 +241,11 @@ class _ProfileScreenPageState extends State<ProfileScreenPage> {
                                   ],
                                 ),
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
                                       'View Leaderboard',
-                                      style:
-                                          AppFonts.appFont.labelSmall!.copyWith(
+                                      style: AppFonts.appFont.labelSmall!.copyWith(
                                         fontWeight: FontWeight.w700,
                                       ),
                                     ),

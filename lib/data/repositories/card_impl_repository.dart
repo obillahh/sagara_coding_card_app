@@ -1,3 +1,4 @@
+import 'package:sagara_coding_card_application/data/data_sources/local/card_local_data_source.dart';
 import 'package:sagara_coding_card_application/data/data_sources/remote/card_remote_data_source.dart';
 import 'package:sagara_coding_card_application/data/models/card_model/card_id_response_model.dart';
 import 'package:sagara_coding_card_application/data/models/card_model/cards_list_response_model.dart';
@@ -7,8 +8,12 @@ import 'package:sagara_coding_card_application/domain/repositories/card_reposito
 
 class CardImplRepository extends CardRepository {
   final CardRemoteDataSource remoteDataSource;
+  CardLocalDataSource? localDataSource;
 
-  CardImplRepository({required this.remoteDataSource});
+  CardImplRepository({
+    required this.remoteDataSource,
+    this.localDataSource,
+  });
 
   @override
   Future<List<CardListDataEntity>?> getListCards() async {
@@ -446,5 +451,10 @@ class CardImplRepository extends CardRepository {
       ),
     );
     return data;
+  }
+
+  @override
+  Future<void> addCollectionCard(int userId, int cardId) async {
+    await localDataSource!.addCollectionCard(userId, cardId);
   }
 }

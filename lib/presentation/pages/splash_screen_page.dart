@@ -6,7 +6,7 @@ import 'package:sagara_coding_card_application/presentation/utils/constant/asset
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_colors.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
 
-import '../manager/auth_manage/login/auth_bloc.dart';
+import '../manager/auth_manage/auth/auth_bloc.dart';
 
 class SplashScreenPage extends StatefulWidget {
   const SplashScreenPage({super.key});
@@ -19,7 +19,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 5)).then((value) {
+    Future.delayed(const Duration(seconds: 6)).then((value) {
       context.read<AuthBloc>().add(IsFirstEntryEvent());
       context.read<AuthBloc>().add(IsLoggedInEvent());
     });
@@ -59,14 +59,20 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
               children: [
                 Image.asset(
                   AssetsConstant.logoSagaraCodingCard,
-                  width: 250.w,
+                  width: 240.w,
                 ),
                 SizedBox(height: 320.h),
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child: Text(
-                    '© Sagara Techology 2023. All Rights Reserved',
-                    style: AppFonts.appFont.bodySmall,
+                  child: Column(
+                    children: [
+                      const CircularProgressIndicator(),
+                      SizedBox(height: 24.h),
+                      Text(
+                        '© Sagara Technology 2023. All Rights Reserved',
+                        style: AppFonts.appFont.bodySmall,
+                      ),
+                    ],
                   ),
                 ),
               ],

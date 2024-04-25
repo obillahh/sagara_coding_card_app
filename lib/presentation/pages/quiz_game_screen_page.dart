@@ -278,6 +278,15 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
               Future.delayed(const Duration(seconds: 3), () {
                 context.pop();
               });
+            } else {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => Container(),
+              );
+              Future.delayed(const Duration(seconds: 3), () {
+                context.pop();
+              });
             }
             Future.delayed(const Duration(seconds: 3), () {
               if (_questionIndex == quizzes.data.length - 1) {
@@ -328,15 +337,15 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
               );
               Future.delayed(const Duration(seconds: 3), () {
                 context.pop();
-                // if (_questionIndex == quizzes.data.length - 1) {
-                //   context.go("/quiz_done");
-                // } else {
-                //   context.pop();
-                // }
-                // else {
-                //   _pageController.nextPage(
-                //       duration: const Duration(milliseconds: 500), curve: Curves.ease);
-                // }
+              });
+            } else {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => Container(),
+              );
+              Future.delayed(const Duration(seconds: 3), () {
+                context.pop();
               });
             }
             Future.delayed(const Duration(seconds: 3), () {
@@ -388,15 +397,15 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
               );
               Future.delayed(const Duration(seconds: 3), () {
                 context.pop();
-                // if (_questionIndex == quizzes.data.length - 1) {
-                //   context.go("/quiz_done");
-                // } else {
-                //   context.pop();
-                // }
-                // else {
-                //   _pageController.nextPage(
-                //       duration: const Duration(milliseconds: 500), curve: Curves.ease);
-                // }
+              });
+            } else {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => Container(),
+              );
+              Future.delayed(const Duration(seconds: 3), () {
+                context.pop();
               });
             }
             Future.delayed(const Duration(seconds: 3), () {
@@ -448,15 +457,15 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
               );
               Future.delayed(const Duration(seconds: 3), () {
                 context.pop();
-                // if (_questionIndex == quizzes.data.length - 1) {
-                //   context.go("/quiz_done");
-                // } else {
-                //   context.pop();
-                // }
-                // else {
-                //   _pageController.nextPage(
-                //       duration: const Duration(milliseconds: 500), curve: Curves.ease);
-                // }
+              });
+            } else {
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => Container(),
+              );
+              Future.delayed(const Duration(seconds: 3), () {
+                context.pop();
               });
             }
             Future.delayed(const Duration(seconds: 3), () {
