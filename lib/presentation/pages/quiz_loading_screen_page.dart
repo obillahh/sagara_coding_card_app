@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,12 +19,34 @@ class LoadingQuizScreenPage extends StatefulWidget {
 }
 
 class _LoadingQuizScreenPageState extends State<LoadingQuizScreenPage> {
+  late int _countdownValue;
+  late Timer _timer;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    Future.delayed(const Duration(seconds: 3))
-        .then((value) => context.push('/quiz_game'));
+    _countdownValue = 3;
+    _startCountdown();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  void _startCountdown() {
+    const oneSec = Duration(seconds: 1);
+    _timer = Timer.periodic(oneSec, (timer) {
+      setState(() {
+        if (_countdownValue <= 0) {
+          timer.cancel();
+          context.push('/quiz_game');
+        } else {
+          _countdownValue--;
+        }
+      });
+    });
   }
 
   @override
@@ -48,13 +73,24 @@ class _LoadingQuizScreenPageState extends State<LoadingQuizScreenPage> {
                         ),
                         SizedBox(height: 20.h),
                         Stack(
+                          alignment: Alignment.center,
                           children: [
                             SizedBox(
-                              width: 200.w,
-                              child: const CircularProgressIndicator(),
+                              width: 180.w,
+                              height: 180.h,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 20.w,
+                                backgroundColor: AppColors.placeholder,
+                                valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+                              ),
                             ),
-                            const Text(
-                              '3',
+                            Text(
+                              _countdownValue.toString(),
+                              style: TextStyle(
+                                fontSize: 90.sp,
+                                fontWeight: FontWeight.bold,
+                                color: AppColors.primary,
+                              ),
                             )
                           ],
                         ),

@@ -59,6 +59,11 @@ class QuizCardScreenPage extends StatelessWidget {
             child: BlocBuilder<CardIdBloc, CardIdState>(
               builder: (context, state) {
                 if (state is CardIdSuccessState) {
+                  int totalScore = 0;
+                  final quizzes = state.card.attributes.quizzes.data;
+                  for (var quiz in quizzes) {
+                    totalScore += quiz.attributes.score;
+                  }
                   return Padding(
                     padding: const EdgeInsets.all(32),
                     child: Column(
@@ -139,7 +144,7 @@ class QuizCardScreenPage extends StatelessWidget {
                                           fontSize: 16.sp,
                                         ),
                                       ),
-                                      const Text('Up to+11000 P'),
+                                      Text('Up to+${totalScore.toString()} P'),
                                     ],
                                   ),
                                   Column(

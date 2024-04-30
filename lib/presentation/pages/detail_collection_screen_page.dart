@@ -8,11 +8,12 @@ import 'package:sagara_coding_card_application/presentation/utils/themes/app_col
 import '../widgets/detail_card_sheet_widget.dart';
 
 class DetailsCollectionScreenPage extends StatefulWidget {
-  final int id;
   const DetailsCollectionScreenPage({
     super.key,
     required this.id,
   });
+
+  final int id;
 
   @override
   State<DetailsCollectionScreenPage> createState() => _DetailsCollectionScreenPageState();
@@ -23,6 +24,12 @@ class _DetailsCollectionScreenPageState extends State<DetailsCollectionScreenPag
   late AnimationController _animationController;
 
   @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
   void initState() {
     super.initState();
     context.read<CardIdBloc>().add(GetCardIdEvent(id: widget.id));
@@ -30,12 +37,6 @@ class _DetailsCollectionScreenPageState extends State<DetailsCollectionScreenPag
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
   }
 
   @override

@@ -9,7 +9,8 @@ import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/lo
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/register_use_case.dart';
 
 import '../../../../data/models/auth_model/register_request_model.dart';
-import '../../../../domain/entities/auth_entity/user_response_entity.dart';
+import '../../../../domain/entities/auth_entity/user_entity/user_data_response_entity.dart';
+import '../../../../domain/entities/auth_entity/user_entity/user_response_entity.dart';
 import '../../../../domain/use_cases/auth_use_case/get_current_user_use_case.dart';
 import '../../../../domain/use_cases/auth_use_case/login_use_case.dart';
 
@@ -76,16 +77,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(
             CurrentUserState(
               currentUser: user ??
-                  UserDataEntity(
+                  UserDataResponseEntity(
                     id: 0,
                     username: 'Guest',
                     email: 'guest@example.com',
-                    provider: 'guest',
-                    confirmed: false,
-                    blocked: false,
-                    createdAt: DateTime.now(),
-                    updatedAt: DateTime.now(),
                     collectionCard: 0,
+                    scores: 0,
                   ),
             ),
           );

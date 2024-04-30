@@ -8,6 +8,7 @@ import '../utils/themes/app_fonts.dart';
 
 class TextFieldUnderlineWidget extends StatelessWidget {
   final TextEditingController controller;
+  final TextInputType keyboardType;
   final bool? obscureText;
   final String nameTextField;
   final String hintText;
@@ -21,6 +22,7 @@ class TextFieldUnderlineWidget extends StatelessWidget {
     required this.prefixIcon,
     this.suffixIcon,
     required this.controller,
+    required this.keyboardType,
     required this.nameTextField,
     required this.validators,
   });
@@ -31,8 +33,9 @@ class TextFieldUnderlineWidget extends StatelessWidget {
       controller: controller,
       validator: validators,
       name: nameTextField,
+      keyboardType: keyboardType,
       style: AppFonts.appFont.labelLarge!.copyWith(
-        color: AppColors.text, // Warna teks input
+        color: AppColors.text,
       ),
       decoration: InputDecoration(
         enabledBorder: const UnderlineInputBorder(

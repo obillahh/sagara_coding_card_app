@@ -8,6 +8,7 @@ class ApiConstant {
 
   // Card
   static const String card = '$baseUrlApi/cards';
+  static const String addCard = '$baseUrlApi/users';
 
   // Leaderboard
   static const String leaderboard = '$baseUrlApi/leaderboards';

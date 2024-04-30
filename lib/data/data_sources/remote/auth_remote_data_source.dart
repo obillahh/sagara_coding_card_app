@@ -2,7 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/register_request_model.dart';
-import 'package:sagara_coding_card_application/data/models/auth_model/user_response_model.dart';
+import 'package:sagara_coding_card_application/data/models/auth_model/user_model/user_response_model.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/api_constant.dart';
 
 import '../../models/auth_model/login_request_model.dart';
@@ -17,7 +17,7 @@ class AuthRemoteDataSource {
       const url = ApiConstant.login;
       final result = await client.post(
         url,
-        data: loginRequestModel.toJson(),
+        data: loginRequestModelToJson(loginRequestModel),
         options: Options(
           headers: {
             'Content-Type': 'application/json',
@@ -33,8 +33,7 @@ class AuthRemoteDataSource {
     }
   }
 
-  Future<UserResponseModel> register(
-      {required RegisterRequestModel registerRequestModel}) async {
+  Future<UserResponseModel> register({required RegisterRequestModel registerRequestModel}) async {
     try {
       const url = ApiConstant.register;
       final result = await client.post(

@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:sagara_coding_card_application/data/models/auth_model/user_model/user_data_response_model.dart';
+import 'package:sagara_coding_card_application/data/models/card_model/add_card_collection_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/card_model/cards_list_response_model.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/api_constant.dart';
 
@@ -72,6 +74,33 @@ class CardRemoteDataSource {
     } catch (e) {
       inspect('Error: $e');
       throw Exception('Failed to get card data');
+    }
+  }
+
+  Future<UserDataResponseModel> addCardCollection(int cardId, int userId) async {
+    try {
+      final url = '${ApiConstant.addCard}/$userId';
+      final model = AddCardCollectionRequestModel(
+        cards: CardsRequestModel(
+          connect: [
+            CardsConnectRequestModel(id: cardId),
+          ],
+        ),
+      );
+      final result = await client.put(
+        url,
+        data: model.toJson(),
+        options: Options(
+          headers: {
+            'Accept': 'application/json',
+          },
+        ),
+      );
+      final userData = UserDataResponseModel.fromJson(result.data);
+      return userData;
+    } catch (error) {
+      inspect('Error: $error');
+      rethrow;
     }
   }
 }

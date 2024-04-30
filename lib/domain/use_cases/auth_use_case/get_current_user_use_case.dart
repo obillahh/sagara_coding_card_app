@@ -1,4 +1,5 @@
-import '../../entities/auth_entity/user_response_entity.dart';
+import '../../entities/auth_entity/user_entity/user_data_response_entity.dart';
+
 import '../../repositories/auth_repository.dart';
 
 class GetCurrentUserUseCase {
@@ -6,5 +7,5 @@ class GetCurrentUserUseCase {
 
   GetCurrentUserUseCase({required this.authRepository});
 
-  Future<UserDataEntity?> call() async => await authRepository.getCurrentUser();
+  Future<UserDataResponseEntity?> call() async => await authRepository.getCurrentUser();
 }

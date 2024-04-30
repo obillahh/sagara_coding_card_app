@@ -1,9 +1,10 @@
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/login_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/register_request_model.dart';
-import 'package:sagara_coding_card_application/domain/entities/auth_entity/user_response_entity.dart';
+import 'package:sagara_coding_card_application/domain/entities/auth_entity/user_entity/user_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/repositories/auth_repository.dart';
 
+import '../../domain/entities/auth_entity/user_entity/user_data_response_entity.dart';
 import '../data_sources/local/auth_local_data_source.dart';
 import '../data_sources/remote/auth_remote_data_source.dart';
 
@@ -27,7 +28,7 @@ class AuthImplRepository extends AuthRepository {
   }
 
   @override
-  Future<UserDataEntity?> getCurrentUser() async {
+  Future<UserDataResponseEntity?> getCurrentUser() async {
     final isLoggedIn = await authLocalDataSource.getToken() != null;
     if (isLoggedIn) {
       return await authLocalDataSource.getUserData();
@@ -75,16 +76,12 @@ class AuthImplRepository extends AuthRepository {
 
       final data = UserResponseEntity(
         jwt: response.jwt ?? '',
-        user: UserDataEntity(
+        user: UserDataResponseEntity(
           id: response.user?.id ?? 0,
           username: response.user?.username ?? '',
           email: response.user?.email ?? '',
-          provider: response.user?.provider ?? '',
-          confirmed: response.user?.confirmed ?? false,
-          blocked: response.user?.blocked ?? false,
-          createdAt: response.user?.createdAt ?? DateTime.now(),
-          updatedAt: response.user?.updatedAt ?? DateTime.now(),
           collectionCard: response.user?.collectionCard ?? 0,
+          scores: response.user?.scores ?? 0,
         ),
       );
 
@@ -105,11 +102,9 @@ class AuthImplRepository extends AuthRepository {
   }
 
   @override
-  Future<UserResponseEntity?> register(
-      {required RegisterRequestModel registerRequest}) async {
+  Future<UserResponseEntity?> register({required RegisterRequestModel registerRequest}) async {
     try {
-      final response =
-          await authRemoteDataSource.register(registerRequestModel: registerRequest);
+      final response = await authRemoteDataSource.register(registerRequestModel: registerRequest);
       if (response.user == null) {
         print('Invalid response: user is null');
         print('Response data: ${response.toJson()}');
@@ -117,16 +112,12 @@ class AuthImplRepository extends AuthRepository {
       }
       final data = UserResponseEntity(
         jwt: response.jwt ?? '',
-        user: UserDataEntity(
+        user: UserDataResponseEntity(
           id: response.user?.id ?? 0,
           username: response.user?.username ?? '',
           email: response.user?.email ?? '',
-          provider: response.user?.provider ?? '',
-          confirmed: response.user?.confirmed ?? false,
-          blocked: response.user?.blocked ?? false,
-          createdAt: response.user?.createdAt ?? DateTime.now(),
-          updatedAt: response.user?.updatedAt ?? DateTime.now(),
           collectionCard: response.user?.collectionCard ?? 0,
+          scores: response.user?.scores ?? 0,
         ),
       );
       return data;
@@ -170,5 +161,4 @@ class AuthImplRepository extends AuthRepository {
       print('Error increasing collection card: $e');
     }
   }
-
 }

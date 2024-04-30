@@ -19,14 +19,14 @@ class CollectionScreenPage extends StatefulWidget {
 
 class _CollectionScreenPageState extends State<CollectionScreenPage> {
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
     context.read<CardListBloc>().add(GetCardListEvent());
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
+    super.initState();
     context.read<CardListBloc>().add(GetCardListEvent());
   }
 
@@ -138,12 +138,11 @@ class _CollectionScreenPageState extends State<CollectionScreenPage> {
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: () {
-                                context
-                                    .read<CardIdBloc>()
-                                    .add(GetCardIdEvent(id: state.cardList[index].id));
+                                final id = state.cardList[index].id;
+                                context.read<CardIdBloc>().add(GetCardIdEvent(id: id));
                                 context.pushNamed(
                                   RouterConstant.detailCollection,
-                                  extra: state.cardList[index].id,
+                                  pathParameters: {'id': id.toString()},
                                 );
                               },
                               child: Image.network(

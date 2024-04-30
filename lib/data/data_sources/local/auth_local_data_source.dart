@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../../domain/entities/auth_entity/user_response_entity.dart';
+import '../../../domain/entities/auth_entity/user_entity/user_data_response_entity.dart';
 
 class AuthLocalDataSource {
   static const String _avatarProfileKey = 'avatar_profile';
@@ -31,19 +31,19 @@ class AuthLocalDataSource {
     await sharedPreference.remove(_tokenKey);
   }
 
-  Future<void> saveUserData(UserDataEntity userData) async {
+  Future<void> saveUserData(UserDataResponseEntity userData) async {
     final sharedPreferences = await SharedPreferences.getInstance();
     final jsonData = userData.toJson();
     final jsonString = jsonEncode(jsonData);
     await sharedPreferences.setString(_userDataKey, jsonString);
   }
 
-  Future<UserDataEntity?> getUserData() async {
+  Future<UserDataResponseEntity?> getUserData() async {
     final sharedPreferences = await SharedPreferences.getInstance();
     final jsonString = sharedPreferences.getString(_userDataKey);
     if (jsonString != null) {
       final jsonData = jsonDecode(jsonString);
-      return UserDataEntity.fromJson(jsonData);
+      return UserDataResponseEntity.fromJson(jsonData);
     }
     return null;
   }

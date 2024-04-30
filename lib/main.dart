@@ -16,11 +16,13 @@ import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/is
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/is_first_entry_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/is_logged_in_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/login_use_case.dart';
+import 'package:sagara_coding_card_application/domain/use_cases/card_use_case/add_card_collection_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/card_use_case/get_list_card_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/profile_use_case/restore_avatar_profile_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/profile_use_case/set_avatar_profile_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/quiz_use_case/get_quiz_use_case.dart';
 import 'package:sagara_coding_card_application/presentation/manager/auth_manage/bloc/avatar_bloc.dart';
+import 'package:sagara_coding_card_application/presentation/manager/card_manage/add_card_collection/bloc/card_collection_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/manager/card_manage/get_card_id/bloc/card_id_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/manager/card_manage/get_card_list/bloc/card_list_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/manager/leaderboard_manage/get_leaderboard_bloc/leaderboard_bloc.dart';
@@ -64,7 +66,13 @@ class _MyAppState extends State<MyApp> {
   void initDio() {
     dio.interceptors.clear();
     dio.interceptors.add(
-        LogInterceptor(responseBody: true, requestBody: true, requestHeader: true, error: true));
+      LogInterceptor(
+        responseBody: true,
+        requestBody: true,
+        requestHeader: true,
+        error: true,
+      ),
+    );
   }
 
   @override
@@ -75,7 +83,7 @@ class _MyAppState extends State<MyApp> {
           create: (context) => CardListBloc(
             getListCardsUseCase: GetListCardsUseCase(
               cardRepository: CardImplRepository(
-                remoteDataSource: CardRemoteDataSource(client: dio),
+                cardRemoteDataSource: CardRemoteDataSource(client: dio),
               ),
             ),
           ),
@@ -84,12 +92,21 @@ class _MyAppState extends State<MyApp> {
           create: (context) => CardIdBloc(
             getCardByIdUseCase: GetCardByIdUseCase(
               cardRepository: CardImplRepository(
-                remoteDataSource: CardRemoteDataSource(client: dio),
+                cardRemoteDataSource: CardRemoteDataSource(client: dio),
               ),
             ),
             getCardByScannerUseCase: GetCardByScannerUseCase(
               cardRepository: CardImplRepository(
-                remoteDataSource: CardRemoteDataSource(client: dio),
+                cardRemoteDataSource: CardRemoteDataSource(client: dio),
+              ),
+            ),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => CardCollectionBloc(
+            addCollectionCardUseCase: AddCollectionCardUseCase(
+              cardRepository: CardImplRepository(
+                cardRemoteDataSource: CardRemoteDataSource(client: dio),
               ),
             ),
           ),
@@ -197,20 +214,24 @@ class _MyAppState extends State<MyApp> {
           return MaterialApp.router(
             debugShowCheckedModeBanner: false,
             title: 'Flutter Demo',
-            theme: ThemeData(
-              bottomSheetTheme: const BottomSheetThemeData(
-                surfaceTintColor: AppColors.text,
-              ),
-              colorScheme: ColorScheme.fromSeed(
-                seedColor: const Color(0xffC5233A),
-              ),
-              textTheme: GoogleFonts.barlowTextTheme(),
-              useMaterial3: true,
-            ),
+            theme: _buildTheme(),
             routerConfig: router,
           );
         },
       ),
+    );
+  }
+
+  ThemeData _buildTheme() {
+    return ThemeData(
+      bottomSheetTheme: const BottomSheetThemeData(
+        surfaceTintColor: AppColors.text,
+      ),
+      colorScheme: ColorScheme.fromSeed(
+        seedColor: const Color(0xffC5233A),
+      ),
+      textTheme: GoogleFonts.barlowTextTheme(),
+      useMaterial3: true,
     );
   }
 }

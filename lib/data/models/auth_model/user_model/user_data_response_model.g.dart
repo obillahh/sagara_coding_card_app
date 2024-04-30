@@ -1,0 +1,41 @@
+// GENERATED CODE - DO NOT MODIFY BY HAND
+
+part of 'user_data_response_model.dart';
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$UserDataResponseModelImpl _$$UserDataResponseModelImplFromJson(
+        Map<String, dynamic> json) =>
+    _$UserDataResponseModelImpl(
+      id: (json['id'] as num?)?.toInt(),
+      username: json['username'] as String?,
+      email: json['email'] as String?,
+      provider: json['provider'] as String?,
+      confirmed: json['confirmed'] as bool?,
+      blocked: json['blocked'] as bool?,
+      collectionCard: (json['collection_card'] as num?)?.toInt(),
+      createdAt: json['createdAt'] == null
+          ? null
+          : DateTime.parse(json['createdAt'] as String),
+      updatedAt: json['updatedAt'] == null
+          ? null
+          : DateTime.parse(json['updatedAt'] as String),
+      scores: (json['scores'] as num?)?.toInt(),
+    );
+
+Map<String, dynamic> _$$UserDataResponseModelImplToJson(
+        _$UserDataResponseModelImpl instance) =>
+    <String, dynamic>{
+      'id': instance.id,
+      'username': instance.username,
+      'email': instance.email,
+      'provider': instance.provider,
+      'confirmed': instance.confirmed,
+      'blocked': instance.blocked,
+      'collection_card': instance.collectionCard,
+      'createdAt': instance.createdAt?.toIso8601String(),
+      'updatedAt': instance.updatedAt?.toIso8601String(),
+      'scores': instance.scores,
+    };

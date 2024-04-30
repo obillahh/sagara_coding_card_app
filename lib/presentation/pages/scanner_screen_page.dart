@@ -8,6 +8,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sagara_coding_card_application/presentation/manager/auth_manage/auth/auth_bloc.dart';
+import 'package:sagara_coding_card_application/presentation/manager/card_manage/add_card_collection/bloc/card_collection_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
 
 import '../manager/card_manage/get_card_id/bloc/card_id_bloc.dart';
@@ -52,7 +53,6 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
         scannedData = barcode.code!;
         final contextBloc = context.read<CardIdBloc>();
         contextBloc.add(GetCardScannerEvent(url: scannedData));
-        context.read<AuthBloc>().add(IncreaseCollectionCardEvent(addCollection: 1));
       },
     );
   }
@@ -119,9 +119,18 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
       body: Column(
         children: [
           BlocConsumer<CardIdBloc, CardIdState>(
+            bloc: context.read<CardIdBloc>(),
             listener: (context, state) {
               if (state is CardIdSuccessState) {
                 final cardId = state.card.id;
+                final userId = (context.read<AuthBloc>().state as CurrentUserState).currentUser!.id;
+                inspect(cardId);
+                context.read<CardCollectionBloc>().add(
+                      AddCollectionCardEvent(
+                        cardId: cardId,
+                        userId: userId,
+                      ),
+                    );
                 context.goNamed(
                   RouterConstant.detailScanner,
                   extra: cardId,

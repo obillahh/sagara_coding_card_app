@@ -1,7 +1,7 @@
 import 'package:sagara_coding_card_application/domain/repositories/auth_repository.dart';
 
 import '../../../data/models/auth_model/register_request_model.dart';
-import '../../entities/auth_entity/user_response_entity.dart';
+import '../../entities/auth_entity/user_entity/user_response_entity.dart';
 
 class RegisterUseCase {
   final AuthRepository authRepository;

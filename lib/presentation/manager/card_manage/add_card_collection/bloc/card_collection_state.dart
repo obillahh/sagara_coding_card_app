@@ -9,4 +9,11 @@ sealed class CardCollectionState extends Equatable {
 
 final class CardCollectionInitial extends CardCollectionState {}
 
-class AddCollectionCardState extends CardCollectionState {}
+class AddCollectionCardState extends CardCollectionState {
+  final UserDataResponseEntity userData;
+
+  const AddCollectionCardState({required this.userData});
+
+  @override
+  List<Object> get props => [userData];
+}

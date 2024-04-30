@@ -37,7 +37,7 @@ class AuthNotFirstEntry extends AuthState {}
 class AuthLogoutSuccess extends AuthState {}
 
 class CurrentUserState extends AuthState {
-  final UserDataEntity? currentUser;
+  final UserDataResponseEntity? currentUser;
 
   CurrentUserState({required this.currentUser});
 

@@ -8,10 +8,8 @@ class CardIdResponseModel {
   });
 
   factory CardIdResponseModel.fromJson(Map<String, dynamic> json) => CardIdResponseModel(
-        data:
-            json["data"] == null ? null : CardIdResponseDataModel.fromJson(json["data"]),
-        meta:
-            json["meta"] == null ? null : CardIdResponseMetaModel.fromJson(json["meta"]),
+        data: json["data"] == null ? null : CardIdResponseDataModel.fromJson(json["data"]),
+        meta: json["meta"] == null ? null : CardIdResponseMetaModel.fromJson(json["meta"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -29,8 +27,7 @@ class CardIdResponseDataModel {
     this.attributes,
   });
 
-  factory CardIdResponseDataModel.fromJson(Map<String, dynamic> json) =>
-      CardIdResponseDataModel(
+  factory CardIdResponseDataModel.fromJson(Map<String, dynamic> json) => CardIdResponseDataModel(
         id: json["id"],
         attributes: json["attributes"] == null
             ? null
@@ -66,22 +63,18 @@ class CardDataAttributesModel {
     this.quizzes,
   });
 
-  factory CardDataAttributesModel.fromJson(Map<String, dynamic> json) =>
-      CardDataAttributesModel(
+  factory CardDataAttributesModel.fromJson(Map<String, dynamic> json) => CardDataAttributesModel(
         name: json["name"],
         role: json["role"],
         description: json["description"],
         level: json["level"],
         createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
         updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
-        publishedAt:
-            json["publishedAt"] == null ? null : DateTime.parse(json["publishedAt"]),
+        publishedAt: json["publishedAt"] == null ? null : DateTime.parse(json["publishedAt"]),
         avatarCard: json["avatar_card"] == null
             ? null
             : AvatarCardIdResponseModel.fromJson(json["avatar_card"]),
-        quizzes: json["quizzes"] == null
-            ? null
-            : QuizCardResponseModel.fromJson(json["quizzes"]),
+        quizzes: json["quizzes"] == null ? null : QuizCardResponseModel.fromJson(json["quizzes"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -123,8 +116,7 @@ class AvatarCardIdDataModel {
     this.attributes,
   });
 
-  factory AvatarCardIdDataModel.fromJson(Map<String, dynamic> json) =>
-      AvatarCardIdDataModel(
+  factory AvatarCardIdDataModel.fromJson(Map<String, dynamic> json) => AvatarCardIdDataModel(
         id: json["id"],
         attributes: json["attributes"] == null
             ? null
@@ -181,8 +173,7 @@ class AvatarCardIdAttributesModel {
         caption: json["caption"],
         width: json["width"],
         height: json["height"],
-        formats:
-            json["formats"] == null ? null : FormatsIdModel.fromJson(json["formats"]),
+        formats: json["formats"] == null ? null : FormatsIdModel.fromJson(json["formats"]),
         hash: json["hash"],
         ext: json["ext"],
         mime: json["mime"],
@@ -228,9 +219,7 @@ class FormatsIdModel {
 
   factory FormatsIdModel.fromJson(Map<String, dynamic> json) => FormatsIdModel(
         small: json["small"] == null ? null : FormatIdDataModel.fromJson(json["small"]),
-        thumbnail: json["thumbnail"] == null
-            ? null
-            : FormatIdDataModel.fromJson(json["thumbnail"]),
+        thumbnail: json["thumbnail"] == null ? null : FormatIdDataModel.fromJson(json["thumbnail"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -302,8 +291,7 @@ class ProviderMetadataModel {
     this.resourceType,
   });
 
-  factory ProviderMetadataModel.fromJson(Map<String, dynamic> json) =>
-      ProviderMetadataModel(
+  factory ProviderMetadataModel.fromJson(Map<String, dynamic> json) => ProviderMetadataModel(
         publicId: json["public_id"],
         resourceType: json["resource_type"],
       );
@@ -317,8 +305,7 @@ class ProviderMetadataModel {
 class CardIdResponseMetaModel {
   CardIdResponseMetaModel();
 
-  factory CardIdResponseMetaModel.fromJson(Map<String, dynamic> json) =>
-      CardIdResponseMetaModel();
+  factory CardIdResponseMetaModel.fromJson(Map<String, dynamic> json) => CardIdResponseMetaModel();
 
   Map<String, dynamic> toJson() => {};
 }
@@ -330,12 +317,10 @@ class QuizCardResponseModel {
     this.data,
   });
 
-  factory QuizCardResponseModel.fromJson(Map<String, dynamic> json) =>
-      QuizCardResponseModel(
+  factory QuizCardResponseModel.fromJson(Map<String, dynamic> json) => QuizCardResponseModel(
         data: json["data"] == null
             ? []
-            : List<QuizCardDataModel>.from(
-                json["data"]!.map((x) => QuizCardDataModel.fromJson(x))),
+            : List<QuizCardDataModel>.from(json["data"]!.map((x) => QuizCardDataModel.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -400,8 +385,7 @@ class QuizCardDataAttributesModel {
         correctOption: json["correct_option"],
         createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
         updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
-        publishedAt:
-            json["publishedAt"] == null ? null : DateTime.parse(json["publishedAt"]),
+        publishedAt: json["publishedAt"] == null ? null : DateTime.parse(json["publishedAt"]),
         score: json["score"],
       );
 

@@ -8,11 +8,11 @@ sealed class CardCollectionEvent extends Equatable {
 }
 
 class AddCollectionCardEvent extends CardCollectionEvent {
-  final int userId;
   final int cardId;
+  final int userId;
 
-  const AddCollectionCardEvent({required this.userId, required this.cardId});
+  const AddCollectionCardEvent({required this.cardId, required this.userId});
 
   @override
-  List<Object> get props => [userId, cardId];
+  List<Object> get props => [cardId, userId];
 }

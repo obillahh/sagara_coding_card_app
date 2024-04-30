@@ -1,13 +1,24 @@
 import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:go_router/go_router.dart";
+import "package:sagara_coding_card_application/presentation/manager/card_manage/get_card_id/bloc/card_id_bloc.dart";
 
 class QuizDonePage extends StatelessWidget {
-  const QuizDonePage({super.key});
+  const QuizDonePage(
+      {super.key,
+      required this.timeRemaining,
+      required this.totalPoints,
+      required this.totalQuestion});
+
+  final String timeRemaining;
+  final String totalPoints;
+  final String totalQuestion;
 
   @override
   Widget build(BuildContext context) {
+    double scorePercentage = (int.parse(totalPoints) / (int.parse(totalQuestion) * 20)) * 100;
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -43,14 +54,21 @@ class QuizDonePage extends StatelessWidget {
                   SizedBox(
                     width: 12.w,
                   ),
-                  Text(
-                    "Back End Engineer",
-                    style: TextStyle(
-                      color: const Color(0xffC5233A),
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  )
+                  BlocBuilder<CardIdBloc, CardIdState>(
+                    builder: (context, state) {
+                      if (state is CardIdSuccessState) {
+                        return Text(
+                          state.card.attributes.role,
+                          style: TextStyle(
+                            color: const Color(0xffC5233A),
+                            fontSize: 18.sp,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        );
+                      }
+                      return const Text("");
+                    },
+                  ),
                 ],
               ),
             ),
@@ -111,7 +129,7 @@ class QuizDonePage extends StatelessWidget {
                                 width: 4.w,
                               ),
                               Text(
-                                "+9000",
+                                "+$totalPoints",
                                 style: TextStyle(
                                   color: const Color(0xff333333),
                                   fontSize: 18.sp,
@@ -168,7 +186,7 @@ class QuizDonePage extends StatelessWidget {
                                 width: 4.w,
                               ),
                               Text(
-                                "01:49",
+                                timeRemaining,
                                 style: TextStyle(
                                     color: const Color(0xff333333),
                                     fontSize: 18.sp,
@@ -225,7 +243,7 @@ class QuizDonePage extends StatelessWidget {
                                 width: 4.w,
                               ),
                               Text(
-                                "80%",
+                                "${scorePercentage.toStringAsFixed(0)}%",
                                 style: TextStyle(
                                     color: const Color(0xff333333),
                                     fontSize: 18.sp,

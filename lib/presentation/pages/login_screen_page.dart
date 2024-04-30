@@ -79,6 +79,7 @@ class _LoginScreenPageState extends State<LoginScreenPage> {
                     hintText: 'Username/Email',
                     prefixIcon: AssetsConstant.usernameIcon,
                     controller: usernameController,
+                    keyboardType: TextInputType.emailAddress,
                   ),
                   TextFieldUnderlineWidget(
                     nameTextField: 'password',
@@ -98,6 +99,7 @@ class _LoginScreenPageState extends State<LoginScreenPage> {
                       ),
                     ),
                     obscureText: obscureText,
+                    keyboardType: TextInputType.visiblePassword,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -130,14 +132,11 @@ class _LoginScreenPageState extends State<LoginScreenPage> {
                     ],
                   ),
                   BlocListener<AuthBloc, AuthState>(
-                    listenWhen: (previous, current) {
-                      return previous != current;
-                    },
                     listener: (context, state) {
                       if (state is AuthLoginSuccess) {
                         context.read<AuthBloc>().add(IsLoggedInEvent());
                         context.go('/home');
-                      } else {
+                      } else if (state is AuthErrorState) {
                         context.pop();
                       }
                     },
@@ -147,7 +146,9 @@ class _LoginScreenPageState extends State<LoginScreenPage> {
                           showDialog(
                             context: context,
                             builder: (context) {
-                              return const Center(child: CircularProgressIndicator());
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
                             },
                           );
                           context.read<AuthBloc>().add(

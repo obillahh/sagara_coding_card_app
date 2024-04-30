@@ -24,8 +24,7 @@ final _rootNavigatorKey = GlobalKey<NavigatorState>();
 
 final _rootNavigatorHome = GlobalKey<NavigatorState>(debugLabel: 'shellHome');
 final _rootNavigatorCollection = GlobalKey<NavigatorState>(debugLabel: 'shellCollection');
-final _rootNavigatorLeaderboard =
-    GlobalKey<NavigatorState>(debugLabel: 'shellLeaderboard');
+final _rootNavigatorLeaderboard = GlobalKey<NavigatorState>(debugLabel: 'shellLeaderboard');
 final _rootNavigatorProfile = GlobalKey<NavigatorState>(debugLabel: 'shellProfile');
 
 final GoRouter router = GoRouter(
@@ -36,7 +35,10 @@ final GoRouter router = GoRouter(
       parentNavigatorKey: _rootNavigatorKey,
       path: '/splash',
       name: RouterConstant.splash,
-      builder: (context, state) => const SplashScreenPage(),
+      pageBuilder: (context, state) => MaterialPage(
+        key: state.pageKey,
+        child: const SplashScreenPage(),
+      ),
     ),
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
@@ -91,12 +93,15 @@ final GoRouter router = GoRouter(
               routes: [
                 GoRoute(
                   parentNavigatorKey: _rootNavigatorKey,
-                  path: 'detail_collection',
+                  path: 'detail_collection/:id',
                   name: RouterConstant.detailCollection,
-                  builder: (context, state) => DetailsCollectionScreenPage(
-                    key: state.pageKey,
-                    id: state.extra as int,
-                  ),
+                  pageBuilder: (context, state) {
+                    final id = int.tryParse(state.pathParameters['id'] ?? '') ?? -1;
+                    return MaterialPage(
+                      child: DetailsCollectionScreenPage(id: id),
+                      key: state.pageKey,
+                    );
+                  },
                 ),
               ],
             ),
@@ -163,9 +168,21 @@ final GoRouter router = GoRouter(
     ),
     GoRoute(
       parentNavigatorKey: _rootNavigatorKey,
-      path: '/quiz_done',
+      path: '/quiz_done/:timeRemaining/:totalPoints/:totalQuestion',
       name: RouterConstant.quizDone,
-      builder: (context, state) => const QuizDonePage(),
+      pageBuilder: (context, state) {
+        final timeRemaining = state.pathParameters['timeRemaining'] ?? '';
+        final totalPoints = state.pathParameters['totalPoints'] ?? '';
+        final totalQuestion = state.pathParameters['totalQuestion'] ?? '';
+        return MaterialPage(
+          child: QuizDonePage(
+            timeRemaining: timeRemaining,
+            totalPoints: totalPoints,
+            totalQuestion: totalQuestion,
+          ),
+          key: state.pageKey,
+        );
+      },
     ),
   ],
 );

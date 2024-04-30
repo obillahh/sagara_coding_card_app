@@ -94,6 +94,7 @@ class _RegisterScreenPageState extends State<RegisterScreenPage> {
                     controller: emailController,
                     hintText: 'Email',
                     prefixIcon: AssetsConstant.emailIcon,
+                    keyboardType: TextInputType.emailAddress,
                   ),
                   TextFieldUnderlineWidget(
                     nameTextField: 'username',
@@ -101,14 +102,14 @@ class _RegisterScreenPageState extends State<RegisterScreenPage> {
                     controller: usernameController,
                     hintText: 'Username',
                     prefixIcon: AssetsConstant.usernameIcon,
+                    keyboardType: TextInputType.name,
                   ),
                   TextFieldUnderlineWidget(
                     nameTextField: 'password',
                     validators: (p0) {
                       if (FormBuilderValidators.required()(p0) != null) {
                         return 'Password is required';
-                      } else if (FormBuilderValidators.minLength(8)(p0) !=
-                          null) {
+                      } else if (FormBuilderValidators.minLength(8)(p0) != null) {
                         return 'Password must be at least 8 characters long';
                       }
 
@@ -129,6 +130,7 @@ class _RegisterScreenPageState extends State<RegisterScreenPage> {
                       ),
                     ),
                     obscureText: obscureText,
+                    keyboardType: TextInputType.visiblePassword,
                   ),
                   // TextFieldUnderlineWidget(
                   //   nameTextField: 're-enter-password',
