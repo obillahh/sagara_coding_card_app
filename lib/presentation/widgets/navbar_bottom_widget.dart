@@ -6,10 +6,9 @@ import 'package:go_router/go_router.dart';
 import '../utils/constant/assets_constant.dart';
 
 class NavigationBottomWidget extends StatefulWidget {
-  final StatefulNavigationShell navigationShell;
+  const NavigationBottomWidget({super.key, required this.navigationShell});
 
-  const NavigationBottomWidget({Key? key, required this.navigationShell})
-      : super(key: key);
+  final StatefulNavigationShell navigationShell;
 
   @override
   State<NavigationBottomWidget> createState() => _NavigationBottomWidgetState();
@@ -22,6 +21,28 @@ class _NavigationBottomWidgetState extends State<NavigationBottomWidget> {
     widget.navigationShell.goBranch(
       index,
       initialLocation: index == widget.navigationShell.currentIndex,
+    );
+  }
+
+  Container _buildNavItem(int index, String nonActiveIcon, String activeIcon) {
+    return Container(
+      decoration: BoxDecoration(
+        color: selectedIndex == index ? const Color(0xffC5233A) : Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: IconButton(
+        onPressed: () {
+          setState(() {
+            selectedIndex = index;
+          });
+          _goBranch(selectedIndex);
+        },
+        icon: SvgPicture.asset(
+          selectedIndex == index ? activeIcon : nonActiveIcon,
+          width: 24.w,
+        ),
+        color: Colors.white,
+      ),
     );
   }
 
@@ -57,48 +78,20 @@ class _NavigationBottomWidgetState extends State<NavigationBottomWidget> {
           children: [
             Row(
               children: [
-                _buildNavItem(
-                    0, AssetsConstant.nonHomeIcon, AssetsConstant.homeIcon),
+                _buildNavItem(0, AssetsConstant.nonHomeIcon, AssetsConstant.homeIcon),
                 SizedBox(width: 24.w),
-                _buildNavItem(1, AssetsConstant.nonCollectionIcon,
-                    AssetsConstant.collectionIcon),
+                _buildNavItem(1, AssetsConstant.nonCollectionIcon, AssetsConstant.collectionIcon),
               ],
             ),
             Row(
               children: [
-                _buildNavItem(2, AssetsConstant.nonLeaderboardIcon,
-                    AssetsConstant.leaderboardIcon),
+                _buildNavItem(2, AssetsConstant.nonLeaderboardIcon, AssetsConstant.leaderboardIcon),
                 SizedBox(width: 24.w),
-                _buildNavItem(3, AssetsConstant.nonProfileIcon,
-                    AssetsConstant.profileIcon),
+                _buildNavItem(3, AssetsConstant.nonProfileIcon, AssetsConstant.profileIcon),
               ],
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Container _buildNavItem(int index, String nonActiveIcon, String activeIcon) {
-    return Container(
-      decoration: BoxDecoration(
-        color: selectedIndex == index
-            ? const Color(0xffC5233A)
-            : Colors.transparent,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: IconButton(
-        icon: SvgPicture.asset(
-          selectedIndex == index ? activeIcon : nonActiveIcon,
-          width: 24.w,
-        ),
-        color: Colors.white,
-        onPressed: () {
-          setState(() {
-            selectedIndex = index;
-          });
-          _goBranch(selectedIndex);
-        },
       ),
     );
   }

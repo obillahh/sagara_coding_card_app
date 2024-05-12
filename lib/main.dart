@@ -10,6 +10,7 @@ import 'package:sagara_coding_card_application/data/repositories/auth_impl_repos
 import 'package:sagara_coding_card_application/data/repositories/profile_impl_repository.dart';
 import 'package:sagara_coding_card_application/data/repositories/quiz_impl_repository.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/change_avatar_use_case.dart';
+import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/check_token_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/get_current_user_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/increase_collection_card_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/is_avatar_changed_use_case.dart';
@@ -36,6 +37,7 @@ import 'data/repositories/card_impl_repository.dart';
 import 'data/repositories/leaderboard_impl_repository.dart';
 import 'domain/use_cases/auth_use_case/logout_use_case.dart';
 import 'domain/use_cases/auth_use_case/register_use_case.dart';
+import 'domain/use_cases/auth_use_case/sign_in_with_google_use_case.dart';
 import 'domain/use_cases/card_use_case/get_card_by_id_use_case.dart';
 import 'domain/use_cases/card_use_case/get_card_by_scanner_use_case.dart';
 import 'domain/use_cases/leaderboard_use_case/get_leaderboard_use_case.dart';
@@ -155,6 +157,18 @@ class _MyAppState extends State<MyApp> {
                 authLocalDataSource: AuthLocalDataSource(),
               ),
             ),
+            signInWithGoogleUseCase: SignInWithGoogleUseCase(
+              authRepository: AuthImplRepository(
+                authRemoteDataSource: AuthRemoteDataSource(client: dio),
+                authLocalDataSource: AuthLocalDataSource(),
+              ),
+            ),
+            checkTokenUseCase: CheckTokenUseCase(
+              authRepository: AuthImplRepository(
+                authLocalDataSource: AuthLocalDataSource(),
+                authRemoteDataSource: AuthRemoteDataSource(client: dio),
+              ),
+            ),
           ),
         ),
         BlocProvider(
@@ -192,12 +206,6 @@ class _MyAppState extends State<MyApp> {
         BlocProvider(
           create: (context) => AvatarBloc(
             changeAvatarUseCase: ChangeAvatarUseCase(
-              authRepository: AuthImplRepository(
-                authRemoteDataSource: AuthRemoteDataSource(client: dio),
-                authLocalDataSource: AuthLocalDataSource(),
-              ),
-            ),
-            isAvatarChangedUseCase: IsAvatarChangedUseCase(
               authRepository: AuthImplRepository(
                 authRemoteDataSource: AuthRemoteDataSource(client: dio),
                 authLocalDataSource: AuthLocalDataSource(),

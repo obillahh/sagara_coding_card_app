@@ -25,9 +25,11 @@ class LoginScreenPage extends StatefulWidget {
 
 class _LoginScreenPageState extends State<LoginScreenPage> {
   final formKey = GlobalKey<FormBuilderState>();
-
   final usernameController = TextEditingController();
   final passwordController = TextEditingController();
+
+  bool? rememberMe = false;
+  bool obscureText = true;
 
   @override
   void dispose() {
@@ -36,182 +38,190 @@ class _LoginScreenPageState extends State<LoginScreenPage> {
     super.dispose();
   }
 
-  bool? rememberMe = false;
-  bool obscureText = true;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.background,
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 36.sp, vertical: 56.sp),
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            alignment: Alignment.topCenter,
-            image: AssetImage(
-              AssetsConstant.bgLoginScreen,
-            ),
-          ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Image.asset(
-              AssetsConstant.logoSagaraCodingCard,
-              width: 140.w,
-            ),
-            FormBuilder(
-              key: formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Welcome Players!'.toUpperCase(),
-                    style: AppFonts.appFont.displaySmall!.copyWith(
-                      color: AppColors.text,
-                      fontWeight: FontWeight.w100,
-                    ),
-                  ),
-                  TextFieldUnderlineWidget(
-                    nameTextField: 'username-email',
-                    validators: FormBuilderValidators.required(),
-                    hintText: 'Username/Email',
-                    prefixIcon: AssetsConstant.usernameIcon,
-                    controller: usernameController,
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  TextFieldUnderlineWidget(
-                    nameTextField: 'password',
-                    validators: FormBuilderValidators.required(),
-                    controller: passwordController,
-                    hintText: 'Password',
-                    prefixIcon: AssetsConstant.passwordIcon,
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          obscureText = !obscureText;
-                        });
-                      },
-                      icon: Icon(
-                        obscureText ? Icons.visibility_off : Icons.visibility,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    obscureText: obscureText,
-                    keyboardType: TextInputType.visiblePassword,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Checkbox(
-                            value: rememberMe,
-                            onChanged: (value) {
-                              setState(() {
-                                rememberMe = value;
-                              });
-                            },
-                            activeColor: AppColors.primary,
-                            checkColor: AppColors.text,
-                            side: const BorderSide(color: AppColors.primary),
-                          ),
-                          Text(
-                            'Remember me',
-                            style: AppFonts.appFont.labelLarge!.copyWith(
-                              color: AppColors.placeholder,
-                            ),
-                          )
-                        ],
-                      ),
-                      TextButtonWidget(
-                        onPressed: () {},
-                        text: 'Forgot Password?',
-                      ),
-                    ],
-                  ),
-                  BlocListener<AuthBloc, AuthState>(
-                    listener: (context, state) {
-                      if (state is AuthLoginSuccess) {
-                        context.read<AuthBloc>().add(IsLoggedInEvent());
-                        context.go('/home');
-                      } else if (state is AuthErrorState) {
-                        context.pop();
-                      }
-                    },
-                    child: PrimaryElevatedButtonWidget(
-                      onPressed: () {
-                        if (formKey.currentState!.saveAndValidate()) {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            },
-                          );
-                          context.read<AuthBloc>().add(
-                                LoginEvent(
-                                  requestModel: LoginRequestModel(
-                                    identifier: usernameController.text,
-                                    password: passwordController.text,
-                                  ),
-                                ),
-                              );
-                        }
-                      },
-                      text: 'Log in',
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      const Expanded(
-                        child: Divider(
-                          color: AppColors.text,
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Text(
-                          'or',
-                          style: AppFonts.appFont.labelSmall!,
-                        ),
-                      ),
-                      const Expanded(
-                        child: Divider(
-                          color: AppColors.text,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SecondaryElevatedButtonWidget(
-                    onPressed: () {
-                      context.push('/verification');
-                    },
-                    text: 'Continue with Google',
-                    icon: SvgPicture.asset(AssetsConstant.googleIcon),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Don’t have an account?',
-                        style: AppFonts.appFont.labelLarge,
-                      ),
-                      TextButtonWidget(
-                        onPressed: () {
-                          context.go('/register');
-                        },
-                        text: 'Sign up',
-                        color: AppColors.primary,
-                      ),
-                    ],
-                  )
-                ],
+      body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
+        child: Container(
+          height: ScreenUtil().screenHeight,
+          padding: EdgeInsets.symmetric(horizontal: 36.sp, vertical: 56.sp),
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              alignment: Alignment.topCenter,
+              image: AssetImage(
+                AssetsConstant.bgLoginScreen,
               ),
             ),
-          ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Image.asset(
+                AssetsConstant.logoSagaraCodingCard,
+                width: 140.w,
+              ),
+              FormBuilder(
+                key: formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Welcome Players!'.toUpperCase(),
+                      style: AppFonts.appFont.displaySmall!.copyWith(
+                        color: AppColors.text,
+                        fontWeight: FontWeight.w100,
+                      ),
+                    ),
+                    TextFieldUnderlineWidget(
+                      nameTextField: 'username-email',
+                      validators: FormBuilderValidators.required(),
+                      hintText: 'Username/Email',
+                      prefixIcon: AssetsConstant.usernameIcon,
+                      controller: usernameController,
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    TextFieldUnderlineWidget(
+                      nameTextField: 'password',
+                      validators: FormBuilderValidators.required(),
+                      controller: passwordController,
+                      hintText: 'Password',
+                      prefixIcon: AssetsConstant.passwordIcon,
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            obscureText = !obscureText;
+                          });
+                        },
+                        icon: Icon(
+                          obscureText ? Icons.visibility_off : Icons.visibility,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                      obscureText: obscureText,
+                      keyboardType: TextInputType.visiblePassword,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Checkbox(
+                              value: rememberMe,
+                              onChanged: (value) {
+                                setState(() {
+                                  rememberMe = value;
+                                });
+                              },
+                              activeColor: AppColors.primary,
+                              checkColor: AppColors.text,
+                              side: const BorderSide(color: AppColors.primary),
+                            ),
+                            Text(
+                              'Remember me',
+                              style: AppFonts.appFont.labelLarge!.copyWith(
+                                color: AppColors.placeholder,
+                              ),
+                            )
+                          ],
+                        ),
+                        TextButtonWidget(
+                          onPressed: () {},
+                          text: 'Forgot Password?',
+                        ),
+                      ],
+                    ),
+                    BlocListener<AuthBloc, AuthState>(
+                      listener: (context, state) {
+                        if (state is AuthLoginSuccess) {
+                          context.read<AuthBloc>().add(IsLoggedInEvent());
+                          context.go('/home');
+                        } else if (state is AuthErrorState) {
+                          context.pop();
+                        }
+                      },
+                      child: PrimaryElevatedButtonWidget(
+                        onPressed: () {
+                          if (formKey.currentState!.saveAndValidate()) {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              },
+                            );
+                            context.read<AuthBloc>().add(
+                                  LoginEvent(
+                                    requestModel: LoginRequestModel(
+                                      identifier: usernameController.text,
+                                      password: passwordController.text,
+                                    ),
+                                  ),
+                                );
+                          }
+                        },
+                        text: 'Log in',
+                      ),
+                    ),
+                    Row(
+                      children: [
+                        const Expanded(
+                          child: Divider(
+                            color: AppColors.text,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(16.0),
+                          child: Text(
+                            'or',
+                            style: AppFonts.appFont.labelSmall!,
+                          ),
+                        ),
+                        const Expanded(
+                          child: Divider(
+                            color: AppColors.text,
+                          ),
+                        ),
+                      ],
+                    ),
+                    BlocListener<AuthBloc, AuthState>(
+                      listener: (context, state) {
+                        if (state is AuthGoogleSignInState) {
+                          context.push('/home');
+                        }
+                      },
+                      child: SecondaryElevatedButtonWidget(
+                        onPressed: () {
+                          context.read<AuthBloc>().add(GoogleSignInEvent());
+                        },
+                        text: 'Continue with Google',
+                        icon: SvgPicture.asset(AssetsConstant.googleIcon),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Don’t have an account?',
+                          style: AppFonts.appFont.labelLarge,
+                        ),
+                        TextButtonWidget(
+                          onPressed: () {
+                            context.go('/register');
+                          },
+                          text: 'Sign up',
+                          color: AppColors.primary,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -21,6 +21,15 @@ class AuthLoginSuccess extends AuthState {
   List<Object?> get props => [login];
 }
 
+class AuthGoogleSignInState extends AuthState {
+  final GoogleSignInAccount googleSignInAccount;
+
+  AuthGoogleSignInState({required this.googleSignInAccount});
+
+  @override
+  List<Object?> get props => [googleSignInAccount];
+}
+
 class AuthRegisterSuccess extends AuthState {
   final UserResponseEntity register;
 
@@ -67,4 +76,13 @@ class CollectionCardIncreased extends AuthState {
 
   @override
   List<Object?> get props => [collectionCard];
+}
+
+class TokenChecked extends AuthState {
+  final bool isTokenValid;
+
+  TokenChecked({required this.isTokenValid});
+
+  @override
+  List<Object?> get props => [isTokenValid];
 }

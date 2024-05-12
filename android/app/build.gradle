@@ -51,6 +51,15 @@ android {
         versionName flutterVersionName
     }
 
+    signingConfigs {
+        debug {
+            keyAlias 'sccdebugkey'
+            keyPassword 'scc123'
+            storeFile file('scckey.jks')
+            storePassword 'scc123'
+        }
+    }
+
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
@@ -58,6 +67,7 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+
 }
 
 flutter {

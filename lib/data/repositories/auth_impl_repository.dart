@@ -1,6 +1,8 @@
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:dart_jsonwebtoken/dart_jsonwebtoken.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/login_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/register_request_model.dart';
+import 'package:sagara_coding_card_application/data/models/auth_model/user_model/avatar_update_request_model.dart';
+import 'package:sagara_coding_card_application/domain/entities/auth_entity/user_entity/avatar_update_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/user_entity/user_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/repositories/auth_repository.dart';
 
@@ -18,9 +20,27 @@ class AuthImplRepository extends AuthRepository {
   final AuthRemoteDataSource authRemoteDataSource;
 
   @override
-  Future<void> changeAvatar({required String avatarUrl}) async {
+  Future<AvatarUpdateResponseEntity?> changeAvatar(
+      {required AvatarUpdateRequestModel request}) async {
     try {
-      await authLocalDataSource.setAvatarProfile(avatarUrl);
+      final response = await authRemoteDataSource.changeAvatar(request: request);
+      final updateResponse = AvatarUpdateResponseEntity(
+        id: response.id ?? 0,
+        name: response.name ?? '',
+        alternativeText: response.alternativeText ?? '',
+        caption: response.caption ?? '',
+        width: response.width ?? 0,
+        height: response.height ?? 0,
+        hash: response.hash ?? '',
+        ext: response.ext ?? '',
+        mime: response.mime ?? '',
+        size: response.size ?? 0,
+        url: response.url ?? '',
+        previewUrl: response.previewUrl ?? '',
+        provider: response.provider ?? '',
+        providerMetadata: response.providerMetadata,
+      );
+      return updateResponse;
     } catch (e) {
       print('Error changing avatar: $e');
       throw Exception('Failed to change avatar');
@@ -55,12 +75,6 @@ class AuthImplRepository extends AuthRepository {
   @override
   Future<bool> isLoggedIn() async {
     return await authLocalDataSource.getToken() != null;
-  }
-
-  @override
-  bool isSignedInWithGoogle() {
-    // TODO: implement isSignedInWithGoogle
-    throw UnimplementedError();
   }
 
   @override
@@ -128,37 +142,37 @@ class AuthImplRepository extends AuthRepository {
   }
 
   @override
-  Future<UserResponseEntity?> signInWithGoogle() async {
-    try {
-      final GoogleSignInAccount? googleUser = await GoogleSignIn().signIn();
-
-      if (googleUser == null) {
-        return null;
-      }
-
-      // final GoogleSignInAuthentication googleAuth =
-      //     await googleUser.authentication;
-
-      // final googleSignInRequest = GoogleSignInRequestModel(
-      //   idToken: googleAuth?.idToken,
-      // );
-
-      // UserCredential userCredentialResult =
-      //     await FirebaseAuth.instance.signInWithCredential(credential);
-      // return userCredentialResult.user;
-    } catch (e) {
-      print('Err signInWithGoogle $e');
-      return null;
-    }
-    return null;
-  }
-
-  @override
   Future<void> increaseCollectionCard() async {
     try {
       await authLocalDataSource.increaseCollectionCard();
     } catch (e) {
       print('Error increasing collection card: $e');
+    }
+  }
+
+  @override
+  bool isSignedInWithGoogle() {
+    // TODO: implement isSignedInWithGoogle
+    throw UnimplementedError();
+  }
+
+  @override
+  Future signInWithGoogle() async {
+    return await authRemoteDataSource.googleSignIn();
+  }
+
+  @override
+  Future<bool> checkToken() async {
+    try {
+      final token = await authLocalDataSource.getToken();
+      final decodedToken = JWT.decode(token!);
+      final expiration = decodedToken.payload['exp'];
+      final expirationDateTime = DateTime.fromMillisecondsSinceEpoch(expiration * 1000);
+      final now = DateTime.now();
+      return !expirationDateTime.isBefore(now);
+    } catch (e) {
+      print('Error checking token: $e');
+      return false;
     }
   }
 }

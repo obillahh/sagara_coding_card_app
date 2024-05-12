@@ -43,183 +43,151 @@ class _RegisterScreenPageState extends State<RegisterScreenPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.background,
-      body: Container(
-        padding: EdgeInsets.symmetric(horizontal: 36.sp, vertical: 56.sp),
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            alignment: Alignment.topCenter,
-            image: AssetImage(
-              AssetsConstant.bgRegisterScreen,
-            ),
-          ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Image.asset(
-              AssetsConstant.logoSagaraCodingCard,
-              width: 140.w,
-            ),
-            FormBuilder(
-              key: formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Join Us!'.toUpperCase(),
-                    style: AppFonts.appFont.displaySmall!.copyWith(
-                      color: AppColors.text,
-                      fontWeight: FontWeight.w100,
-                    ),
-                  ),
-                  // TextFieldUnderlineWidget(
-                  //   nameTextField: 'name',
-                  //   validators: FormBuilderValidators.required(),
-                  //   controller: nameController,
-                  //   hintText: 'Name',
-                  //   prefixIcon: AssetsConstant.nameIcon,
-                  // ),
-                  TextFieldUnderlineWidget(
-                    nameTextField: 'email',
-                    validators: (p0) {
-                      if (FormBuilderValidators.required()(p0) != null) {
-                        return 'Email is required';
-                      } else if (FormBuilderValidators.email()(p0) != null) {
-                        return 'Invalid email format';
-                      }
-                      return null;
-                    },
-                    controller: emailController,
-                    hintText: 'Email',
-                    prefixIcon: AssetsConstant.emailIcon,
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  TextFieldUnderlineWidget(
-                    nameTextField: 'username',
-                    validators: FormBuilderValidators.required(),
-                    controller: usernameController,
-                    hintText: 'Username',
-                    prefixIcon: AssetsConstant.usernameIcon,
-                    keyboardType: TextInputType.name,
-                  ),
-                  TextFieldUnderlineWidget(
-                    nameTextField: 'password',
-                    validators: (p0) {
-                      if (FormBuilderValidators.required()(p0) != null) {
-                        return 'Password is required';
-                      } else if (FormBuilderValidators.minLength(8)(p0) != null) {
-                        return 'Password must be at least 8 characters long';
-                      }
-
-                      return null;
-                    },
-                    controller: passwordController,
-                    hintText: 'Password',
-                    prefixIcon: AssetsConstant.passwordIcon,
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          obscureText = !obscureText;
-                        });
-                      },
-                      icon: Icon(
-                        obscureText ? Icons.visibility_off : Icons.visibility,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    obscureText: obscureText,
-                    keyboardType: TextInputType.visiblePassword,
-                  ),
-                  // TextFieldUnderlineWidget(
-                  //   nameTextField: 're-enter-password',
-                  //   validators: (p0) {
-                  //     if (FormBuilderValidators.required()(p0) != null) {
-                  //       return 'Enter your password again';
-                  //     } else if (p0 != passwordController.text) {
-                  //       return 'Password does not match';
-                  //     }
-                  //     return null;
-                  //   },
-                  //   controller: confirmPasswordController,
-                  //   hintText: 'Re-enter Password',
-                  //   prefixIcon: AssetsConstant.passwordIcon,
-                  //   suffixIcon: IconButton(
-                  //     onPressed: () {
-                  //       setState(
-                  //         () {
-                  //           obscureText = !obscureText;
-                  //         },
-                  //       );
-                  //     },
-                  //     icon: Icon(
-                  //       obscureText ? Icons.visibility_off : Icons.visibility,
-                  //       color: AppColors.primary,
-                  //     ),
-                  //   ),
-                  //   obscureText: obscureText,
-                  // ),
-                  SizedBox(height: 16.h),
-                  BlocListener<AuthBloc, AuthState>(
-                    listener: (context, state) {
-                      try {
-                        if (state is AuthRegisterSuccess) {
-                          context.go('/login');
-                        }
-                      } catch (e) {
-                        if (state is AuthErrorState) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text('Registration failed: $e'),
-                          ));
-                        }
-                      }
-                    },
-                    child: PrimaryElevatedButtonWidget(
-                      onPressed: () {
-                        if (formKey.currentState!.saveAndValidate()) {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            },
-                          );
-                          context.read<AuthBloc>().add(
-                                RegisterEvent(
-                                  requestModel: RegisterRequestModel(
-                                    email: emailController.text,
-                                    password: passwordController.text,
-                                    username: usernameController.text,
-                                  ),
-                                ),
-                              );
-                        }
-                      },
-                      text: 'Sign Up',
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Already have an account?',
-                        style: AppFonts.appFont.labelLarge,
-                      ),
-                      TextButtonWidget(
-                        onPressed: () {
-                          context.go('/login');
-                        },
-                        text: 'Log in',
-                        color: AppColors.primary,
-                      ),
-                    ],
-                  )
-                ],
+      body: SingleChildScrollView(
+        child: Container(
+          height: ScreenUtil().screenHeight,
+          padding: EdgeInsets.symmetric(horizontal: 36.sp, vertical: 56.sp),
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              alignment: Alignment.topCenter,
+              image: AssetImage(
+                AssetsConstant.bgRegisterScreen,
               ),
             ),
-          ],
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Image.asset(
+                AssetsConstant.logoSagaraCodingCard,
+                width: 140.w,
+              ),
+              FormBuilder(
+                key: formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Join Us!'.toUpperCase(),
+                      style: AppFonts.appFont.displaySmall!.copyWith(
+                        color: AppColors.text,
+                        fontWeight: FontWeight.w100,
+                      ),
+                    ),
+                    TextFieldUnderlineWidget(
+                      nameTextField: 'email',
+                      validators: (p0) {
+                        if (FormBuilderValidators.required()(p0) != null) {
+                          return 'Email is required';
+                        } else if (FormBuilderValidators.email()(p0) != null) {
+                          return 'Invalid email format';
+                        }
+                        return null;
+                      },
+                      controller: emailController,
+                      hintText: 'Email',
+                      prefixIcon: AssetsConstant.emailIcon,
+                      keyboardType: TextInputType.emailAddress,
+                    ),
+                    TextFieldUnderlineWidget(
+                      nameTextField: 'username',
+                      validators: FormBuilderValidators.required(),
+                      controller: usernameController,
+                      hintText: 'Username',
+                      prefixIcon: AssetsConstant.usernameIcon,
+                      keyboardType: TextInputType.name,
+                    ),
+                    TextFieldUnderlineWidget(
+                      nameTextField: 'password',
+                      validators: (p0) {
+                        if (FormBuilderValidators.required()(p0) != null) {
+                          return 'Password is required';
+                        } else if (FormBuilderValidators.minLength(8)(p0) != null) {
+                          return 'Password must be at least 8 characters long';
+                        }
+
+                        return null;
+                      },
+                      controller: passwordController,
+                      hintText: 'Password',
+                      prefixIcon: AssetsConstant.passwordIcon,
+                      suffixIcon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            obscureText = !obscureText;
+                          });
+                        },
+                        icon: Icon(
+                          obscureText ? Icons.visibility_off : Icons.visibility,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                      obscureText: obscureText,
+                      keyboardType: TextInputType.visiblePassword,
+                    ),
+                    SizedBox(height: 16.h),
+                    BlocListener<AuthBloc, AuthState>(
+                      listener: (context, state) {
+                        try {
+                          if (state is AuthRegisterSuccess) {
+                            context.go('/login');
+                          }
+                        } catch (e) {
+                          if (state is AuthErrorState) {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text('Registration failed: $e'),
+                            ));
+                          }
+                        }
+                      },
+                      child: PrimaryElevatedButtonWidget(
+                        onPressed: () {
+                          if (formKey.currentState!.saveAndValidate()) {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              },
+                            );
+                            context.read<AuthBloc>().add(
+                                  RegisterEvent(
+                                    requestModel: RegisterRequestModel(
+                                      email: emailController.text,
+                                      password: passwordController.text,
+                                      username: usernameController.text,
+                                    ),
+                                  ),
+                                );
+                          }
+                        },
+                        text: 'Sign Up',
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Already have an account?',
+                          style: AppFonts.appFont.labelLarge,
+                        ),
+                        TextButtonWidget(
+                          onPressed: () {
+                            context.go('/login');
+                          },
+                          text: 'Log in',
+                          color: AppColors.primary,
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

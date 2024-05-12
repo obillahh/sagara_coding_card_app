@@ -1,12 +1,15 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:meta/meta.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/login_request_model.dart';
+import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/check_token_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/increase_collection_card_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/is_first_entry_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/is_logged_in_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/logout_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/register_use_case.dart';
+import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/sign_in_with_google_use_case.dart';
 
 import '../../../../data/models/auth_model/register_request_model.dart';
 import '../../../../domain/entities/auth_entity/user_entity/user_data_response_entity.dart';
@@ -19,31 +22,41 @@ part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUseCase loginUseCase;
+  final SignInWithGoogleUseCase signInWithGoogleUseCase;
   final RegisterUseCase registerUseCase;
   final IsLoggedInUseCase isLoggedInUseCase;
   final IsFirstEntryUseCase isFirstEntryUseCase;
   final LogoutUseCase logoutUseCase;
   final GetCurrentUserUseCase getCurrentUserUseCase;
   final IncreaseCollectionCardUseCase increaseCollectionCardUseCase;
+  final CheckTokenUseCase checkTokenUseCase;
   AuthBloc({
     required this.registerUseCase,
     required this.loginUseCase,
+    required this.signInWithGoogleUseCase,
     required this.isLoggedInUseCase,
     required this.isFirstEntryUseCase,
     required this.logoutUseCase,
     required this.getCurrentUserUseCase,
     required this.increaseCollectionCardUseCase,
+    required this.checkTokenUseCase,
   }) : super(AuthInitial()) {
     on<AuthEvent>(
       (event, emit) async {
         if (event is LoginEvent) {
-          final UserResponseEntity? data = await loginUseCase(
-            event.requestModel,
-          );
+          final UserResponseEntity? data = await loginUseCase(event.requestModel);
           if (data != null) {
             emit(AuthLoginSuccess(login: data));
           } else {
             emit(AuthFailure(error: 'Login Failed'));
+          }
+        }
+        if (event is GoogleSignInEvent) {
+          try {
+            final data = await signInWithGoogleUseCase.call();
+            emit(AuthGoogleSignInState(googleSignInAccount: data));
+          } catch (e) {
+            emit(AuthFailure(error: e.toString()));
           }
         }
         if (event is RegisterEvent) {
@@ -77,7 +90,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
           emit(
             CurrentUserState(
               currentUser: user ??
-                  UserDataResponseEntity(
+                  const UserDataResponseEntity(
                     id: 0,
                     username: 'Guest',
                     email: 'guest@example.com',
@@ -97,6 +110,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             emit(CollectionCardIncreased(collectionCard: event.addCollection));
           } catch (e) {
             emit(AuthErrorState('Failed to increase collection card: $e'));
+          }
+        }
+        if (event is CheckTokenEvent) {
+          try {
+            final isTokenValid = await checkTokenUseCase();
+            emit(TokenChecked(isTokenValid: isTokenValid));
+          } catch (e) {
+            emit(AuthErrorState('Failed to check token: $e'));
           }
         }
       },

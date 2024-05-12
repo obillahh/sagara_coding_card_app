@@ -14,7 +14,8 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-UserDataResponseEntity _$UserDataResponseEntityFromJson(Map<String, dynamic> json) {
+UserDataResponseEntity _$UserDataResponseEntityFromJson(
+    Map<String, dynamic> json) {
   return _UserDataResponseEntity.fromJson(json);
 }
 
@@ -39,8 +40,8 @@ mixin _$UserDataResponseEntity {
 
 /// @nodoc
 abstract class $UserDataResponseEntityCopyWith<$Res> {
-  factory $UserDataResponseEntityCopyWith(
-          UserDataResponseEntity value, $Res Function(UserDataResponseEntity) then) =
+  factory $UserDataResponseEntityCopyWith(UserDataResponseEntity value,
+          $Res Function(UserDataResponseEntity) then) =
       _$UserDataResponseEntityCopyWithImpl<$Res, UserDataResponseEntity>;
   @useResult
   $Res call(
@@ -52,7 +53,8 @@ abstract class $UserDataResponseEntityCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$UserDataResponseEntityCopyWithImpl<$Res, $Val extends UserDataResponseEntity>
+class _$UserDataResponseEntityCopyWithImpl<$Res,
+        $Val extends UserDataResponseEntity>
     implements $UserDataResponseEntityCopyWith<$Res> {
   _$UserDataResponseEntityCopyWithImpl(this._value, this._then);
 
@@ -99,7 +101,8 @@ class _$UserDataResponseEntityCopyWithImpl<$Res, $Val extends UserDataResponseEn
 abstract class _$$UserDataResponseEntityImplCopyWith<$Res>
     implements $UserDataResponseEntityCopyWith<$Res> {
   factory _$$UserDataResponseEntityImplCopyWith(
-          _$UserDataResponseEntityImpl value, $Res Function(_$UserDataResponseEntityImpl) then) =
+          _$UserDataResponseEntityImpl value,
+          $Res Function(_$UserDataResponseEntityImpl) then) =
       __$$UserDataResponseEntityImplCopyWithImpl<$Res>;
   @override
   @useResult
@@ -113,10 +116,12 @@ abstract class _$$UserDataResponseEntityImplCopyWith<$Res>
 
 /// @nodoc
 class __$$UserDataResponseEntityImplCopyWithImpl<$Res>
-    extends _$UserDataResponseEntityCopyWithImpl<$Res, _$UserDataResponseEntityImpl>
+    extends _$UserDataResponseEntityCopyWithImpl<$Res,
+        _$UserDataResponseEntityImpl>
     implements _$$UserDataResponseEntityImplCopyWith<$Res> {
   __$$UserDataResponseEntityImplCopyWithImpl(
-      _$UserDataResponseEntityImpl _value, $Res Function(_$UserDataResponseEntityImpl) _then)
+      _$UserDataResponseEntityImpl _value,
+      $Res Function(_$UserDataResponseEntityImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -193,7 +198,8 @@ class _$UserDataResponseEntityImpl implements _UserDataResponseEntity {
         (other.runtimeType == runtimeType &&
             other is _$UserDataResponseEntityImpl &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.username, username) || other.username == username) &&
+            (identical(other.username, username) ||
+                other.username == username) &&
             (identical(other.email, email) || other.email == email) &&
             (identical(other.collectionCard, collectionCard) ||
                 other.collectionCard == collectionCard) &&
@@ -202,13 +208,15 @@ class _$UserDataResponseEntityImpl implements _UserDataResponseEntity {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, username, email, collectionCard, scores);
+  int get hashCode =>
+      Object.hash(runtimeType, id, username, email, collectionCard, scores);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$UserDataResponseEntityImplCopyWith<_$UserDataResponseEntityImpl> get copyWith =>
-      __$$UserDataResponseEntityImplCopyWithImpl<_$UserDataResponseEntityImpl>(this, _$identity);
+  _$$UserDataResponseEntityImplCopyWith<_$UserDataResponseEntityImpl>
+      get copyWith => __$$UserDataResponseEntityImplCopyWithImpl<
+          _$UserDataResponseEntityImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
@@ -220,11 +228,12 @@ class _$UserDataResponseEntityImpl implements _UserDataResponseEntity {
 
 abstract class _UserDataResponseEntity implements UserDataResponseEntity {
   const factory _UserDataResponseEntity(
-      {@JsonKey(name: "id") required final int id,
-      @JsonKey(name: "username") required final String username,
-      @JsonKey(name: "email") required final String email,
-      @JsonKey(name: "collection_card") required final int collectionCard,
-      @JsonKey(name: "scores") required final int scores}) = _$UserDataResponseEntityImpl;
+          {@JsonKey(name: "id") required final int id,
+          @JsonKey(name: "username") required final String username,
+          @JsonKey(name: "email") required final String email,
+          @JsonKey(name: "collection_card") required final int collectionCard,
+          @JsonKey(name: "scores") required final int scores}) =
+      _$UserDataResponseEntityImpl;
 
   factory _UserDataResponseEntity.fromJson(Map<String, dynamic> json) =
       _$UserDataResponseEntityImpl.fromJson;
@@ -246,6 +255,6 @@ abstract class _UserDataResponseEntity implements UserDataResponseEntity {
   int get scores;
   @override
   @JsonKey(ignore: true)
-  _$$UserDataResponseEntityImplCopyWith<_$UserDataResponseEntityImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$UserDataResponseEntityImplCopyWith<_$UserDataResponseEntityImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

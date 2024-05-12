@@ -9,20 +9,11 @@ sealed class AvatarState extends Equatable {
 
 class AvatarInitial extends AvatarState {}
 
-class ChangeAvatarState extends AvatarState {
-  final String avatarUrl;
-
-  const ChangeAvatarState({required this.avatarUrl});
-
-  @override
-  List<Object> get props => [avatarUrl];
-}
-
 class AvatarChangedState extends AvatarState {
-  final String avatarUrl;
+  final AvatarUpdateResponseEntity response;
 
-  const AvatarChangedState({required this.avatarUrl});
+  const AvatarChangedState({required this.response});
 
   @override
-  List<Object> get props => [avatarUrl];
+  List<Object> get props => [response];
 }

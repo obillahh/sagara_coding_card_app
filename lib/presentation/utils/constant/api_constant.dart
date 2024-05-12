@@ -5,6 +5,7 @@ class ApiConstant {
   // Auth
   static const String login = '$baseUrlApi/auth/local';
   static const String register = '$baseUrlApi/auth/local/register';
+  static const String avatarUpdate = '$baseUrlApi/upload';
 
   // Card
   static const String card = '$baseUrlApi/cards';

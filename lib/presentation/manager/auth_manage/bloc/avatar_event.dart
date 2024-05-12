@@ -8,12 +8,12 @@ sealed class AvatarEvent extends Equatable {
 }
 
 class ChangeAvatarEvent extends AvatarEvent {
-  final String avatarUrl;
+  final AvatarUpdateRequestModel request;
 
-  const ChangeAvatarEvent(this.avatarUrl);
+  const ChangeAvatarEvent({required this.request});
 
   @override
-  List<Object> get props => [avatarUrl];
+  List<Object> get props => [request];
 }
 
 class IsAvatarChangedEvent extends AvatarEvent {}

@@ -22,6 +22,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
     Future.delayed(const Duration(seconds: 7)).then((value) {
       context.read<AuthBloc>().add(IsFirstEntryEvent());
       context.read<AuthBloc>().add(IsLoggedInEvent());
+      context.read<AuthBloc>().add(CheckTokenEvent());
     });
   }
 
@@ -38,6 +39,39 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
           context.go('/home');
         } else if (state is AuthNotAuthenticated) {
           context.go('/login');
+        } else if (state is TokenChecked) {
+          state.isTokenValid
+              ? null
+              : showDialog(
+                  context: context,
+                  builder: (context) {
+                    return AlertDialog(
+                      backgroundColor: AppColors.background,
+                      title: const Text("Session Expired"),
+                      titleTextStyle: const TextStyle(
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      content: const Text(
+                        "Your session has expired. Please login again.",
+                      ),
+                      contentTextStyle: const TextStyle(
+                        color: AppColors.text,
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic,
+                      ),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            context.pushReplacement('/login');
+                          },
+                          child: const Text("Login"),
+                        ),
+                      ],
+                    );
+                  },
+                  barrierDismissible: false,
+                );
         }
       },
       child: Scaffold(

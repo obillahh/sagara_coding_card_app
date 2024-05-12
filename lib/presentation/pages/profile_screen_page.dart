@@ -1,10 +1,13 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sagara_coding_card_application/presentation/manager/auth_manage/bloc/avatar_bloc.dart';
 
 import 'package:sagara_coding_card_application/presentation/manager/profile_manage/bloc/profile_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/assets_constant.dart';
@@ -61,9 +64,9 @@ class _ProfileScreenPageState extends State<ProfileScreenPage> {
                     children: [
                       Row(
                         children: [
-                          BlocConsumer<ProfileBloc, ProfileState>(
+                          BlocConsumer<AvatarBloc, AvatarState>(
                             listener: (context, state) {
-                              if (state is AvatarProfileSet) {
+                              if (state is AvatarChangedState) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text('Avatar profile Changed'),
@@ -72,12 +75,12 @@ class _ProfileScreenPageState extends State<ProfileScreenPage> {
                               }
                             },
                             builder: (context, state) {
-                              if (state is AvatarProfileSet) {
-                                inspect(state.avatar);
+                              if (state is AvatarChangedState) {
+                                inspect(state.response.url);
                                 return CircleAvatar(
                                   radius: 32.r,
                                   backgroundImage: NetworkImage(
-                                    state.avatar,
+                                    state.response.url,
                                   ),
                                 );
                               } else {
@@ -154,10 +157,8 @@ class _ProfileScreenPageState extends State<ProfileScreenPage> {
                                           builder: (context, state) {
                                             if (state is CurrentUserState) {
                                               return Text(
-                                                state.currentUser!.collectionCard
-                                                    .toString(),
-                                                style:
-                                                    AppFonts.appFont.titleLarge!.copyWith(
+                                                state.currentUser!.collectionCard.toString(),
+                                                style: AppFonts.appFont.titleLarge!.copyWith(
                                                   fontWeight: FontWeight.w700,
                                                 ),
                                               );
@@ -185,19 +186,24 @@ class _ProfileScreenPageState extends State<ProfileScreenPage> {
                                     )
                                   ],
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'View Collection',
-                                      style: AppFonts.appFont.labelSmall!.copyWith(
-                                        fontWeight: FontWeight.w700,
+                                GestureDetector(
+                                  onTap: () {
+                                    context.go('/collection');
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'View Collection',
+                                        style: AppFonts.appFont.labelSmall!.copyWith(
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
-                                    ),
-                                    SvgPicture.asset(
-                                      AssetsConstant.doubleArrowIcon,
-                                    ),
-                                  ],
+                                      SvgPicture.asset(
+                                        AssetsConstant.doubleArrowIcon,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
@@ -240,19 +246,24 @@ class _ProfileScreenPageState extends State<ProfileScreenPage> {
                                     )
                                   ],
                                 ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'View Leaderboard',
-                                      style: AppFonts.appFont.labelSmall!.copyWith(
-                                        fontWeight: FontWeight.w700,
+                                GestureDetector(
+                                  onTap: () {
+                                    context.go('/leaderboard');
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        'View Leaderboard',
+                                        style: AppFonts.appFont.labelSmall!.copyWith(
+                                          fontWeight: FontWeight.w700,
+                                        ),
                                       ),
-                                    ),
-                                    SvgPicture.asset(
-                                      AssetsConstant.doubleArrowIcon,
-                                    ),
-                                  ],
+                                      SvgPicture.asset(
+                                        AssetsConstant.doubleArrowIcon,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),

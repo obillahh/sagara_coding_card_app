@@ -15,6 +15,8 @@ class LoginEvent extends AuthEvent {
   List<Object?> get props => [requestModel];
 }
 
+class GoogleSignInEvent extends AuthEvent {}
+
 class RegisterEvent extends AuthEvent {
   final RegisterRequestModel requestModel;
 
@@ -40,3 +42,5 @@ class IncreaseCollectionCardEvent extends AuthEvent {
   @override
   List<Object?> get props => [addCollection];
 }
+
+class CheckTokenEvent extends AuthEvent {}

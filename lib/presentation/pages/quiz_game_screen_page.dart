@@ -28,19 +28,18 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
   int _secondsRemaining = 120;
   int _questionIndex = 0;
   int totalPoints = 0;
+  late int totalQuestions;
 
   String _formatTime(int seconds) {
     int minutes = seconds ~/ 60;
     int remainingSeconds = seconds % 60;
-
     String formattedMinutes = minutes.toString().padLeft(2, '0');
     String formattedSeconds = remainingSeconds.toString().padLeft(2, '0');
-
     return '$formattedMinutes:$formattedSeconds';
   }
 
   double _calculateProgress() {
-    return (_secondsRemaining / (2 * 60));
+    return (_secondsRemaining / 120);
   }
 
   @override
@@ -55,28 +54,55 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
           _secondsRemaining--;
         } else {
           _timer?.cancel();
+          calculateTotalPoints();
           showDialog(
             context: context,
             builder: (context) => AlertDialog(
-              title: Column(
-                children: [
-                  const Text('Time Up!'),
-                  Row(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {
-                          context.go('/home');
-                        },
-                        child: const Text('OK'),
-                      )
-                    ],
-                  )
-                ],
+              backgroundColor: AppColors.background,
+              title: const Text('Times Up!'),
+              titleTextStyle: TextStyle(
+                color: AppColors.text,
+                fontWeight: FontWeight.bold,
+                fontSize: 20.sp,
               ),
+              content: const Text('Your time is up!'),
+              contentTextStyle: TextStyle(
+                color: AppColors.text,
+                fontSize: 14.sp,
+              ),
+              actions: [
+                ElevatedButton(
+                  onPressed: () {
+                    navigateToQuizDonePage();
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: AppColors.text,
+                  ),
+                  child: const Text('OK'),
+                ),
+              ],
             ),
           );
         }
       });
+    });
+  }
+
+  void calculateTotalPoints() {
+    totalPoints = 0;
+    for (int i = 0; i < selectedOptions.length; i++) {
+      if (selectedOptions[i] == null) {
+        totalPoints += 0;
+      }
+    }
+  }
+
+  void navigateToQuizDonePage() {
+    context.goNamed(RouterConstant.quizDone, pathParameters: {
+      'timeRemaining': _formatTime(_secondsRemaining),
+      'totalPoints': totalPoints.toString(),
+      'totalQuestion': totalQuestions.toString(),
     });
   }
 
@@ -155,6 +181,7 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
               builder: (context, state) {
                 if (state is CardIdSuccessState) {
                   final quizzes = state.card.attributes.quizzes;
+                  totalQuestions = quizzes.data.length;
                   return SingleChildScrollView(
                     padding: EdgeInsets.all(16.w),
                     child: Column(
@@ -225,7 +252,7 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
                         SizedBox(
                           height: 400.h,
                           child: PageView.builder(
-                            itemCount: quizzes.data.length,
+                            itemCount: totalQuestions,
                             controller: _pageController,
                             physics: const NeverScrollableScrollPhysics(),
                             onPageChanged: (index) {
