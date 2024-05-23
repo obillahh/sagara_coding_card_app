@@ -213,14 +213,7 @@ class _CollectionScreenPageState extends State<CollectionScreenPage> {
                           ),
                           itemBuilder: (context, index) {
                             return GestureDetector(
-                              onTap: () {
-                                // final id = state.cardList[index].id;
-                                // context.read<CardIdBloc>().add(GetCardIdEvent(id: id));
-                                // context.pushNamed(
-                                //   RouterConstant.detailCollection,
-                                //   pathParameters: {'id': id.toString()},
-                                // );
-                              },
+                              onTap: () {},
                               child: Image.asset(
                                 AssetsConstant.lockCard,
                                 width: state
