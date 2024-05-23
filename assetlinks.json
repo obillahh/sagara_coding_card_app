@@ -1,0 +1,9 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.example.preloved_market",
+    "sha256_cert_fingerprints":
+    ["01:60:38:FE:C6:32:A7:39:37:1F:39:E6:88:E6:40:5C:D8:AF:61:80:76:8D:F9:21:82:2F:60:4E:25:54:4E:F9"]
+  }
+}]

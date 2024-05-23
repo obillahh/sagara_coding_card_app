@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
+// import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/register_request_model.dart';
 import 'package:sagara_coding_card_application/presentation/manager/auth_manage/auth/auth_bloc.dart';
@@ -79,12 +79,14 @@ class _RegisterScreenPageState extends State<RegisterScreenPage> {
                     TextFieldUnderlineWidget(
                       nameTextField: 'email',
                       validators: (p0) {
-                        if (FormBuilderValidators.required()(p0) != null) {
-                          return 'Email is required';
-                        } else if (FormBuilderValidators.email()(p0) != null) {
-                          return 'Invalid email format';
-                        }
                         return null;
+
+                        // if (FormBuilderValidators.required()(p0) != null) {
+                        //   return 'Email is required';
+                        // } else if (FormBuilderValidators.email()(p0) != null) {
+                        //   return 'Invalid email format';
+                        // }
+                        // return null;
                       },
                       controller: emailController,
                       hintText: 'Email',
@@ -93,7 +95,10 @@ class _RegisterScreenPageState extends State<RegisterScreenPage> {
                     ),
                     TextFieldUnderlineWidget(
                       nameTextField: 'username',
-                      validators: FormBuilderValidators.required(),
+                      validators: (p0) {
+                        return null;
+                      },
+                      // validators: FormBuilderValidators.required(),
                       controller: usernameController,
                       hintText: 'Username',
                       prefixIcon: AssetsConstant.usernameIcon,
@@ -102,12 +107,11 @@ class _RegisterScreenPageState extends State<RegisterScreenPage> {
                     TextFieldUnderlineWidget(
                       nameTextField: 'password',
                       validators: (p0) {
-                        if (FormBuilderValidators.required()(p0) != null) {
-                          return 'Password is required';
-                        } else if (FormBuilderValidators.minLength(8)(p0) != null) {
-                          return 'Password must be at least 8 characters long';
-                        }
-
+                        // if (FormBuilderValidators.required()(p0) != null) {
+                        //   return 'Password is required';
+                        // } else if (FormBuilderValidators.minLength(8)(p0) != null) {
+                        //   return 'Password must be at least 8 characters long';
+                        // }
                         return null;
                       },
                       controller: passwordController,

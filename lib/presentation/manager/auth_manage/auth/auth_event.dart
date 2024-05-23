@@ -26,6 +26,24 @@ class RegisterEvent extends AuthEvent {
   List<Object?> get props => [requestModel];
 }
 
+class ForgotPasswordEvent extends AuthEvent {
+  final ForgotPasswordRequestModel requestModel;
+
+  ForgotPasswordEvent({required this.requestModel});
+
+  @override
+  List<Object?> get props => [requestModel];
+}
+
+class ResetPasswordEvent extends AuthEvent {
+  final ResetPasswordRequestModel requestModel;
+
+  ResetPasswordEvent({required this.requestModel});
+
+  @override
+  List<Object?> get props => [requestModel];
+}
+
 class IsLoggedInEvent extends AuthEvent {}
 
 class IsFirstEntryEvent extends AuthEvent {}

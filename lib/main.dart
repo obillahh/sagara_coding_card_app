@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:app_links/app_links.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,12 +14,13 @@ import 'package:sagara_coding_card_application/data/repositories/profile_impl_re
 import 'package:sagara_coding_card_application/data/repositories/quiz_impl_repository.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/change_avatar_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/check_token_use_case.dart';
+import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/forgot_password_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/get_current_user_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/increase_collection_card_use_case.dart';
-import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/is_avatar_changed_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/is_first_entry_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/is_logged_in_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/login_use_case.dart';
+import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/reset_password_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/card_use_case/add_card_collection_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/card_use_case/get_list_card_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/profile_use_case/restore_avatar_profile_use_case.dart';
@@ -58,11 +62,43 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final Dio dio = Dio();
+  late AppLinks _appLinks;
+  StreamSubscription<Uri>? _linkSubscription;
 
   @override
   void initState() {
-    initDio();
     super.initState();
+    initDio();
+    initDeepLinks();
+  }
+
+  @override
+  void dispose() {
+    _linkSubscription?.cancel();
+    super.dispose();
+  }
+
+  Future<void> initDeepLinks() async {
+    _appLinks = AppLinks();
+
+    _linkSubscription = _appLinks.uriLinkStream.listen((uri) {
+      print('onAppLink: $uri');
+      openAppLink(uri);
+    });
+  }
+
+  void openAppLink(Uri uri) {
+    print('Received deep link: $uri');
+
+    final path = uri.path;
+    final router = AppRouter.router;
+
+    if (path == '/reset_password') {
+      print('Navigating to reset password screen...');
+      router.go('/reset_password');
+    } else {
+      print('No matching route for deep link: $path');
+    }
   }
 
   void initDio() {
@@ -169,6 +205,18 @@ class _MyAppState extends State<MyApp> {
                 authRemoteDataSource: AuthRemoteDataSource(client: dio),
               ),
             ),
+            forgotPasswordUseCase: ForgotPasswordUseCase(
+              authRepository: AuthImplRepository(
+                authRemoteDataSource: AuthRemoteDataSource(client: dio),
+                authLocalDataSource: AuthLocalDataSource(),
+              ),
+            ),
+            resetPasswordUseCase: ResetPasswordUseCase(
+              authRepository: AuthImplRepository(
+                authRemoteDataSource: AuthRemoteDataSource(client: dio),
+                authLocalDataSource: AuthLocalDataSource(),
+              ),
+            ),
           ),
         ),
         BlocProvider(
@@ -223,7 +271,7 @@ class _MyAppState extends State<MyApp> {
             debugShowCheckedModeBanner: false,
             title: 'Flutter Demo',
             theme: _buildTheme(),
-            routerConfig: router,
+            routerConfig: AppRouter.router,
           );
         },
       ),

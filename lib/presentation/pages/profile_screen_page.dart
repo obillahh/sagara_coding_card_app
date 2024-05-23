@@ -134,8 +134,8 @@ class _ProfileScreenPageState extends State<ProfileScreenPage> {
                         children: [
                           Container(
                             padding: EdgeInsets.all(8.sp),
-                            width: 144.w,
-                            height: 70.h,
+                            width: 145.w,
+                            height: 80.h,
                             decoration: BoxDecoration(
                               color: AppColors.primary,
                               borderRadius: BorderRadius.circular(8.r),
@@ -210,8 +210,8 @@ class _ProfileScreenPageState extends State<ProfileScreenPage> {
                           ),
                           Container(
                             padding: EdgeInsets.all(8.sp),
-                            width: 144.w,
-                            height: 70.h,
+                            width: 145.w,
+                            height: 80.h,
                             decoration: BoxDecoration(
                               color: AppColors.primary,
                               borderRadius: BorderRadius.circular(8.r),

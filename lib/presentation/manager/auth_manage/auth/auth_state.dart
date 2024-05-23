@@ -86,3 +86,18 @@ class TokenChecked extends AuthState {
   @override
   List<Object?> get props => [isTokenValid];
 }
+
+class ForgotPasswordSuccess extends AuthState {
+  final ForgotPasswordResponseEntity forgotPassword;
+
+  ForgotPasswordSuccess({required this.forgotPassword});
+
+  @override
+  List<Object?> get props => [forgotPassword];
+}
+
+class ResetPasswordSuccess extends AuthState {
+  final UserResponseEntity response;
+
+  ResetPasswordSuccess({required this.response});
+}

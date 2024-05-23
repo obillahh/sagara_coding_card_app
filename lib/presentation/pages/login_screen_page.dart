@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:form_builder_validators/form_builder_validators.dart';
+// import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/login_request_model.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/assets_constant.dart';
@@ -77,7 +77,10 @@ class _LoginScreenPageState extends State<LoginScreenPage> {
                     ),
                     TextFieldUnderlineWidget(
                       nameTextField: 'username-email',
-                      validators: FormBuilderValidators.required(),
+                      validators: (p0) {
+                        return null;
+                      },
+                      // validators: FormBuilderValidators.required(),
                       hintText: 'Username/Email',
                       prefixIcon: AssetsConstant.usernameIcon,
                       controller: usernameController,
@@ -85,7 +88,10 @@ class _LoginScreenPageState extends State<LoginScreenPage> {
                     ),
                     TextFieldUnderlineWidget(
                       nameTextField: 'password',
-                      validators: FormBuilderValidators.required(),
+                      validators: (p0) {
+                        return null;
+                      },
+                      // validators: FormBuilderValidators.required(),
                       controller: passwordController,
                       hintText: 'Password',
                       prefixIcon: AssetsConstant.passwordIcon,
@@ -128,7 +134,9 @@ class _LoginScreenPageState extends State<LoginScreenPage> {
                           ],
                         ),
                         TextButtonWidget(
-                          onPressed: () {},
+                          onPressed: () {
+                            context.push('/forgot_password');
+                          },
                           text: 'Forgot Password?',
                         ),
                       ],
@@ -187,20 +195,20 @@ class _LoginScreenPageState extends State<LoginScreenPage> {
                         ),
                       ],
                     ),
-                    BlocListener<AuthBloc, AuthState>(
-                      listener: (context, state) {
-                        if (state is AuthGoogleSignInState) {
-                          context.push('/home');
-                        }
-                      },
-                      child: SecondaryElevatedButtonWidget(
-                        onPressed: () {
-                          context.read<AuthBloc>().add(GoogleSignInEvent());
-                        },
-                        text: 'Continue with Google',
-                        icon: SvgPicture.asset(AssetsConstant.googleIcon),
-                      ),
-                    ),
+                    // BlocListener<AuthBloc, AuthState>(
+                    //   listener: (context, state) {
+                    //     if (state is AuthGoogleSignInState) {
+                    //       context.push('/home');
+                    //     }
+                    //   },
+                    //   child: SecondaryElevatedButtonWidget(
+                    //     onPressed: () {
+                    //       context.read<AuthBloc>().add(GoogleSignInEvent());
+                    //     },
+                    //     text: 'Continue with Google',
+                    //     icon: SvgPicture.asset(AssetsConstant.googleIcon),
+                    //   ),
+                    // ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [

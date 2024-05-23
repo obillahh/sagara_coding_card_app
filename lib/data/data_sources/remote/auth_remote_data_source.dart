@@ -3,7 +3,10 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sagara_coding_card_application/data/data_sources/local/auth_local_data_source.dart';
+import 'package:sagara_coding_card_application/data/models/auth_model/forgot_password_request_model.dart';
+import 'package:sagara_coding_card_application/data/models/auth_model/forgot_password_response_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/register_request_model.dart';
+import 'package:sagara_coding_card_application/data/models/auth_model/reset_password_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/user_model/avatar_update_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/user_model/avatar_update_response_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/user_model/user_response_model.dart';
@@ -96,6 +99,48 @@ class AuthRemoteDataSource {
     } catch (e) {
       inspect('Error: $e');
       return const AvatarUpdateResponseModel();
+    }
+  }
+
+  Future<ForgotPasswordResponseModel> forgotPassword(
+      {required ForgotPasswordRequestModel request}) async {
+    try {
+      const url = ApiConstant.forgotPassword;
+      final result = await client.post(
+        url,
+        data: forgotPasswordRequestModelToJson(request),
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+      final forgotPasswordData = ForgotPasswordResponseModel.fromJson(result.data);
+      return forgotPasswordData;
+    } catch (e) {
+      inspect('Error: $e');
+      rethrow;
+    }
+  }
+
+  Future<UserResponseModel> resetPassword(
+      {required ResetPasswordRequestModel resetPasswordRequestModel}) async {
+    try {
+      const url = ApiConstant.resetPassword;
+      final result = await client.post(
+        url,
+        data: resetPasswordRequestModel.toJson(),
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+      final regisData = UserResponseModel.fromJson(result.data);
+      return regisData;
+    } catch (e) {
+      inspect('Error: $e');
+      return UserResponseModel();
     }
   }
 }

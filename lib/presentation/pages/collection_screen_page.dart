@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sagara_coding_card_application/presentation/manager/card_manage/get_card_id/bloc/card_id_bloc.dart';
+import 'package:sagara_coding_card_application/presentation/utils/constant/assets_constant.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/router_constant.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -117,6 +118,81 @@ class _CollectionScreenPageState extends State<CollectionScreenPage> {
                     ],
                   ),
                   SizedBox(height: 4.h),
+                  // BlocBuilder<CardListBloc, CardListState>(
+                  //   builder: (context, state) {
+                  //     if (state is CardListSuccessState) {
+                  //       if (state.cardList.isEmpty) {
+                  //         return const Center(
+                  //           child: Text('Empty'),
+                  //         );
+                  //       }
+                  //       return GridView.builder(
+                  //         physics: const NeverScrollableScrollPhysics(),
+                  //         shrinkWrap: true,
+                  //         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  //           crossAxisCount: 2,
+                  //           crossAxisSpacing: 8.sp,
+                  //           mainAxisSpacing: 4.sp,
+                  //           childAspectRatio: 0.56.r,
+                  //           // childAspectRatio: .6,
+                  //         ),
+                  //         itemBuilder: (context, index) {
+                  //           return GestureDetector(
+                  //             onTap: () {
+                  //               final id = state.cardList[index].id;
+                  //               context.read<CardIdBloc>().add(GetCardIdEvent(id: id));
+                  //               context.pushNamed(
+                  //                 RouterConstant.detailCollection,
+                  //                 pathParameters: {'id': id.toString()},
+                  //               );
+                  //             },
+                  //             child: Image.network(
+                  //               state.cardList[index].attributes.avatarCard.data.attributes.formats
+                  //                   .small.url,
+                  //               width: state
+                  //                   .cardList[index].attributes.avatarCard.data.attributes.width
+                  //                   .toDouble(),
+                  //             ),
+                  //           );
+                  //         },
+                  //         itemCount: state.cardList.length,
+                  //       );
+                  //     }
+                  //     if (state is CardListFailureState) {
+                  //       return const Center(
+                  //         child: Text('Card Collection Empty'),
+                  //       );
+                  //     } else {
+                  //       return GridView.builder(
+                  //         physics: const NeverScrollableScrollPhysics(),
+                  //         shrinkWrap: true,
+                  //         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  //           crossAxisCount: 2,
+                  //           crossAxisSpacing: 8.sp,
+                  //           mainAxisSpacing: 4.sp,
+                  //           childAspectRatio: 0.56.r,
+                  //         ),
+                  //         itemBuilder: (context, index) {
+                  //           return Shimmer.fromColors(
+                  //             baseColor: Colors.grey.shade800,
+                  //             highlightColor: Colors.grey.shade700,
+                  //             direction: ShimmerDirection.ttb,
+                  //             // period: const Duration(milliseconds: 800),
+                  //             child: Container(
+                  //               height: 200.h,
+                  //               width: 100.w,
+                  //               decoration: BoxDecoration(
+                  //                 borderRadius: BorderRadius.circular(4),
+                  //                 color: AppColors.primary,
+                  //               ),
+                  //             ),
+                  //           );
+                  //         },
+                  //         itemCount: 6,
+                  //       );
+                  //     }
+                  //   },
+                  // ),
                   BlocBuilder<CardListBloc, CardListState>(
                     builder: (context, state) {
                       if (state is CardListSuccessState) {
@@ -138,23 +214,22 @@ class _CollectionScreenPageState extends State<CollectionScreenPage> {
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: () {
-                                final id = state.cardList[index].id;
-                                context.read<CardIdBloc>().add(GetCardIdEvent(id: id));
-                                context.pushNamed(
-                                  RouterConstant.detailCollection,
-                                  pathParameters: {'id': id.toString()},
-                                );
+                                // final id = state.cardList[index].id;
+                                // context.read<CardIdBloc>().add(GetCardIdEvent(id: id));
+                                // context.pushNamed(
+                                //   RouterConstant.detailCollection,
+                                //   pathParameters: {'id': id.toString()},
+                                // );
                               },
-                              child: Image.network(
-                                state.cardList[index].attributes.avatarCard.data.attributes.formats
-                                    .small.url,
+                              child: Image.asset(
+                                AssetsConstant.lockCard,
                                 width: state
                                     .cardList[index].attributes.avatarCard.data.attributes.width
                                     .toDouble(),
                               ),
                             );
                           },
-                          itemCount: state.cardList.length,
+                          itemCount: 6,
                         );
                       }
                       if (state is CardListFailureState) {
