@@ -14,3 +14,10 @@ class GetCardScannerEvent extends CardIdEvent {
 
   GetCardScannerEvent({required this.url});
 }
+
+class CheckCardEvent extends CardIdEvent {
+  final CheckCardRequestModel request;
+  final int cardId;
+
+  CheckCardEvent({required this.request, required this.cardId});
+}

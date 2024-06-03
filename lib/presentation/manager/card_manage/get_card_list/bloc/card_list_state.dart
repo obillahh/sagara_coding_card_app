@@ -18,3 +18,17 @@ class CardListFailureState extends CardListState {
 
   CardListFailureState({required this.message});
 }
+
+class CardAlbumListLoadingState extends CardListState {}
+
+class CardAlbumListSuccessState extends CardListState {
+  final List<CardAlbumResponseEntity> cardList;
+
+  CardAlbumListSuccessState({required this.cardList});
+}
+
+class CardAlbumListFailureState extends CardListState {
+  final String message;
+
+  CardAlbumListFailureState({required this.message});
+}

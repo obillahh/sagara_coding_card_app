@@ -3,6 +3,8 @@ import "package:flutter_bloc/flutter_bloc.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/flutter_svg.dart";
 import "package:go_router/go_router.dart";
+import "package:sagara_coding_card_application/data/models/auth_model/user_model/score_update_request_model.dart";
+import "package:sagara_coding_card_application/presentation/manager/auth_manage/auth/auth_bloc.dart";
 import "package:sagara_coding_card_application/presentation/manager/card_manage/get_card_id/bloc/card_id_bloc.dart";
 
 class QuizDonePage extends StatelessWidget {
@@ -18,7 +20,12 @@ class QuizDonePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int? userId;
     double scorePercentage = (int.parse(totalPoints) / (int.parse(totalQuestion) * 20)) * 100;
+    final authState = context.read<AuthBloc>().state;
+    if (authState is CurrentUserState && authState.currentUser != null) {
+      userId = authState.currentUser!.id;
+    }
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -263,28 +270,39 @@ class QuizDonePage extends StatelessWidget {
             ),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: ElevatedButton(
-                onPressed: () => {
-                  context.go('/home'),
+              child: BlocListener<AuthBloc, AuthState>(
+                listener: (context, state) {
+                  if (state is ScoresUpdated) {
+                    context.go('/home');
+                  }
                 },
-                style: ElevatedButton.styleFrom(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0.r),
+                child: ElevatedButton(
+                  onPressed: () => {
+                    context.read<AuthBloc>().add(
+                          UpdateScoresEvent(
+                              req: ScoreUpdateRequestModel(scores: int.parse(totalPoints)),
+                              id: userId!),
+                        ),
+                  },
+                  style: ElevatedButton.styleFrom(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12.0.r),
+                    ),
+                    minimumSize: Size(double.infinity.w, 40.h),
+                    backgroundColor: const Color(0xffC5233A),
+                    textStyle: TextStyle(
+                      color: Colors.white,
+                      fontSize: 12.sp,
+                      fontStyle: FontStyle.normal,
+                    ),
                   ),
-                  minimumSize: Size(double.infinity.w, 40.h),
-                  backgroundColor: const Color(0xffC5233A),
-                  textStyle: TextStyle(
-                    color: Colors.white,
-                    fontSize: 12.sp,
-                    fontStyle: FontStyle.normal,
-                  ),
-                ),
-                child: Text(
-                  "Continue",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 16.sp,
+                  child: Text(
+                    "Continue",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16.sp,
+                    ),
                   ),
                 ),
               ),

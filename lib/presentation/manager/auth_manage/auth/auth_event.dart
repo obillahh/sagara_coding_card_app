@@ -62,3 +62,10 @@ class IncreaseCollectionCardEvent extends AuthEvent {
 }
 
 class CheckTokenEvent extends AuthEvent {}
+
+class UpdateScoresEvent extends AuthEvent {
+  final ScoreUpdateRequestModel req;
+  final int id;
+
+  UpdateScoresEvent({required this.req, required this.id});
+}

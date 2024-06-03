@@ -5,6 +5,7 @@ import 'package:meta/meta.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/forgot_password_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/login_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/reset_password_request_model.dart';
+import 'package:sagara_coding_card_application/data/models/auth_model/user_model/score_update_request_model.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/forgot_password_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/check_token_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/forgot_password_use_case.dart';
@@ -15,6 +16,7 @@ import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/lo
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/register_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/reset_password_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/sign_in_with_google_use_case.dart';
+import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/update_scores_use_case.dart';
 
 import '../../../../data/models/auth_model/register_request_model.dart';
 import '../../../../domain/entities/auth_entity/user_entity/user_data_response_entity.dart';
@@ -37,6 +39,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final GetCurrentUserUseCase getCurrentUserUseCase;
   final IncreaseCollectionCardUseCase increaseCollectionCardUseCase;
   final CheckTokenUseCase checkTokenUseCase;
+  final UpdateScoresUseCase updateScoresUseCase;
   AuthBloc({
     required this.registerUseCase,
     required this.loginUseCase,
@@ -49,6 +52,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.getCurrentUserUseCase,
     required this.increaseCollectionCardUseCase,
     required this.checkTokenUseCase,
+    required this.updateScoresUseCase,
   }) : super(AuthInitial()) {
     on<AuthEvent>(
       (event, emit) async {
@@ -143,6 +147,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             emit(TokenChecked(isTokenValid: isTokenValid));
           } catch (e) {
             emit(AuthErrorState('Failed to check token: $e'));
+          }
+        }
+        if (event is UpdateScoresEvent) {
+          try {
+            final data = await updateScoresUseCase(request: event.req, id: event.id);
+            emit(ScoresUpdated(user: data!));
+          } catch (e) {
+            emit(AuthErrorState('Failed to update scores: $e'));
           }
         }
       },

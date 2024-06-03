@@ -18,3 +18,9 @@ final class CardIdFailureState extends CardIdState {
 
   CardIdFailureState({required this.message});
 }
+
+class CardCheckedState extends CardIdState {
+  final CheckCardResponseEntity response;
+
+  CardCheckedState({required this.response});
+}

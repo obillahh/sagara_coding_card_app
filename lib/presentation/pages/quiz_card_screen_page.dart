@@ -55,7 +55,7 @@ class QuizCardScreenPage extends StatelessWidget {
         backgroundColor: Colors.white,
         builder: (context) {
           return SizedBox(
-            height: 300.h,
+            height: 320.h,
             child: BlocBuilder<CardIdBloc, CardIdState>(
               builder: (context, state) {
                 if (state is CardIdSuccessState) {
@@ -198,7 +198,7 @@ class QuizCardScreenPage extends StatelessWidget {
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.text,
-                                minimumSize: Size(150.w, 36.h),
+                                minimumSize: Size(145.w, 36.h),
                                 elevation: 0,
                                 side: BorderSide(
                                   color: AppColors.primary,
@@ -219,7 +219,7 @@ class QuizCardScreenPage extends StatelessWidget {
                               },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.primary,
-                                minimumSize: Size(150.w, 36.h),
+                                minimumSize: Size(145.w, 36.h),
                                 elevation: 0,
                                 side: BorderSide(
                                   color: AppColors.primary,

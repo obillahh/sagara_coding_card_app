@@ -1,9 +1,13 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:sagara_coding_card_application/data/data_sources/local/auth_local_data_source.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/user_model/user_data_response_model.dart';
 import 'package:sagara_coding_card_application/data/models/card_model/add_card_collection_request_model.dart';
+import 'package:sagara_coding_card_application/data/models/card_model/card_album_response_model.dart';
 import 'package:sagara_coding_card_application/data/models/card_model/cards_list_response_model.dart';
+import 'package:sagara_coding_card_application/data/models/card_model/check_card_request_model.dart';
+import 'package:sagara_coding_card_application/data/models/card_model/check_card_response_model.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/api_constant.dart';
 
 import '../../models/card_model/card_id_response_model.dart';
@@ -22,10 +26,8 @@ class CardRemoteDataSource {
           "populate": "avatar_card",
         },
         options: Options(
-          // responseType: ResponseType.stream,
           headers: {
             'Accept': 'application/json',
-            // 'Authorization': 'Bearer ${await AuthLocalDataSource().getToken()}',
           },
         ),
       );
@@ -34,6 +36,30 @@ class CardRemoteDataSource {
     } catch (e) {
       inspect('Error: $e');
       return CardResponseModel();
+    }
+  }
+
+  Future<List<CardAlbumResponseModel>> getAlbumCard({required int id}) async {
+    try {
+      final url = '${ApiConstant.listCard}/$id/card-album';
+      final result = await client.get(
+        url,
+        options: Options(
+          headers: {
+            'Accept': 'application/json',
+          },
+        ),
+      );
+
+      final List<dynamic> jsonData = result.data;
+      final List<CardAlbumResponseModel> cardData = jsonData
+          .map((item) => CardAlbumResponseModel.fromJson(item as Map<String, dynamic>))
+          .toList();
+
+      return cardData;
+    } catch (e) {
+      inspect('Error: $e');
+      return [];
     }
   }
 
@@ -100,6 +126,29 @@ class CardRemoteDataSource {
       return userData;
     } catch (error) {
       inspect('Error: $error');
+      rethrow;
+    }
+  }
+
+  Future<CheckCardResponseModel> checkCard(
+      {required CheckCardRequestModel request, required int cardId}) async {
+    try {
+      final url = '${ApiConstant.card}/$cardId/check-ownership';
+      final token = await AuthLocalDataSource().getToken();
+      final result = await client.post(
+        url,
+        data: checkCardRequestModelToJson(request),
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer $token',
+            'Accept': 'application/json',
+          },
+        ),
+      );
+      final checkCardData = CheckCardResponseModel.fromJson(result.data);
+      return checkCardData;
+    } catch (e) {
+      inspect('Error: $e');
       rethrow;
     }
   }

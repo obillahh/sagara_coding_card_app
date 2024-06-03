@@ -9,6 +9,7 @@ import 'package:sagara_coding_card_application/data/models/auth_model/register_r
 import 'package:sagara_coding_card_application/data/models/auth_model/reset_password_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/user_model/avatar_update_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/user_model/avatar_update_response_model.dart';
+import 'package:sagara_coding_card_application/data/models/auth_model/user_model/score_update_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/user_model/user_response_model.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/api_constant.dart';
 
@@ -115,7 +116,7 @@ class AuthRemoteDataSource {
           },
         ),
       );
-      final forgotPasswordData = ForgotPasswordResponseModel.fromJson(result.data);
+      final forgotPasswordData = forgotPasswordResponseModelFromJson(result.data);
       return forgotPasswordData;
     } catch (e) {
       inspect('Error: $e');
@@ -141,6 +142,32 @@ class AuthRemoteDataSource {
     } catch (e) {
       inspect('Error: $e');
       return UserResponseModel();
+    }
+  }
+
+  Future<UserResponseModel> updateScores(
+      {required ScoreUpdateRequestModel request, required int id}) async {
+    try {
+      final String url = '${ApiConstant.baseUrlApi}/$id/update-scores';
+      final token = await AuthLocalDataSource().getToken();
+      if (token != null) {
+        final result = await client.put(
+          url,
+          data: scoreUpdateRequestModelToJson(request),
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $token',
+            },
+          ),
+        );
+        final regisData = UserResponseModel.fromJson(result.data);
+        return regisData;
+      } else {
+        return UserResponseModel();
+      }
+    } catch (e) {
+      inspect('Error: $e');
+      rethrow;
     }
   }
 }

@@ -1,8 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:app_links/app_links.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,7 +23,10 @@ import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/is
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/is_logged_in_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/login_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/reset_password_use_case.dart';
+import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/update_scores_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/card_use_case/add_card_collection_use_case.dart';
+import 'package:sagara_coding_card_application/domain/use_cases/card_use_case/check_card_use_case.dart';
+import 'package:sagara_coding_card_application/domain/use_cases/card_use_case/get_album_cards_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/card_use_case/get_list_card_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/profile_use_case/restore_avatar_profile_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/profile_use_case/set_avatar_profile_use_case.dart';
@@ -124,6 +129,11 @@ class _MyAppState extends State<MyApp> {
                 cardRemoteDataSource: CardRemoteDataSource(client: dio),
               ),
             ),
+            getAlbumCardsUseCase: GetAlbumCardsUseCase(
+              cardRepository: CardImplRepository(
+                cardRemoteDataSource: CardRemoteDataSource(client: dio),
+              ),
+            ),
           ),
         ),
         BlocProvider(
@@ -134,6 +144,11 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
             getCardByScannerUseCase: GetCardByScannerUseCase(
+              cardRepository: CardImplRepository(
+                cardRemoteDataSource: CardRemoteDataSource(client: dio),
+              ),
+            ),
+            checkCardUseCase: CheckCardUseCase(
               cardRepository: CardImplRepository(
                 cardRemoteDataSource: CardRemoteDataSource(client: dio),
               ),
@@ -217,6 +232,12 @@ class _MyAppState extends State<MyApp> {
                 authLocalDataSource: AuthLocalDataSource(),
               ),
             ),
+            updateScoresUseCase: UpdateScoresUseCase(
+              authRepository: AuthImplRepository(
+                authRemoteDataSource: AuthRemoteDataSource(client: dio),
+                authLocalDataSource: AuthLocalDataSource(),
+              ),
+            ),
           ),
         ),
         BlocProvider(
@@ -267,18 +288,25 @@ class _MyAppState extends State<MyApp> {
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (context, child) {
-          return MaterialApp.router(
-            debugShowCheckedModeBanner: false,
-            title: 'Flutter Demo',
-            theme: _buildTheme(),
-            routerConfig: AppRouter.router,
-          );
+          return Platform.isIOS
+              ? CupertinoApp.router(
+                  debugShowCheckedModeBanner: false,
+                  title: 'Flutter Demo',
+                  theme: _buildCupertinoTheme(),
+                  routerConfig: AppRouter.router,
+                )
+              : MaterialApp.router(
+                  debugShowCheckedModeBanner: false,
+                  title: 'Flutter Demo',
+                  theme: _buildMaterialTheme(),
+                  routerConfig: AppRouter.router,
+                );
         },
       ),
     );
   }
 
-  ThemeData _buildTheme() {
+  ThemeData _buildMaterialTheme() {
     return ThemeData(
       bottomSheetTheme: const BottomSheetThemeData(
         surfaceTintColor: AppColors.text,
@@ -288,6 +316,15 @@ class _MyAppState extends State<MyApp> {
       ),
       textTheme: GoogleFonts.barlowTextTheme(),
       useMaterial3: true,
+    );
+  }
+
+  CupertinoThemeData _buildCupertinoTheme() {
+    return CupertinoThemeData(
+      primaryColor: const Color(0xffC5233A),
+      textTheme: CupertinoTextThemeData(
+        textStyle: GoogleFonts.barlow(),
+      ),
     );
   }
 }

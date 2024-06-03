@@ -9,7 +9,8 @@
 # packages, and plugins designed to encourage good coding practices.
 analyzer:
   errors:
-    i ignorenvalid_annotation_target: ignore
+    ignorenvalid_annotation_target: ignore
+    invalid_annotation_target: ignore
 include: package:flutter_lints/flutter.yaml
 
 linter:

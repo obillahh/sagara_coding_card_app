@@ -100,7 +100,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
                   alignment: Alignment.bottomCenter,
                   child: Column(
                     children: [
-                      const CircularProgressIndicator(),
+                      const CircularProgressIndicator(color: AppColors.primary),
                       SizedBox(height: 24.h),
                       Text(
                         '© Sagara Technology 2023. All Rights Reserved',

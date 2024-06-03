@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:sagara_coding_card_application/data/models/card_model/check_card_request_model.dart';
 import 'package:sagara_coding_card_application/presentation/manager/auth_manage/auth/auth_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/manager/card_manage/add_card_collection/bloc/card_collection_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
@@ -125,6 +126,13 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
                 final cardId = state.card.id;
                 final userId = (context.read<AuthBloc>().state as CurrentUserState).currentUser!.id;
                 inspect(cardId);
+                final checkCardRequest = CheckCardRequestModel(userId: userId);
+                context.read<CardIdBloc>().add(
+                      CheckCardEvent(
+                        request: checkCardRequest,
+                        cardId: cardId,
+                      ),
+                    );
                 context.read<CardCollectionBloc>().add(
                       AddCollectionCardEvent(
                         cardId: cardId,

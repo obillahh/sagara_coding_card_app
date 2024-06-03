@@ -4,6 +4,7 @@ import 'package:sagara_coding_card_application/data/models/auth_model/login_requ
 import 'package:sagara_coding_card_application/data/models/auth_model/register_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/reset_password_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/user_model/avatar_update_request_model.dart';
+import 'package:sagara_coding_card_application/data/models/auth_model/user_model/score_update_request_model.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/forgot_password_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/user_entity/avatar_update_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/user_entity/user_response_entity.dart';
@@ -212,6 +213,30 @@ class AuthImplRepository extends AuthRepository {
           collectionCard: response.user?.collectionCard ?? 0,
           scores: response.user?.scores ?? 0,
         ),
+      );
+      return data;
+    } catch (e) {
+      print('Login error: $e');
+      return null;
+    }
+  }
+
+  @override
+  Future<UserDataResponseEntity?> updateScores(
+      {required ScoreUpdateRequestModel request, required int id}) async {
+    try {
+      final response = await authRemoteDataSource.updateScores(request: request, id: id);
+      if (response.user == null) {
+        print('Invalid response: user is null');
+        print('Response data: ${response.toJson()}');
+        return null;
+      }
+      final data = UserDataResponseEntity(
+        id: response.user?.id ?? 0,
+        username: response.user?.username ?? '',
+        email: response.user?.email ?? '',
+        collectionCard: response.user?.collectionCard ?? 0,
+        scores: response.user?.scores ?? 0,
       );
       return data;
     } catch (e) {

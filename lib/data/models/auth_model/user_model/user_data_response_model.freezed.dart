@@ -29,6 +29,12 @@ mixin _$UserDataResponseModel {
   String? get email => throw _privateConstructorUsedError;
   @JsonKey(name: "provider")
   String? get provider => throw _privateConstructorUsedError;
+  @JsonKey(name: "password")
+  String? get password => throw _privateConstructorUsedError;
+  @JsonKey(name: "resetPasswordToken")
+  String? get resetPasswordToken => throw _privateConstructorUsedError;
+  @JsonKey(name: "confirmationToken")
+  dynamic get confirmationToken => throw _privateConstructorUsedError;
   @JsonKey(name: "confirmed")
   bool? get confirmed => throw _privateConstructorUsedError;
   @JsonKey(name: "blocked")
@@ -59,6 +65,9 @@ abstract class $UserDataResponseModelCopyWith<$Res> {
       @JsonKey(name: "username") String? username,
       @JsonKey(name: "email") String? email,
       @JsonKey(name: "provider") String? provider,
+      @JsonKey(name: "password") String? password,
+      @JsonKey(name: "resetPasswordToken") String? resetPasswordToken,
+      @JsonKey(name: "confirmationToken") dynamic confirmationToken,
       @JsonKey(name: "confirmed") bool? confirmed,
       @JsonKey(name: "blocked") bool? blocked,
       @JsonKey(name: "collection_card") int? collectionCard,
@@ -85,6 +94,9 @@ class _$UserDataResponseModelCopyWithImpl<$Res,
     Object? username = freezed,
     Object? email = freezed,
     Object? provider = freezed,
+    Object? password = freezed,
+    Object? resetPasswordToken = freezed,
+    Object? confirmationToken = freezed,
     Object? confirmed = freezed,
     Object? blocked = freezed,
     Object? collectionCard = freezed,
@@ -109,6 +121,18 @@ class _$UserDataResponseModelCopyWithImpl<$Res,
           ? _value.provider
           : provider // ignore: cast_nullable_to_non_nullable
               as String?,
+      password: freezed == password
+          ? _value.password
+          : password // ignore: cast_nullable_to_non_nullable
+              as String?,
+      resetPasswordToken: freezed == resetPasswordToken
+          ? _value.resetPasswordToken
+          : resetPasswordToken // ignore: cast_nullable_to_non_nullable
+              as String?,
+      confirmationToken: freezed == confirmationToken
+          ? _value.confirmationToken
+          : confirmationToken // ignore: cast_nullable_to_non_nullable
+              as dynamic,
       confirmed: freezed == confirmed
           ? _value.confirmed
           : confirmed // ignore: cast_nullable_to_non_nullable
@@ -151,6 +175,9 @@ abstract class _$$UserDataResponseModelImplCopyWith<$Res>
       @JsonKey(name: "username") String? username,
       @JsonKey(name: "email") String? email,
       @JsonKey(name: "provider") String? provider,
+      @JsonKey(name: "password") String? password,
+      @JsonKey(name: "resetPasswordToken") String? resetPasswordToken,
+      @JsonKey(name: "confirmationToken") dynamic confirmationToken,
       @JsonKey(name: "confirmed") bool? confirmed,
       @JsonKey(name: "blocked") bool? blocked,
       @JsonKey(name: "collection_card") int? collectionCard,
@@ -175,6 +202,9 @@ class __$$UserDataResponseModelImplCopyWithImpl<$Res>
     Object? username = freezed,
     Object? email = freezed,
     Object? provider = freezed,
+    Object? password = freezed,
+    Object? resetPasswordToken = freezed,
+    Object? confirmationToken = freezed,
     Object? confirmed = freezed,
     Object? blocked = freezed,
     Object? collectionCard = freezed,
@@ -199,6 +229,18 @@ class __$$UserDataResponseModelImplCopyWithImpl<$Res>
           ? _value.provider
           : provider // ignore: cast_nullable_to_non_nullable
               as String?,
+      password: freezed == password
+          ? _value.password
+          : password // ignore: cast_nullable_to_non_nullable
+              as String?,
+      resetPasswordToken: freezed == resetPasswordToken
+          ? _value.resetPasswordToken
+          : resetPasswordToken // ignore: cast_nullable_to_non_nullable
+              as String?,
+      confirmationToken: freezed == confirmationToken
+          ? _value.confirmationToken
+          : confirmationToken // ignore: cast_nullable_to_non_nullable
+              as dynamic,
       confirmed: freezed == confirmed
           ? _value.confirmed
           : confirmed // ignore: cast_nullable_to_non_nullable
@@ -235,6 +277,9 @@ class _$UserDataResponseModelImpl implements _UserDataResponseModel {
       @JsonKey(name: "username") this.username,
       @JsonKey(name: "email") this.email,
       @JsonKey(name: "provider") this.provider,
+      @JsonKey(name: "password") this.password,
+      @JsonKey(name: "resetPasswordToken") this.resetPasswordToken,
+      @JsonKey(name: "confirmationToken") this.confirmationToken,
       @JsonKey(name: "confirmed") this.confirmed,
       @JsonKey(name: "blocked") this.blocked,
       @JsonKey(name: "collection_card") this.collectionCard,
@@ -258,6 +303,15 @@ class _$UserDataResponseModelImpl implements _UserDataResponseModel {
   @JsonKey(name: "provider")
   final String? provider;
   @override
+  @JsonKey(name: "password")
+  final String? password;
+  @override
+  @JsonKey(name: "resetPasswordToken")
+  final String? resetPasswordToken;
+  @override
+  @JsonKey(name: "confirmationToken")
+  final dynamic confirmationToken;
+  @override
   @JsonKey(name: "confirmed")
   final bool? confirmed;
   @override
@@ -278,7 +332,7 @@ class _$UserDataResponseModelImpl implements _UserDataResponseModel {
 
   @override
   String toString() {
-    return 'UserDataResponseModel(id: $id, username: $username, email: $email, provider: $provider, confirmed: $confirmed, blocked: $blocked, collectionCard: $collectionCard, createdAt: $createdAt, updatedAt: $updatedAt, scores: $scores)';
+    return 'UserDataResponseModel(id: $id, username: $username, email: $email, provider: $provider, password: $password, resetPasswordToken: $resetPasswordToken, confirmationToken: $confirmationToken, confirmed: $confirmed, blocked: $blocked, collectionCard: $collectionCard, createdAt: $createdAt, updatedAt: $updatedAt, scores: $scores)';
   }
 
   @override
@@ -292,6 +346,12 @@ class _$UserDataResponseModelImpl implements _UserDataResponseModel {
             (identical(other.email, email) || other.email == email) &&
             (identical(other.provider, provider) ||
                 other.provider == provider) &&
+            (identical(other.password, password) ||
+                other.password == password) &&
+            (identical(other.resetPasswordToken, resetPasswordToken) ||
+                other.resetPasswordToken == resetPasswordToken) &&
+            const DeepCollectionEquality()
+                .equals(other.confirmationToken, confirmationToken) &&
             (identical(other.confirmed, confirmed) ||
                 other.confirmed == confirmed) &&
             (identical(other.blocked, blocked) || other.blocked == blocked) &&
@@ -306,8 +366,21 @@ class _$UserDataResponseModelImpl implements _UserDataResponseModel {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, id, username, email, provider,
-      confirmed, blocked, collectionCard, createdAt, updatedAt, scores);
+  int get hashCode => Object.hash(
+      runtimeType,
+      id,
+      username,
+      email,
+      provider,
+      password,
+      resetPasswordToken,
+      const DeepCollectionEquality().hash(confirmationToken),
+      confirmed,
+      blocked,
+      collectionCard,
+      createdAt,
+      updatedAt,
+      scores);
 
   @JsonKey(ignore: true)
   @override
@@ -330,6 +403,9 @@ abstract class _UserDataResponseModel implements UserDataResponseModel {
           @JsonKey(name: "username") final String? username,
           @JsonKey(name: "email") final String? email,
           @JsonKey(name: "provider") final String? provider,
+          @JsonKey(name: "password") final String? password,
+          @JsonKey(name: "resetPasswordToken") final String? resetPasswordToken,
+          @JsonKey(name: "confirmationToken") final dynamic confirmationToken,
           @JsonKey(name: "confirmed") final bool? confirmed,
           @JsonKey(name: "blocked") final bool? blocked,
           @JsonKey(name: "collection_card") final int? collectionCard,
@@ -353,6 +429,15 @@ abstract class _UserDataResponseModel implements UserDataResponseModel {
   @override
   @JsonKey(name: "provider")
   String? get provider;
+  @override
+  @JsonKey(name: "password")
+  String? get password;
+  @override
+  @JsonKey(name: "resetPasswordToken")
+  String? get resetPasswordToken;
+  @override
+  @JsonKey(name: "confirmationToken")
+  dynamic get confirmationToken;
   @override
   @JsonKey(name: "confirmed")
   bool? get confirmed;

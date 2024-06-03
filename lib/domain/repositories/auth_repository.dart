@@ -3,6 +3,7 @@ import 'package:sagara_coding_card_application/data/models/auth_model/login_requ
 import 'package:sagara_coding_card_application/data/models/auth_model/register_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/reset_password_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/user_model/avatar_update_request_model.dart';
+import 'package:sagara_coding_card_application/data/models/auth_model/user_model/score_update_request_model.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/forgot_password_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/user_entity/avatar_update_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/user_entity/user_response_entity.dart';
@@ -26,4 +27,6 @@ abstract class AuthRepository {
   Future<String?> isAvatarChanged();
   Future<void> increaseCollectionCard();
   Future<bool> checkToken();
+  Future<UserDataResponseEntity?> updateScores(
+      {required ScoreUpdateRequestModel request, required int id});
 }

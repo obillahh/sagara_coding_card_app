@@ -1,9 +1,14 @@
+import 'dart:developer';
+
 import 'package:sagara_coding_card_application/data/data_sources/remote/card_remote_data_source.dart';
 import 'package:sagara_coding_card_application/data/models/card_model/card_id_response_model.dart';
 import 'package:sagara_coding_card_application/data/models/card_model/cards_list_response_model.dart';
+import 'package:sagara_coding_card_application/data/models/card_model/check_card_request_model.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/user_entity/user_data_response_entity.dart';
+import 'package:sagara_coding_card_application/domain/entities/card_entity/card_album_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/entities/card_entity/card_id_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/entities/card_entity/card_list_response_entity.dart';
+import 'package:sagara_coding_card_application/domain/entities/card_entity/check_card_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/repositories/card_repository.dart';
 
 class CardImplRepository extends CardRepository {
@@ -436,6 +441,63 @@ class CardImplRepository extends CardRepository {
       return data;
     } catch (error) {
       print(error);
+      return null;
+    }
+  }
+
+  @override
+  Future<List<CardAlbumResponseEntity>> getAlbumCards({required int id}) async {
+    try {
+      final response = await cardRemoteDataSource.getAlbumCard(id: id);
+      final List<CardAlbumResponseEntity> entities = response
+          .map((model) => CardAlbumResponseEntity(
+                id: model.id ?? 0,
+                name: model.name ?? '',
+                role: model.role ?? '',
+                description: model.description ?? '',
+                level: model.level ?? '',
+                avatarCard: DataAvatarCardEntity(
+                  id: model.avatarCard?.id ?? 0,
+                  name: model.avatarCard?.name ?? '',
+                  alternativeText: model.avatarCard?.alternativeText ?? '',
+                  caption: model.avatarCard?.caption ?? '',
+                  width: model.avatarCard?.width ?? 0,
+                  height: model.avatarCard?.height ?? 0,
+                  hash: model.avatarCard?.hash ?? '',
+                  ext: model.avatarCard?.ext ?? '',
+                  mime: model.avatarCard?.mime ?? '',
+                  size: model.avatarCard?.size ?? 0,
+                  url: model.avatarCard?.url ?? '',
+                  previewUrl: model.avatarCard?.previewUrl ?? '',
+                  provider: model.avatarCard?.provider ?? '',
+                  providerMetadata: model.avatarCard?.providerMetadata ?? '',
+                  folderPath: model.avatarCard?.folderPath ?? '',
+                  createdAt: model.avatarCard?.createdAt ?? DateTime.now(),
+                  updatedAt: model.avatarCard?.updatedAt ?? DateTime.now(),
+                  isUrlSigned: model.avatarCard?.isUrlSigned ?? false,
+                ),
+                status: model.status!,
+              ))
+          .toList();
+      return entities;
+    } catch (e) {
+      log(e.toString());
+      return [];
+    }
+  }
+
+  @override
+  Future<CheckCardResponseEntity?> checkCard(
+      {required CheckCardRequestModel request, required int cardId}) async {
+    try {
+      final response = await cardRemoteDataSource.checkCard(request: request, cardId: cardId);
+      final data = CheckCardResponseEntity(
+        status: response.status ?? 0,
+        message: '',
+      );
+      return data;
+    } catch (e) {
+      print(e);
       return null;
     }
   }

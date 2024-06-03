@@ -101,3 +101,9 @@ class ResetPasswordSuccess extends AuthState {
 
   ResetPasswordSuccess({required this.response});
 }
+
+class ScoresUpdated extends AuthState {
+  final UserDataResponseEntity user;
+
+  ScoresUpdated({required this.user});
+}
