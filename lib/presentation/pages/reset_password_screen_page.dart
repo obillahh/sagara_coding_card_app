@@ -35,19 +35,6 @@ class _ResetPasswordScreenPageState extends State<ResetPasswordScreenPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Align(
-              alignment: Alignment.topLeft,
-              child: IconButton(
-                onPressed: () {
-                  context.pop();
-                },
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: AppColors.primary,
-                  size: 38.sp,
-                ),
-              ),
-            ),
             Text(
               'create a new password'.toUpperCase(),
               style: AppFonts.appFont.headlineSmall!.copyWith(

@@ -217,9 +217,8 @@ class _CollectionScreenPageState extends State<CollectionScreenPage> {
                               baseColor: Colors.grey.shade800,
                               highlightColor: Colors.grey.shade700,
                               direction: ShimmerDirection.ttb,
-                              // period: const Duration(milliseconds: 800),
                               child: Container(
-                                height: 200.h,
+                                height: 180.h,
                                 width: 100.w,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(4),
