@@ -69,3 +69,15 @@ class UpdateScoresEvent extends AuthEvent {
 
   UpdateScoresEvent({required this.req, required this.id});
 }
+
+class SyncCollectionEvent extends AuthEvent {
+  final int id;
+
+  SyncCollectionEvent({required this.id});
+}
+
+class GetUserIdEvent extends AuthEvent {
+  final int id;
+
+  GetUserIdEvent({required this.id});
+}

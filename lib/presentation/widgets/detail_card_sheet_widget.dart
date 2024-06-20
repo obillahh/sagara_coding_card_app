@@ -8,7 +8,7 @@ import 'package:sagara_coding_card_application/data/models/auth_model/user_model
 import 'package:sagara_coding_card_application/domain/entities/card_entity/card_id_response_entity.dart';
 import 'package:sagara_coding_card_application/presentation/manager/auth_manage/auth/auth_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/manager/auth_manage/bloc/avatar_bloc.dart';
-import 'package:sagara_coding_card_application/presentation/manager/card_manage/get_card_id/bloc/card_id_bloc.dart';
+import 'package:sagara_coding_card_application/presentation/manager/card_manage/bloc/card_bloc.dart';
 
 import '../utils/constant/assets_constant.dart';
 import '../utils/themes/app_colors.dart';
@@ -31,7 +31,7 @@ class DetailCardSheetWidget extends StatelessWidget {
       builder: (context, authState) {
         if (authState is CurrentUserState) {
           final userId = authState.currentUser!.id;
-          return BlocBuilder<CardIdBloc, CardIdState>(
+          return BlocBuilder<CardBloc, CardState>(
             builder: (context, cardState) {
               return _buildDraggableScrollableSheet(context, userId, cardState);
             },
@@ -43,7 +43,7 @@ class DetailCardSheetWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildDraggableScrollableSheet(BuildContext context, int userId, CardIdState cardState) {
+  Widget _buildDraggableScrollableSheet(BuildContext context, int userId, CardState cardState) {
     return DraggableScrollableSheet(
       initialChildSize: 0.4.sp,
       minChildSize: 0.2.sp,
@@ -178,21 +178,26 @@ class DetailCardSheetWidget extends StatelessWidget {
                                     ),
                                   );
                             } else {
-                              if (cardState is CardCheckedState &&
-                                  cardState.response.status == 200) {
-                                context.read<AvatarBloc>().add(
-                                      ChangeAvatarEvent(
-                                        request: AvatarUpdateRequestModel(
-                                          ref: 'plugin::users-permissions.user',
-                                          refId: userId,
-                                          field: 'avatar',
-                                          files: card.attributes.avatarCard.data.attributes.url,
-                                        ),
-                                      ),
-                                    );
-                              } else {
-                                context.go('/quiz_card');
-                              }
+                              cardState.maybeWhen(
+                                success: (cardList, card, userData, checkCard) {
+                                  if (checkCard != null && checkCard.status == 200) {
+                                    context.read<AvatarBloc>().add(
+                                          ChangeAvatarEvent(
+                                            request: AvatarUpdateRequestModel(
+                                              ref: 'plugin::users-permissions.user',
+                                              refId: userId,
+                                              field: 'avatar',
+                                              files:
+                                                  card!.attributes.avatarCard.data.attributes.url,
+                                            ),
+                                          ),
+                                        );
+                                  } else {
+                                    context.go('/quiz_card');
+                                  }
+                                },
+                                orElse: () {},
+                              );
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -202,10 +207,16 @@ class DetailCardSheetWidget extends StatelessWidget {
                           child: Text(
                             isFromScanner == false
                                 ? 'Choose as Avatar'
-                                : (cardState is CardCheckedState &&
-                                        cardState.response.status == 200)
-                                    ? 'Choose as Avatar'
-                                    : 'Take Quiz',
+                                : cardState.maybeWhen(
+                                    success: (cardList, card, userData, checkCard) {
+                                      if (checkCard != null && checkCard.status == 200) {
+                                        return 'Choose as Avatar';
+                                      } else {
+                                        return 'Take Quiz';
+                                      }
+                                    },
+                                    orElse: () => 'Take Quiz',
+                                  ),
                             style: AppFonts.appFont.labelLarge!.copyWith(
                               fontWeight: FontWeight.w700,
                             ),
@@ -258,16 +269,16 @@ class DetailCardSheetWidget extends StatelessWidget {
       },
     );
   }
-}
 
-Widget _buildDragHandle() {
-  return Container(
-    width: 40.w,
-    height: 4.h,
-    margin: REdgeInsets.symmetric(vertical: 8.0),
-    decoration: BoxDecoration(
-      color: AppColors.primary,
-      borderRadius: BorderRadius.circular(4.r),
-    ),
-  );
+  Widget _buildDragHandle() {
+    return Container(
+      width: 40.w,
+      height: 4.h,
+      margin: REdgeInsets.symmetric(vertical: 8.0),
+      decoration: BoxDecoration(
+        color: AppColors.primary,
+        borderRadius: BorderRadius.circular(4.r),
+      ),
+    );
+  }
 }

@@ -133,11 +133,9 @@ class CardImplRepository extends CardRepository {
   }
 
   @override
-  Future<CardIdResponseDataEntity?> getCardById(int id) async {
+  Future<CardIdResponseDataEntity> getCardById({required int id}) async {
     final response = await cardRemoteDataSource.getCardById(id);
-    if (response.data == null) {
-      return null;
-    }
+
     final data = CardIdResponseDataEntity(
       id: response.data?.id ?? 0,
       attributes: CardIdDataAttributesEntity(
@@ -281,7 +279,7 @@ class CardImplRepository extends CardRepository {
   }
 
   @override
-  Future<CardIdResponseDataEntity?> getCardByScanner(String url) async {
+  Future<CardIdResponseDataEntity?> getCardByScanner({required String url}) async {
     final response = await cardRemoteDataSource.getCardByScanner(url);
     if (response.data == null) {
       return null;
@@ -428,7 +426,8 @@ class CardImplRepository extends CardRepository {
   }
 
   @override
-  Future<UserDataResponseEntity?> addCollectionCard(int cardId, int userId) async {
+  Future<UserDataResponseEntity?> addCollectionCard(
+      {required int cardId, required int userId}) async {
     try {
       final response = await cardRemoteDataSource.addCardCollection(cardId, userId);
       final data = UserDataResponseEntity(

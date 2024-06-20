@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sagara_coding_card_application/presentation/manager/card_manage/get_card_id/bloc/card_id_bloc.dart';
+import 'package:sagara_coding_card_application/presentation/manager/card_manage/bloc/card_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_colors.dart';
 import 'package:sagara_coding_card_application/presentation/widgets/detail_card_sheet_widget.dart';
 
@@ -21,7 +21,7 @@ class _DetailScannerScreenPageState extends State<DetailScannerScreenPage>
   @override
   void initState() {
     super.initState();
-    context.read<CardIdBloc>().add(GetCardIdEvent(id: widget.id));
+    context.read<CardBloc>().add(CardEvent.getCardByIdEvent(id: widget.id));
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 300),
@@ -68,50 +68,69 @@ class _DetailScannerScreenPageState extends State<DetailScannerScreenPage>
           ),
         ],
       ),
-      body: BlocBuilder<CardIdBloc, CardIdState>(
+      body: BlocBuilder<CardBloc, CardState>(
         builder: (context, state) {
-          if (state is CardIdSuccessState) {
-            return SizedBox(
-              width: double.infinity.w,
-              height: double.infinity.h,
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: Image.network(
-                  state.card.attributes.avatarCard.data.attributes.url,
-                  fit: BoxFit.fitWidth,
-                  width: double.infinity.w,
-                ),
-              ),
-            );
-          }
-          return Container();
-        },
-      ),
-      bottomSheet: BlocBuilder<CardIdBloc, CardIdState>(
-        builder: (context, state) {
-          if (state is CardIdSuccessState) {
-            final card = state.card;
-            return DetailCardSheetWidget(
-              animationController: _animationController,
-              card: card,
-              isFromScanner: true,
-            );
-          }
-          return BottomSheet(
-            animationController: _animationController,
-            enableDrag: true,
-            showDragHandle: true,
-            backgroundColor: const Color(0xff333030),
-            onClosing: () {
-              context.pop();
+          return state.when(
+            initial: () {
+              return const SizedBox();
             },
-            builder: (context) {
+            loading: () {
+              return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+            },
+            success: (cardList, card, userData, checkCard) {
               return SizedBox(
-                height: 260.h,
-                child: const Center(
-                  child: CircularProgressIndicator(),
+                width: double.infinity.w,
+                height: double.infinity.h,
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: Image.network(
+                    card!.attributes.avatarCard.data.attributes.url,
+                    fit: BoxFit.fitWidth,
+                    width: double.infinity.w,
+                  ),
                 ),
               );
+            },
+            failure: (error) {
+              return Center(child: Text(error));
+            },
+          );
+        },
+      ),
+      bottomSheet: BlocBuilder<CardBloc, CardState>(
+        builder: (context, state) {
+          return state.when(
+            initial: () {
+              return const SizedBox();
+            },
+            loading: () {
+              return BottomSheet(
+                animationController: _animationController,
+                enableDrag: true,
+                showDragHandle: true,
+                backgroundColor: const Color(0xff333030),
+                onClosing: () {
+                  context.pop();
+                },
+                builder: (context) {
+                  return SizedBox(
+                    height: 260.h,
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                },
+              );
+            },
+            success: (cardList, card, userData, checkCard) {
+              return DetailCardSheetWidget(
+                animationController: _animationController,
+                card: card!,
+                isFromScanner: true,
+              );
+            },
+            failure: (error) {
+              return Center(child: Text(error));
             },
           );
         },

@@ -9,10 +9,9 @@ import 'package:go_router/go_router.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sagara_coding_card_application/data/models/card_model/check_card_request_model.dart';
 import 'package:sagara_coding_card_application/presentation/manager/auth_manage/auth/auth_bloc.dart';
-import 'package:sagara_coding_card_application/presentation/manager/card_manage/add_card_collection/bloc/card_collection_bloc.dart';
+import 'package:sagara_coding_card_application/presentation/manager/card_manage/bloc/card_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
 
-import '../manager/card_manage/get_card_id/bloc/card_id_bloc.dart';
 import '../utils/constant/assets_constant.dart';
 import '../utils/constant/router_constant.dart';
 import '../utils/themes/app_colors.dart';
@@ -52,8 +51,8 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
       (Barcode barcode) {
         inspect('Scanned barcode: ${barcode.code}');
         scannedData = barcode.code!;
-        final contextBloc = context.read<CardIdBloc>();
-        contextBloc.add(GetCardScannerEvent(url: scannedData));
+        final contextBloc = context.read<CardBloc>();
+        contextBloc.add(CardEvent.getCardByScannerEvent(url: scannedData));
       },
     );
   }
@@ -119,58 +118,68 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
       ),
       body: Column(
         children: [
-          BlocConsumer<CardIdBloc, CardIdState>(
-            bloc: context.read<CardIdBloc>(),
+          BlocConsumer<CardBloc, CardState>(
+            bloc: context.read<CardBloc>(),
             listener: (context, state) {
-              if (state is CardIdSuccessState) {
-                final cardId = state.card.id;
-                final userId = (context.read<AuthBloc>().state as CurrentUserState).currentUser!.id;
-                inspect(cardId);
-                final checkCardRequest = CheckCardRequestModel(userId: userId);
-                context.read<CardIdBloc>().add(
-                      CheckCardEvent(
-                        request: checkCardRequest,
-                        cardId: cardId,
-                      ),
-                    );
-                context.read<CardCollectionBloc>().add(
-                      AddCollectionCardEvent(
-                        cardId: cardId,
-                        userId: userId,
-                      ),
-                    );
-                context.goNamed(
-                  RouterConstant.detailScanner,
-                  extra: cardId,
-                );
-              } else if (state is CardIdFailureState) {
-                print('Error: ${state.message}');
-              }
+              state.maybeWhen(
+                success: (cardList, card, userData, checkCard) {
+                  final cardId = card!.id;
+                  final userId =
+                      (context.read<AuthBloc>().state as CurrentUserState).currentUser!.id;
+                  inspect(cardId);
+                  final checkCardRequest = CheckCardRequestModel(userId: userId);
+                  context.read<CardBloc>().add(
+                        CardEvent.checkCardEvent(
+                          request: checkCardRequest,
+                          cardId: cardId,
+                        ),
+                      );
+                  context.read<CardBloc>().add(
+                        CardEvent.addCardCollectionEvent(
+                          cardId: cardId,
+                          userId: userId,
+                        ),
+                      );
+                  context.goNamed(
+                    RouterConstant.detailScanner,
+                    extra: cardId,
+                  );
+                },
+                failure: (message) {
+                  Text(message);
+                },
+                orElse: () {
+                  null;
+                },
+              );
             },
             builder: (context, state) {
-              if (state is CardIdLoadingState) {
-                return const Expanded(
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                );
-              } else {
-                return Expanded(
-                  child: QRView(
-                    key: _qrKey,
-                    onQRViewCreated: _onQRViewCreated,
-                    overlay: QrScannerOverlayShape(
-                      borderColor: AppColors.primary,
-                      overlayColor: AppColors.background.withOpacity(0.5.r),
-                      borderRadius: 6.r,
-                      borderLength: 80.r,
-                      borderWidth: 8.w,
-                      cutOutWidth: 280.w,
-                      cutOutHeight: 320.h,
+              return state.maybeWhen(
+                loading: () {
+                  return const Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(),
                     ),
-                  ),
-                );
-              }
+                  );
+                },
+                orElse: () {
+                  return Expanded(
+                    child: QRView(
+                      key: _qrKey,
+                      onQRViewCreated: _onQRViewCreated,
+                      overlay: QrScannerOverlayShape(
+                        borderColor: AppColors.primary,
+                        overlayColor: AppColors.background.withOpacity(0.5.r),
+                        borderRadius: 6.r,
+                        borderLength: 80.r,
+                        borderWidth: 8.w,
+                        cutOutWidth: 280.w,
+                        cutOutHeight: 320.h,
+                      ),
+                    ),
+                  );
+                },
+              );
             },
           ),
         ],

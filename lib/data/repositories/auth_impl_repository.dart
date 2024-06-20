@@ -6,7 +6,9 @@ import 'package:sagara_coding_card_application/data/models/auth_model/reset_pass
 import 'package:sagara_coding_card_application/data/models/auth_model/user_model/avatar_update_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/user_model/score_update_request_model.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/forgot_password_response_entity.dart';
+import 'package:sagara_coding_card_application/domain/entities/auth_entity/sync_collection_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/user_entity/avatar_update_response_entity.dart';
+import 'package:sagara_coding_card_application/domain/entities/auth_entity/user_entity/user_id_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/user_entity/user_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/repositories/auth_repository.dart';
 
@@ -241,6 +243,52 @@ class AuthImplRepository extends AuthRepository {
       return data;
     } catch (e) {
       print('Login error: $e');
+      return null;
+    }
+  }
+
+  @override
+  Future<SyncCollectionResponseEntity?> syncCollection({required int id}) async {
+    try {
+      final response = await authRemoteDataSource.syncCollection(id: id);
+      final data = SyncCollectionResponseEntity(
+        message: response.message ?? '',
+      );
+      return data;
+    } catch (e) {
+      print('Sync error: $e');
+      return null;
+    }
+  }
+
+  @override
+  Future<UserIdResponseEntity?> getUserId({required int id}) async {
+    try {
+      final response = await authRemoteDataSource.getUserId(id: id);
+      final data = UserIdResponseEntity(
+        id: response.id ?? 0,
+        username: response.username ?? '',
+        email: response.email ?? '',
+        collectionCard: response.collectionCard ?? 0,
+        scores: response.scores ?? 0,
+        avatar: UserIdAvatarResponseEntity(
+          id: response.avatar?.id ?? 0,
+          name: response.avatar?.name ?? '',
+          alternativeText: response.avatar?.alternativeText ?? '',
+          caption: response.avatar?.caption ?? '',
+          width: response.avatar?.width ?? 0,
+          height: response.avatar?.height ?? 0,
+          hash: response.avatar?.hash ?? '',
+          ext: response.avatar?.ext ?? '',
+          mime: response.avatar?.mime ?? '',
+          size: response.avatar?.size ?? 0,
+          url: response.avatar?.url ?? '',
+          isUrlSigned: response.avatar?.isUrlSigned ?? false,
+        ),
+      );
+      return data;
+    } catch (e) {
+      print('Sync error: $e');
       return null;
     }
   }

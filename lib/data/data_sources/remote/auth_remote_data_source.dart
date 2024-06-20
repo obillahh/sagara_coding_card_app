@@ -7,9 +7,11 @@ import 'package:sagara_coding_card_application/data/models/auth_model/forgot_pas
 import 'package:sagara_coding_card_application/data/models/auth_model/forgot_password_response_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/register_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/reset_password_request_model.dart';
+import 'package:sagara_coding_card_application/data/models/auth_model/sync_collection_response_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/user_model/avatar_update_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/user_model/avatar_update_response_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/user_model/score_update_request_model.dart';
+import 'package:sagara_coding_card_application/data/models/auth_model/user_model/user_id_response_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/user_model/user_response_model.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/api_constant.dart';
 
@@ -58,6 +60,29 @@ class AuthRemoteDataSource {
     } catch (e) {
       inspect('Error: $e');
       return UserResponseModel();
+    }
+  }
+
+  Future<UserIdResponseModel> getUserId({required int id}) async {
+    try {
+      final String url = '${ApiConstant.baseUrlApi}/users/$id';
+      final result = await client.get(
+        url,
+        queryParameters: {
+          'populate': 'avatar',
+        },
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      final userIdData = UserIdResponseModel.fromJson(result.data);
+      return userIdData;
+    } catch (e) {
+      inspect('Error: $e');
+      return const UserIdResponseModel();
     }
   }
 
@@ -164,6 +189,30 @@ class AuthRemoteDataSource {
         return regisData;
       } else {
         return UserResponseModel();
+      }
+    } catch (e) {
+      inspect('Error: $e');
+      rethrow;
+    }
+  }
+
+  Future<SyncCollectionResponseModel> syncCollection({required int id}) async {
+    try {
+      final String url = '${ApiConstant.syncCollection}/$id/sync-collection';
+      final token = await AuthLocalDataSource().getToken();
+      if (token != null) {
+        final result = await client.put(
+          url,
+          options: Options(
+            headers: {
+              'Authorization': 'Bearer $token',
+            },
+          ),
+        );
+        final syncCollectionData = SyncCollectionResponseModel.fromJson(result.data);
+        return syncCollectionData;
+      } else {
+        return const SyncCollectionResponseModel();
       }
     } catch (e) {
       inspect('Error: $e');

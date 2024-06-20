@@ -6,6 +6,6 @@ class AddCollectionCardUseCase {
 
   AddCollectionCardUseCase({required this.cardRepository});
 
-  Future<UserDataResponseEntity?> call(int cardId, int userId) async =>
-      await cardRepository.addCollectionCard(cardId, userId);
+  Future<UserDataResponseEntity?> call({required int cardId, required int userId}) async =>
+      await cardRepository.addCollectionCard(cardId: cardId, userId: userId);
 }

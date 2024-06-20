@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sagara_coding_card_application/presentation/manager/card_manage/get_card_id/bloc/card_id_bloc.dart';
+import 'package:sagara_coding_card_application/presentation/manager/card_manage/bloc/card_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/manager/quiz_manage/bloc/quiz_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/assets_constant.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/router_constant.dart';
@@ -147,25 +147,29 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
           ),
         ],
       ),
-      body: BlocBuilder<CardIdBloc, CardIdState>(
+      body: BlocBuilder<CardBloc, CardState>(
         builder: (context, state) {
-          if (state is CardIdSuccessState) {
-            return SizedBox(
-              width: double.infinity.w,
-              height: double.infinity.h,
-              child: Align(
-                alignment: Alignment.topCenter,
-                child: Image.network(
-                  state.card.attributes.avatarCard.data.attributes.url,
-                  fit: BoxFit.fitWidth,
-                  width: double.infinity.w,
+          return state.maybeWhen(
+            success: (cardList, card, userData, checkCard) {
+              return SizedBox(
+                width: double.infinity.w,
+                height: double.infinity.h,
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: Image.network(
+                    card!.attributes.avatarCard.data.attributes.url,
+                    fit: BoxFit.fitWidth,
+                    width: double.infinity.w,
+                  ),
                 ),
-              ),
-            );
-          }
-          return SizedBox(
-            width: double.infinity.w,
-            height: double.infinity.h,
+              );
+            },
+            orElse: () {
+              return SizedBox(
+                width: double.infinity.w,
+                height: double.infinity.h,
+              );
+            },
           );
         },
       ),
@@ -177,105 +181,107 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
         builder: (context) {
           return SizedBox(
             height: 400.h,
-            child: BlocBuilder<CardIdBloc, CardIdState>(
+            child: BlocBuilder<CardBloc, CardState>(
               builder: (context, state) {
-                if (state is CardIdSuccessState) {
-                  final quizzes = state.card.attributes.quizzes;
-                  totalQuestions = quizzes.data.length;
-                  return SingleChildScrollView(
-                    padding: EdgeInsets.all(16.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                SizedBox(
-                                  width: 20.w,
-                                  height: 20.h,
-                                  child: CircularProgressIndicator(
-                                    value: _calculateProgress(),
-                                    strokeWidth: 4.w,
-                                    color: AppColors.text,
+                return state.maybeWhen(
+                  success: (cardList, card, userData, checkCard) {
+                    final quizzes = card!.attributes.quizzes;
+                    totalQuestions = quizzes.data.length;
+                    return SingleChildScrollView(
+                      padding: EdgeInsets.all(16.w),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  SizedBox(
+                                    width: 20.w,
+                                    height: 20.h,
+                                    child: CircularProgressIndicator(
+                                      value: _calculateProgress(),
+                                      strokeWidth: 4.w,
+                                      color: AppColors.text,
+                                    ),
                                   ),
+                                  SizedBox(width: 12.w),
+                                  Text(
+                                    '${_formatTime(_secondsRemaining)} s',
+                                    style: AppFonts.appFont.titleLarge!.copyWith(
+                                      fontWeight: FontWeight.w800,
+                                      color: AppColors.text,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 18.h,
+                                  vertical: 4.w,
                                 ),
-                                SizedBox(width: 12.w),
-                                Text(
-                                  '${_formatTime(_secondsRemaining)} s',
-                                  style: AppFonts.appFont.titleLarge!.copyWith(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: AppColors.background,
+                                ),
+                                child: Text(
+                                  card.attributes.role.toUpperCase(),
+                                  style: AppFonts.appFont.titleSmall!.copyWith(
                                     fontWeight: FontWeight.w800,
-                                    color: AppColors.text,
+                                    fontStyle: FontStyle.italic,
                                   ),
                                 ),
-                              ],
-                            ),
-                            Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: 18.h,
-                                vertical: 4.w,
                               ),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(10),
-                                color: AppColors.background,
-                              ),
-                              child: Text(
-                                state.card.attributes.role.toUpperCase(),
-                                style: AppFonts.appFont.titleSmall!.copyWith(
-                                  fontWeight: FontWeight.w800,
-                                  fontStyle: FontStyle.italic,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 24.h),
-                        Container(
-                          padding: EdgeInsets.symmetric(
-                            horizontal: 16.w,
-                            vertical: 4.h,
+                            ],
                           ),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(16.r),
-                            color: AppColors.background,
-                          ),
-                          child: Text(
-                            '${_questionIndex + 1} of ${quizzes.data.length} Questions',
-                            style: const TextStyle(
-                              color: AppColors.text,
-                              fontWeight: FontWeight.w600,
+                          SizedBox(height: 24.h),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16.w,
+                              vertical: 4.h,
+                            ),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(16.r),
+                              color: AppColors.background,
+                            ),
+                            child: Text(
+                              '${_questionIndex + 1} of ${quizzes.data.length} Questions',
+                              style: const TextStyle(
+                                color: AppColors.text,
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(height: 8.h),
-                        SizedBox(
-                          height: 400.h,
-                          child: PageView.builder(
-                            itemCount: totalQuestions,
-                            controller: _pageController,
-                            physics: const NeverScrollableScrollPhysics(),
-                            onPageChanged: (index) {
-                              setState(() {
-                                _questionIndex = index;
-                              });
-                            },
-                            itemBuilder: (context, index) {
-                              return buildQuestionWidget(
-                                quizzes.data[index],
-                                index,
-                                quizzes.data[index].attributes.correctOption,
-                                state,
-                              );
-                            },
+                          SizedBox(height: 8.h),
+                          SizedBox(
+                            height: 400.h,
+                            child: PageView.builder(
+                              itemCount: totalQuestions,
+                              controller: _pageController,
+                              physics: const NeverScrollableScrollPhysics(),
+                              onPageChanged: (index) {
+                                setState(() {
+                                  _questionIndex = index;
+                                });
+                              },
+                              itemBuilder: (context, index) {
+                                return buildQuestionWidget(
+                                  quizzes.data[index],
+                                  index,
+                                  quizzes.data[index].attributes.correctOption,
+                                  state,
+                                );
+                              },
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-                return const Center(
-                  child: CircularProgressIndicator(),
+                        ],
+                      ),
+                    );
+                  },
+                  orElse: () => const Center(
+                    child: CircularProgressIndicator(),
+                  ),
                 );
               },
             ),
@@ -289,12 +295,18 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
     dynamic quizItem,
     int index,
     String correctOption,
-    CardIdSuccessState state,
+    CardState state,
   ) {
-    final quizzes = state.card.attributes.quizzes;
-    final scores = state.card.attributes.quizzes.data[index].attributes.score;
-    final question = state.card.attributes.quizzes.data.length;
-    inspect(question);
+    final quizzes = state.maybeWhen(
+      success: (cardList, card, userData, checkCard) => card?.attributes.quizzes,
+      orElse: () => null,
+    );
+    if (quizzes == null) {
+      return const SizedBox();
+    }
+
+    final scores = quizzes.data[index].attributes.score;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -318,60 +330,14 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
             });
             if (correctOption == quizItem.attributes.optionOne) {
               totalPoints += scores;
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) => Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        AssetsConstant.correctIcon,
-                      ),
-                      SizedBox(height: 12.h),
-                      Text(
-                        'Great Job!!!',
-                        style: TextStyle(
-                          decoration: TextDecoration.none,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 32.sp,
-                          color: AppColors.text,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-              Future.delayed(const Duration(seconds: 3), () {
-                context.pop();
-              });
-            } else {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) => Container(),
-              );
-              Future.delayed(const Duration(seconds: 3), () {
-                context.pop();
-              });
             }
-            Future.delayed(const Duration(seconds: 3), () {
-              if (_questionIndex == quizzes.data.length - 1) {
-                context.goNamed(RouterConstant.quizDone, pathParameters: {
-                  'timeRemaining': _formatTime(_secondsRemaining),
-                  'totalPoints': totalPoints.toString(),
-                  'totalQuestion': question.toString(),
-                });
-              } else {
-                _pageController.nextPage(
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.ease,
-                );
-              }
-            });
+            log('totalPoints: $totalPoints');
+            _pageController.nextPage(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeIn,
+            );
           },
         ),
-        SizedBox(height: 12.h),
         OptionWidget(
           option: 'B)',
           optionValue: quizItem.attributes.optionTwo,
@@ -383,60 +349,14 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
             });
             if (correctOption == quizItem.attributes.optionTwo) {
               totalPoints += scores;
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) => Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        AssetsConstant.correctIcon,
-                      ),
-                      SizedBox(height: 12.h),
-                      Text(
-                        'Great Job!!!',
-                        style: TextStyle(
-                          decoration: TextDecoration.none,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 32.sp,
-                          color: AppColors.text,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-              Future.delayed(const Duration(seconds: 3), () {
-                context.pop();
-              });
-            } else {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) => Container(),
-              );
-              Future.delayed(const Duration(seconds: 3), () {
-                context.pop();
-              });
             }
-            Future.delayed(const Duration(seconds: 3), () {
-              if (_questionIndex == quizzes.data.length - 1) {
-                context.goNamed(RouterConstant.quizDone, pathParameters: {
-                  'timeRemaining': _formatTime(_secondsRemaining),
-                  'totalPoints': totalPoints.toString(),
-                  'totalQuestion': question.toString(),
-                });
-              } else {
-                _pageController.nextPage(
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.ease,
-                );
-              }
-            });
+            log('totalPoints: $totalPoints');
+            _pageController.nextPage(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeIn,
+            );
           },
         ),
-        SizedBox(height: 12.h),
         OptionWidget(
           option: 'C)',
           optionValue: quizItem.attributes.optionThree,
@@ -448,60 +368,14 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
             });
             if (correctOption == quizItem.attributes.optionThree) {
               totalPoints += scores;
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) => Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        AssetsConstant.correctIcon,
-                      ),
-                      SizedBox(height: 12.h),
-                      Text(
-                        'Great Job!!!',
-                        style: TextStyle(
-                          decoration: TextDecoration.none,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 32.sp,
-                          color: AppColors.text,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-              Future.delayed(const Duration(seconds: 3), () {
-                context.pop();
-              });
-            } else {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) => Container(),
-              );
-              Future.delayed(const Duration(seconds: 3), () {
-                context.pop();
-              });
             }
-            Future.delayed(const Duration(seconds: 3), () {
-              if (_questionIndex == quizzes.data.length - 1) {
-                context.goNamed(RouterConstant.quizDone, pathParameters: {
-                  'timeRemaining': _formatTime(_secondsRemaining),
-                  'totalPoints': totalPoints.toString(),
-                  'totalQuestion': question.toString(),
-                });
-              } else {
-                _pageController.nextPage(
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.ease,
-                );
-              }
-            });
+            log('totalPoints: $totalPoints');
+            _pageController.nextPage(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeIn,
+            );
           },
         ),
-        SizedBox(height: 12.h),
         OptionWidget(
           option: 'D)',
           optionValue: quizItem.attributes.optionFour,
@@ -513,57 +387,12 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
             });
             if (correctOption == quizItem.attributes.optionFour) {
               totalPoints += scores;
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) => Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SvgPicture.asset(
-                        AssetsConstant.correctIcon,
-                      ),
-                      SizedBox(height: 12.h),
-                      Text(
-                        'Great Job!!!',
-                        style: TextStyle(
-                          decoration: TextDecoration.none,
-                          fontWeight: FontWeight.w900,
-                          fontSize: 32.sp,
-                          color: AppColors.text,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              );
-              Future.delayed(const Duration(seconds: 3), () {
-                context.pop();
-              });
-            } else {
-              showDialog(
-                context: context,
-                barrierDismissible: false,
-                builder: (context) => Container(),
-              );
-              Future.delayed(const Duration(seconds: 3), () {
-                context.pop();
-              });
             }
-            Future.delayed(const Duration(seconds: 3), () {
-              if (_questionIndex == quizzes.data.length - 1) {
-                context.goNamed(RouterConstant.quizDone, pathParameters: {
-                  'timeRemaining': _formatTime(_secondsRemaining),
-                  'totalPoints': totalPoints.toString(),
-                  'totalQuestion': question.toString(),
-                });
-              } else {
-                _pageController.nextPage(
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.ease,
-                );
-              }
-            });
+            log('totalPoints: $totalPoints');
+            _pageController.nextPage(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeIn,
+            );
           },
         ),
       ],

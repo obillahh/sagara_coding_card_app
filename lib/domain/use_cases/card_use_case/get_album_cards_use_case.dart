@@ -6,6 +6,6 @@ class GetAlbumCardsUseCase {
 
   GetAlbumCardsUseCase({required this.cardRepository});
 
-  Future<List<CardAlbumResponseEntity>> call({required int id}) async =>
+  Future<List<CardAlbumResponseEntity>?> call({required int id}) async =>
       await cardRepository.getAlbumCards(id: id);
 }

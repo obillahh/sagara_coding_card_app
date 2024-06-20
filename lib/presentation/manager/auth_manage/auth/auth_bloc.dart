@@ -7,8 +7,11 @@ import 'package:sagara_coding_card_application/data/models/auth_model/login_requ
 import 'package:sagara_coding_card_application/data/models/auth_model/reset_password_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/user_model/score_update_request_model.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/forgot_password_response_entity.dart';
+import 'package:sagara_coding_card_application/domain/entities/auth_entity/sync_collection_response_entity.dart';
+import 'package:sagara_coding_card_application/domain/entities/auth_entity/user_entity/user_id_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/check_token_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/forgot_password_use_case.dart';
+import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/get_user_id_user_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/increase_collection_card_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/is_first_entry_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/is_logged_in_use_case.dart';
@@ -16,6 +19,7 @@ import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/lo
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/register_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/reset_password_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/sign_in_with_google_use_case.dart';
+import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/sync_collection_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/update_scores_use_case.dart';
 
 import '../../../../data/models/auth_model/register_request_model.dart';
@@ -40,6 +44,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final IncreaseCollectionCardUseCase increaseCollectionCardUseCase;
   final CheckTokenUseCase checkTokenUseCase;
   final UpdateScoresUseCase updateScoresUseCase;
+  final SyncCollectionUseCase syncCollectionUseCase;
+  final GetUserIdUseCase getUserIdUseCase;
   AuthBloc({
     required this.registerUseCase,
     required this.loginUseCase,
@@ -53,6 +59,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.increaseCollectionCardUseCase,
     required this.checkTokenUseCase,
     required this.updateScoresUseCase,
+    required this.syncCollectionUseCase,
+    required this.getUserIdUseCase,
   }) : super(AuthInitial()) {
     on<AuthEvent>(
       (event, emit) async {
@@ -155,6 +163,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             emit(ScoresUpdated(user: data!));
           } catch (e) {
             emit(AuthErrorState('Failed to update scores: $e'));
+          }
+        }
+        if (event is SyncCollectionEvent) {
+          try {
+            final data = await syncCollectionUseCase(id: event.id);
+            emit(CollectionSynced(syncCollection: data!));
+          } catch (e) {
+            emit(AuthErrorState('Failed to sync collection: $e'));
+          }
+        }
+        if (event is GetUserIdEvent) {
+          try {
+            final data = await getUserIdUseCase(id: event.id);
+            emit(GetUserSuccessState(user: data!));
+          } catch (e) {
+            emit(AuthErrorState('Failed to get user: $e'));
           }
         }
       },

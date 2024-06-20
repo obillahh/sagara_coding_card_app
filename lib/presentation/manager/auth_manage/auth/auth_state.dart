@@ -107,3 +107,15 @@ class ScoresUpdated extends AuthState {
 
   ScoresUpdated({required this.user});
 }
+
+class CollectionSynced extends AuthState {
+  final SyncCollectionResponseEntity syncCollection;
+
+  CollectionSynced({required this.syncCollection});
+}
+
+class GetUserSuccessState extends AuthState {
+  final UserIdResponseEntity user;
+
+  GetUserSuccessState({required this.user});
+}

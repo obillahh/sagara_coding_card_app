@@ -4,12 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sagara_coding_card_application/data/models/card_model/check_card_request_model.dart';
 import 'package:sagara_coding_card_application/presentation/manager/auth_manage/auth/auth_bloc.dart';
-import 'package:sagara_coding_card_application/presentation/manager/card_manage/get_card_id/bloc/card_id_bloc.dart';
+import 'package:sagara_coding_card_application/presentation/manager/card_manage/bloc/card_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/assets_constant.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/router_constant.dart';
 import 'package:shimmer/shimmer.dart';
 
-import '../manager/card_manage/get_card_list/bloc/card_list_bloc.dart';
 import '../utils/themes/app_colors.dart';
 import '../utils/themes/app_fonts.dart';
 
@@ -29,7 +28,7 @@ class _CollectionScreenPageState extends State<CollectionScreenPage> {
     final authState = context.read<AuthBloc>().state;
     if (authState is CurrentUserState && authState.currentUser != null) {
       userId = authState.currentUser!.id;
-      context.read<CardListBloc>().add(GetCardAlbumListEvent(id: userId!));
+      context.read<CardBloc>().add(CardEvent.getCardListEvent(id: userId!));
     }
   }
 
@@ -37,7 +36,7 @@ class _CollectionScreenPageState extends State<CollectionScreenPage> {
     final authState = context.read<AuthBloc>().state;
     if (authState is CurrentUserState && authState.currentUser != null) {
       userId = authState.currentUser!.id;
-      context.read<CardListBloc>().add(GetCardAlbumListEvent(id: userId!));
+      context.read<CardBloc>().add(CardEvent.getCardListEvent(id: userId!));
     }
   }
 
@@ -124,112 +123,137 @@ class _CollectionScreenPageState extends State<CollectionScreenPage> {
                     ],
                   ),
                   SizedBox(height: 4.h),
-                  BlocBuilder<CardListBloc, CardListState>(
+                  BlocBuilder<CardBloc, CardState>(
+                    bloc: context.read<CardBloc>(),
                     builder: (context, state) {
-                      if (state is CardAlbumListSuccessState) {
-                        return GridView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 8.sp,
-                            mainAxisSpacing: 4.sp,
-                            childAspectRatio: 0.56.r,
-                            // childAspectRatio: .6,
-                          ),
-                          itemBuilder: (context, index) {
-                            if (state.cardList[index].status == "locked") {
-                              return GestureDetector(
-                                onTap: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: const Text(
-                                        'Locked',
-                                        style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColors.primary,
-                                        ),
-                                      ),
-                                      content: const Text(
-                                        'This card is locked',
-                                        style: TextStyle(color: AppColors.text),
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: context.pop,
-                                          child: const Text(
-                                            'OK',
-                                            style: TextStyle(
-                                              color: AppColors.text,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                      backgroundColor: AppColors.background,
-                                    ),
-                                  );
-                                },
-                                child: Image.asset(
-                                  AssetsConstant.lockCard,
+                      return state.when(
+                        initial: () {
+                          return const SizedBox();
+                        },
+                        loading: () {
+                          return GridView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 8.sp,
+                              mainAxisSpacing: 4.sp,
+                              childAspectRatio: 0.56.r,
+                            ),
+                            itemBuilder: (context, index) {
+                              return Shimmer.fromColors(
+                                baseColor: Colors.grey.shade800,
+                                highlightColor: Colors.grey.shade700,
+                                direction: ShimmerDirection.ttb,
+                                child: Container(
+                                  height: 180.h,
+                                  width: 100.w,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4),
+                                    color: AppColors.primary,
+                                  ),
                                 ),
                               );
-                            }
-                            return GestureDetector(
-                              onTap: () {
-                                final id = state.cardList[index].id;
-                                context.read<CardIdBloc>().add(CheckCardEvent(
-                                      cardId: id,
-                                      request: CheckCardRequestModel(userId: userId!),
-                                    ));
-                                context.read<CardIdBloc>().add(GetCardIdEvent(id: id));
-                                context.pushNamed(
-                                  RouterConstant.detailCollection,
-                                  pathParameters: {
-                                    'id': id.toString(),
-                                  },
-                                );
-                              },
-                              child: Image.network(
-                                state.cardList[index].avatarCard.url,
-                              ),
-                            );
-                          },
-                          itemCount: state.cardList.length,
-                        );
-                      }
-                      if (state is CardListFailureState) {
-                        return const Center(
-                          child: Text('Card Collection Empty'),
-                        );
-                      } else {
-                        return GridView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
-                          shrinkWrap: true,
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 8.sp,
-                            mainAxisSpacing: 4.sp,
-                            childAspectRatio: 0.56.r,
-                          ),
-                          itemBuilder: (context, index) {
-                            return Shimmer.fromColors(
-                              baseColor: Colors.grey.shade800,
-                              highlightColor: Colors.grey.shade700,
-                              direction: ShimmerDirection.ttb,
-                              child: Container(
-                                height: 180.h,
-                                width: 100.w,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4),
+                            },
+                            itemCount: 6,
+                          );
+                        },
+                        success: (cardList, card, userData, checkCard) {
+                          if (cardList == null) {
+                            return Center(
+                              child: Text(
+                                'No cards available.',
+                                style: AppFonts.appFont.titleMedium!.copyWith(
+                                  fontWeight: FontWeight.w700,
                                   color: AppColors.primary,
+                                  height: 0.h,
                                 ),
                               ),
                             );
-                          },
-                          itemCount: 6,
-                        );
-                      }
+                          }
+                          return GridView.builder(
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 8.sp,
+                              mainAxisSpacing: 4.sp,
+                              childAspectRatio: 0.56.r,
+                            ),
+                            itemBuilder: (context, index) {
+                              if (cardList[index].status == "locked") {
+                                return GestureDetector(
+                                  onTap: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: const Text(
+                                          'Locked',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            color: AppColors.primary,
+                                          ),
+                                        ),
+                                        content: const Text(
+                                          'This card is locked',
+                                          style: TextStyle(color: AppColors.text),
+                                        ),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: context.pop,
+                                            child: const Text(
+                                              'OK',
+                                              style: TextStyle(
+                                                color: AppColors.text,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                        backgroundColor: AppColors.background,
+                                      ),
+                                    );
+                                  },
+                                  child: Image.asset(
+                                    AssetsConstant.lockCard,
+                                  ),
+                                );
+                              }
+                              return GestureDetector(
+                                onTap: () {
+                                  final id = cardList[index].id;
+                                  context.read<CardBloc>().add(CardEvent.checkCardEvent(
+                                        cardId: id,
+                                        request: CheckCardRequestModel(userId: userId!),
+                                      ));
+                                  context.read<CardBloc>().add(CardEvent.getCardByIdEvent(id: id));
+                                  context.pushNamed(
+                                    RouterConstant.detailCollection,
+                                    pathParameters: {
+                                      'id': id.toString(),
+                                    },
+                                  );
+                                },
+                                child: Image.network(
+                                  cardList[index].avatarCard.url,
+                                ),
+                              );
+                            },
+                            itemCount: cardList.length,
+                          );
+                        },
+                        failure: (message) {
+                          return Center(
+                            child: Text(
+                              message,
+                              style: AppFonts.appFont.titleMedium!.copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.primary,
+                                height: 0.h,
+                              ),
+                            ),
+                          );
+                        },
+                      );
                     },
                   ),
                   SizedBox(height: 32.h),

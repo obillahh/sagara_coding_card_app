@@ -18,23 +18,22 @@ import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/ch
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/check_token_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/forgot_password_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/get_current_user_use_case.dart';
+import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/get_user_id_user_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/increase_collection_card_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/is_first_entry_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/is_logged_in_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/login_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/reset_password_use_case.dart';
+import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/sync_collection_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/update_scores_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/card_use_case/add_card_collection_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/card_use_case/check_card_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/card_use_case/get_album_cards_use_case.dart';
-import 'package:sagara_coding_card_application/domain/use_cases/card_use_case/get_list_card_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/profile_use_case/restore_avatar_profile_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/profile_use_case/set_avatar_profile_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/quiz_use_case/get_quiz_use_case.dart';
 import 'package:sagara_coding_card_application/presentation/manager/auth_manage/bloc/avatar_bloc.dart';
-import 'package:sagara_coding_card_application/presentation/manager/card_manage/add_card_collection/bloc/card_collection_bloc.dart';
-import 'package:sagara_coding_card_application/presentation/manager/card_manage/get_card_id/bloc/card_id_bloc.dart';
-import 'package:sagara_coding_card_application/presentation/manager/card_manage/get_card_list/bloc/card_list_bloc.dart';
+import 'package:sagara_coding_card_application/presentation/manager/card_manage/bloc/card_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/manager/leaderboard_manage/get_leaderboard_bloc/leaderboard_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/manager/profile_manage/bloc/profile_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/manager/quiz_manage/bloc/quiz_bloc.dart';
@@ -123,21 +122,12 @@ class _MyAppState extends State<MyApp> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => CardListBloc(
-            getListCardsUseCase: GetListCardsUseCase(
-              cardRepository: CardImplRepository(
-                cardRemoteDataSource: CardRemoteDataSource(client: dio),
-              ),
-            ),
+          create: (context) => CardBloc(
             getAlbumCardsUseCase: GetAlbumCardsUseCase(
               cardRepository: CardImplRepository(
                 cardRemoteDataSource: CardRemoteDataSource(client: dio),
               ),
             ),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => CardIdBloc(
             getCardByIdUseCase: GetCardByIdUseCase(
               cardRepository: CardImplRepository(
                 cardRemoteDataSource: CardRemoteDataSource(client: dio),
@@ -148,16 +138,12 @@ class _MyAppState extends State<MyApp> {
                 cardRemoteDataSource: CardRemoteDataSource(client: dio),
               ),
             ),
-            checkCardUseCase: CheckCardUseCase(
+            addCollectionCardUseCase: AddCollectionCardUseCase(
               cardRepository: CardImplRepository(
                 cardRemoteDataSource: CardRemoteDataSource(client: dio),
               ),
             ),
-          ),
-        ),
-        BlocProvider(
-          create: (context) => CardCollectionBloc(
-            addCollectionCardUseCase: AddCollectionCardUseCase(
+            checkCardUseCase: CheckCardUseCase(
               cardRepository: CardImplRepository(
                 cardRemoteDataSource: CardRemoteDataSource(client: dio),
               ),
@@ -233,6 +219,18 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
             updateScoresUseCase: UpdateScoresUseCase(
+              authRepository: AuthImplRepository(
+                authRemoteDataSource: AuthRemoteDataSource(client: dio),
+                authLocalDataSource: AuthLocalDataSource(),
+              ),
+            ),
+            syncCollectionUseCase: SyncCollectionUseCase(
+              authRepository: AuthImplRepository(
+                authRemoteDataSource: AuthRemoteDataSource(client: dio),
+                authLocalDataSource: AuthLocalDataSource(),
+              ),
+            ),
+            getUserIdUseCase: GetUserIdUseCase(
               authRepository: AuthImplRepository(
                 authRemoteDataSource: AuthRemoteDataSource(client: dio),
                 authLocalDataSource: AuthLocalDataSource(),

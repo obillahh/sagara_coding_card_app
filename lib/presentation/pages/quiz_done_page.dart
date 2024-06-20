@@ -5,7 +5,7 @@ import "package:flutter_svg/flutter_svg.dart";
 import "package:go_router/go_router.dart";
 import "package:sagara_coding_card_application/data/models/auth_model/user_model/score_update_request_model.dart";
 import "package:sagara_coding_card_application/presentation/manager/auth_manage/auth/auth_bloc.dart";
-import "package:sagara_coding_card_application/presentation/manager/card_manage/get_card_id/bloc/card_id_bloc.dart";
+import "package:sagara_coding_card_application/presentation/manager/card_manage/bloc/card_bloc.dart";
 
 class QuizDonePage extends StatelessWidget {
   const QuizDonePage(
@@ -61,19 +61,21 @@ class QuizDonePage extends StatelessWidget {
                   SizedBox(
                     width: 12.w,
                   ),
-                  BlocBuilder<CardIdBloc, CardIdState>(
+                  BlocBuilder<CardBloc, CardState>(
                     builder: (context, state) {
-                      if (state is CardIdSuccessState) {
-                        return Text(
-                          state.card.attributes.role,
-                          style: TextStyle(
-                            color: const Color(0xffC5233A),
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        );
-                      }
-                      return const Text("");
+                      return state.maybeWhen(
+                        success: (cardList, card, userData, checkCard) {
+                          return Text(
+                            card!.attributes.role,
+                            style: TextStyle(
+                              color: const Color(0xffC5233A),
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          );
+                        },
+                        orElse: () => const Text(""),
+                      );
                     },
                   ),
                 ],
@@ -272,7 +274,7 @@ class QuizDonePage extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: BlocListener<AuthBloc, AuthState>(
                 listener: (context, state) {
-                  if (state is ScoresUpdated) {
+                  if (state is ScoresUpdated && state is CollectionSynced) {
                     context.go('/home');
                   }
                 },
@@ -283,6 +285,7 @@ class QuizDonePage extends StatelessWidget {
                               req: ScoreUpdateRequestModel(scores: int.parse(totalPoints)),
                               id: userId!),
                         ),
+                    context.read<AuthBloc>().add(SyncCollectionEvent(id: userId)),
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(

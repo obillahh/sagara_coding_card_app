@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sagara_coding_card_application/presentation/manager/auth_manage/bloc/avatar_bloc.dart';
 
 import 'package:sagara_coding_card_application/presentation/manager/profile_manage/bloc/profile_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/assets_constant.dart';
@@ -25,11 +24,18 @@ class ProfileScreenPage extends StatefulWidget {
 }
 
 class _ProfileScreenPageState extends State<ProfileScreenPage> {
+  int? userId;
+
   @override
   initState() {
     super.initState();
     context.read<AuthBloc>().add(GetCurrentUserEvent());
     context.read<ProfileBloc>().add(RestoreAvatarProfileEvent());
+    final authState = context.read<AuthBloc>().state;
+    if (authState is CurrentUserState && authState.currentUser != null) {
+      userId = authState.currentUser!.id;
+      context.read<AuthBloc>().add(GetUserIdEvent(id: userId!));
+    }
   }
 
   @override
@@ -64,23 +70,14 @@ class _ProfileScreenPageState extends State<ProfileScreenPage> {
                     children: [
                       Row(
                         children: [
-                          BlocConsumer<AvatarBloc, AvatarState>(
-                            listener: (context, state) {
-                              if (state is AvatarChangedState) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Avatar profile Changed'),
-                                  ),
-                                );
-                              }
-                            },
+                          BlocBuilder<AuthBloc, AuthState>(
                             builder: (context, state) {
-                              if (state is AvatarChangedState) {
-                                inspect(state.response.url);
+                              if (state is GetUserSuccessState) {
+                                inspect(state.user.avatar.url);
                                 return CircleAvatar(
                                   radius: 32.r,
                                   backgroundImage: NetworkImage(
-                                    state.response.url,
+                                    state.user.avatar.url,
                                   ),
                                 );
                               } else {
@@ -96,18 +93,18 @@ class _ProfileScreenPageState extends State<ProfileScreenPage> {
                           SizedBox(width: 12.w),
                           BlocBuilder<AuthBloc, AuthState>(
                             builder: (context, state) {
-                              if (state is CurrentUserState) {
+                              if (state is GetUserSuccessState) {
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      state.currentUser!.username,
+                                      state.user.username,
                                       style: AppFonts.appFont.titleLarge!.copyWith(
                                         fontWeight: FontWeight.w700,
                                       ),
                                     ),
                                     Text(
-                                      state.currentUser!.email,
+                                      state.user.email,
                                       style: AppFonts.appFont.titleSmall!.copyWith(
                                         fontWeight: FontWeight.w400,
                                         color: AppColors.placeholder,
@@ -155,9 +152,9 @@ class _ProfileScreenPageState extends State<ProfileScreenPage> {
                                       children: [
                                         BlocBuilder<AuthBloc, AuthState>(
                                           builder: (context, state) {
-                                            if (state is CurrentUserState) {
+                                            if (state is GetUserSuccessState) {
                                               return Text(
-                                                state.currentUser!.collectionCard.toString(),
+                                                state.user.collectionCard.toString(),
                                                 style: AppFonts.appFont.titleLarge!.copyWith(
                                                   fontWeight: FontWeight.w700,
                                                 ),
