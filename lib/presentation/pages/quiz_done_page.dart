@@ -89,180 +89,20 @@ class QuizDonePage extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    width: 100.w,
-                    height: 75.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(12.r),
-                      ),
-                      border: Border.all(
-                        color: const Color(0xffC5233A),
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        Stack(
-                          alignment: Alignment.topCenter,
-                          children: [
-                            Container(
-                              width: double.infinity,
-                              height: 20.h,
-                              decoration: BoxDecoration(
-                                color: const Color(0xff1A1A1A),
-                                borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(12.r),
-                                ),
-                              ),
-                              child: const Text(
-                                "Points",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Expanded(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                "assets/icons/point.svg",
-                                height: 20.h,
-                              ),
-                              SizedBox(
-                                width: 4.w,
-                              ),
-                              Text(
-                                "+$totalPoints",
-                                style: TextStyle(
-                                  color: const Color(0xff333333),
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                  InfoCard(
+                    title: "Points",
+                    iconPath: "assets/icons/point.svg",
+                    content: "+$totalPoints",
                   ),
-                  Container(
-                    width: 100.w,
-                    height: 75.h,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(12.r)),
-                        border: Border.all(color: const Color(0xffC5233A))),
-                    child: Column(
-                      children: [
-                        Stack(
-                          alignment: Alignment.topCenter,
-                          children: [
-                            Container(
-                              width: double.infinity,
-                              height: 20.h,
-                              decoration: BoxDecoration(
-                                color: const Color(0xff1A1A1A),
-                                borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(12.r),
-                                ),
-                              ),
-                              child: const Text(
-                                "Time",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Expanded(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                "assets/icons/time.svg",
-                                height: 20.h,
-                              ),
-                              SizedBox(
-                                width: 4.w,
-                              ),
-                              Text(
-                                timeRemaining,
-                                style: TextStyle(
-                                    color: const Color(0xff333333),
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.bold),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                  InfoCard(
+                    title: "Time",
+                    iconPath: "assets/icons/time.svg",
+                    content: timeRemaining,
                   ),
-                  Container(
-                    width: 100.w,
-                    height: 75.h,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(12.r)),
-                      border: Border.all(color: const Color(0xffC5233A)),
-                    ),
-                    child: Column(
-                      children: [
-                        Stack(
-                          alignment: Alignment.topCenter,
-                          children: [
-                            Container(
-                              width: double.infinity,
-                              height: 20.h,
-                              decoration: BoxDecoration(
-                                color: const Color(0xff1A1A1A),
-                                borderRadius: BorderRadius.vertical(
-                                  top: Radius.circular(12.r),
-                                ),
-                              ),
-                              child: const Text(
-                                "Score",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Expanded(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SvgPicture.asset(
-                                "assets/icons/score.svg",
-                                height: 20.h,
-                              ),
-                              SizedBox(
-                                width: 4.w,
-                              ),
-                              Text(
-                                "${scorePercentage.toStringAsFixed(0)}%",
-                                style: TextStyle(
-                                    color: const Color(0xff333333),
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.bold),
-                              )
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
+                  InfoCard(
+                    title: "Score",
+                    iconPath: "assets/icons/score.svg",
+                    content: "${scorePercentage.toStringAsFixed(0)}%",
                   ),
                 ],
               ),
@@ -274,19 +114,19 @@ class QuizDonePage extends StatelessWidget {
               padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: BlocListener<AuthBloc, AuthState>(
                 listener: (context, state) {
-                  if (state is ScoresUpdated && state is CollectionSynced) {
+                  if (state is ScoresUpdated || state is CollectionSynced) {
                     context.go('/home');
                   }
                 },
                 child: ElevatedButton(
-                  onPressed: () => {
+                  onPressed: () {
                     context.read<AuthBloc>().add(
                           UpdateScoresEvent(
                             req: ScoreUpdateRequestModel(scores: int.parse(totalPoints)),
                             id: userId!,
                           ),
-                        ),
-                    context.read<AuthBloc>().add(SyncCollectionEvent(id: userId)),
+                        );
+                    context.read<AuthBloc>().add(SyncCollectionEvent(id: userId));
                   },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
@@ -313,6 +153,80 @@ class QuizDonePage extends StatelessWidget {
             )
           ],
         ),
+      ),
+    );
+  }
+}
+
+class InfoCard extends StatelessWidget {
+  const InfoCard({
+    super.key,
+    required this.title,
+    required this.iconPath,
+    required this.content,
+  });
+
+  final String title;
+  final String iconPath;
+  final String content;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 100.w,
+      height: 75.h,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(12.r),
+        ),
+        border: Border.all(
+          color: const Color(0xffC5233A),
+        ),
+      ),
+      child: Column(
+        children: [
+          Container(
+            width: double.infinity,
+            height: 20.h,
+            decoration: BoxDecoration(
+              color: const Color(0xff1A1A1A),
+              borderRadius: BorderRadius.vertical(
+                top: Radius.circular(12.r),
+              ),
+            ),
+            child: Text(
+              title,
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          Expanded(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SvgPicture.asset(
+                  iconPath,
+                  height: 20.h,
+                ),
+                SizedBox(
+                  width: 4.w,
+                ),
+                Text(
+                  content,
+                  style: TextStyle(
+                    color: const Color(0xff333333),
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }

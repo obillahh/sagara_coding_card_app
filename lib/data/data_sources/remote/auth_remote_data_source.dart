@@ -174,22 +174,12 @@ class AuthRemoteDataSource {
       {required ScoreUpdateRequestModel request, required int id}) async {
     try {
       final String url = '${ApiConstant.baseUrlApi}/$id/update-score';
-      final token = await AuthLocalDataSource().getToken();
-      if (token != null) {
-        final result = await client.put(
-          url,
-          data: scoreUpdateRequestModelToJson(request),
-          options: Options(
-            headers: {
-              'Authorization': 'Bearer $token',
-            },
-          ),
-        );
-        final regisData = UserResponseModel.fromJson(result.data);
-        return regisData;
-      } else {
-        return UserResponseModel();
-      }
+      final result = await client.put(
+        url,
+        data: scoreUpdateRequestModelToJson(request),
+      );
+      final regisData = UserResponseModel.fromJson(result.data);
+      return regisData;
     } catch (e) {
       inspect('Error: $e');
       rethrow;

@@ -133,12 +133,12 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
                         cardId: cardId,
                       ),
                     );
-                // context.read<CardBloc>().add(
-                //       CardEvent.addCardCollectionEvent(
-                //         cardId: cardId,
-                //         userId: userId,
-                //       ),
-                //     );
+                context.read<CardBloc>().add(
+                      CardEvent.addCardCollectionEvent(
+                        cardId: cardId,
+                        userId: userId,
+                      ),
+                    );
                 context.goNamed(
                   RouterConstant.detailScanner,
                   extra: cardId,
