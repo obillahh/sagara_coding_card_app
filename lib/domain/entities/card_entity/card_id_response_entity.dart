@@ -1,386 +1,229 @@
-class CardIdResponseEntity {
-  final CardIdResponseDataEntity data;
-  final CardIdResponseMetaEntity meta;
+// To parse this JSON data, do
+//
+//     final cardIdResponseEntity = cardIdResponseEntityFromJson(jsonString);
 
-  CardIdResponseEntity({
-    required this.data,
-    required this.meta,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'dart:convert';
+
+part 'card_id_response_entity.freezed.dart';
+part 'card_id_response_entity.g.dart';
+
+CardIdResponseEntity cardIdResponseEntityFromJson(String str) =>
+    CardIdResponseEntity.fromJson(json.decode(str));
+
+String cardIdResponseEntityToJson(CardIdResponseEntity data) => json.encode(data.toJson());
+
+@freezed
+class CardIdResponseEntity with _$CardIdResponseEntity {
+  const factory CardIdResponseEntity({
+    @JsonKey(name: "data") required CardIdDataEntity data,
+    @JsonKey(name: "meta") required CardIdMetaEntity meta,
+  }) = _CardIdResponseEntity;
 
   factory CardIdResponseEntity.fromJson(Map<String, dynamic> json) =>
-      CardIdResponseEntity(
-        data: CardIdResponseDataEntity.fromJson(json["data"]),
-        meta: CardIdResponseMetaEntity.fromJson(json["meta"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "data": data.toJson(),
-        "meta": meta.toJson(),
-      };
+      _$CardIdResponseEntityFromJson(json);
 }
 
-class CardIdResponseDataEntity {
-  final int id;
-  final CardIdDataAttributesEntity attributes;
+@freezed
+class CardIdDataEntity with _$CardIdDataEntity {
+  const factory CardIdDataEntity({
+    @JsonKey(name: "id") required int id,
+    @JsonKey(name: "attributes") required CardIdDataAttributesEntity attributes,
+  }) = _CardIdDataEntity;
 
-  CardIdResponseDataEntity({
-    required this.id,
-    required this.attributes,
-  });
-
-  factory CardIdResponseDataEntity.fromJson(Map<String, dynamic> json) =>
-      CardIdResponseDataEntity(
-        id: json["id"],
-        attributes: CardIdDataAttributesEntity.fromJson(json["attributes"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "attributes": attributes.toJson(),
-      };
+  factory CardIdDataEntity.fromJson(Map<String, dynamic> json) => _$CardIdDataEntityFromJson(json);
 }
 
-class CardIdDataAttributesEntity {
-  final String name;
-  final String role;
-  final String description;
-  final String level;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final DateTime publishedAt;
-  final AvatarCardIdResponseEntity avatarCard;
-  final QuizCardResponseEntity quizzes;
-
-  CardIdDataAttributesEntity({
-    required this.name,
-    required this.role,
-    required this.description,
-    required this.level,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.publishedAt,
-    required this.avatarCard,
-    required this.quizzes,
-  });
+@freezed
+class CardIdDataAttributesEntity with _$CardIdDataAttributesEntity {
+  const factory CardIdDataAttributesEntity({
+    @JsonKey(name: "name") required String name,
+    @JsonKey(name: "role") required String role,
+    @JsonKey(name: "description") required String description,
+    @JsonKey(name: "level") required String level,
+    @JsonKey(name: "createdAt") required DateTime createdAt,
+    @JsonKey(name: "updatedAt") required DateTime updatedAt,
+    @JsonKey(name: "publishedAt") required DateTime publishedAt,
+    @JsonKey(name: "avatar_card") required CardIdDataAttributesAvatarCardEntity avatarCard,
+    @JsonKey(name: "quizzes") required CardIdDataAttributesQuizzesEntity quizzes,
+    @JsonKey(name: "users") required CardIdDataAttributesUsersEntity users,
+  }) = _CardIdDataAttributesEntity;
 
   factory CardIdDataAttributesEntity.fromJson(Map<String, dynamic> json) =>
-      CardIdDataAttributesEntity(
-        name: json["name"],
-        role: json["role"],
-        description: json["description"],
-        level: json["level"],
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
-        publishedAt: DateTime.parse(json["publishedAt"]),
-        avatarCard: AvatarCardIdResponseEntity.fromJson(json["avatar_card"]),
-        quizzes: QuizCardResponseEntity.fromJson(json["quizzes"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "name": name,
-        "role": role,
-        "description": description,
-        "level": level,
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-        "publishedAt": publishedAt.toIso8601String(),
-        "avatar_card": avatarCard.toJson(),
-        "quizzes": quizzes.toJson(),
-      };
+      _$CardIdDataAttributesEntityFromJson(json);
 }
 
-class AvatarCardIdResponseEntity {
-  final AvatarCardIdDataEntity data;
+@freezed
+class CardIdDataAttributesAvatarCardEntity with _$CardIdDataAttributesAvatarCardEntity {
+  const factory CardIdDataAttributesAvatarCardEntity({
+    @JsonKey(name: "data") required CardIdDataAttributesAvatarCardDataEntity data,
+  }) = _CardIdDataAttributesAvatarCardEntity;
 
-  AvatarCardIdResponseEntity({
-    required this.data,
-  });
-
-  factory AvatarCardIdResponseEntity.fromJson(Map<String, dynamic> json) =>
-      AvatarCardIdResponseEntity(
-        data: AvatarCardIdDataEntity.fromJson(json["data"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "data": data.toJson(),
-      };
+  factory CardIdDataAttributesAvatarCardEntity.fromJson(Map<String, dynamic> json) =>
+      _$CardIdDataAttributesAvatarCardEntityFromJson(json);
 }
 
-class AvatarCardIdDataEntity {
-  final int id;
-  final AvatarCardIdAttributesEntity attributes;
+@freezed
+class CardIdDataAttributesAvatarCardDataEntity with _$CardIdDataAttributesAvatarCardDataEntity {
+  const factory CardIdDataAttributesAvatarCardDataEntity({
+    @JsonKey(name: "id") required int id,
+    @JsonKey(name: "attributes")
+    required CardIdDataAttributesAvatarCardDataAttributesEntity attributes,
+  }) = _CardIdDataAttributesAvatarCardDataEntity;
 
-  AvatarCardIdDataEntity({
-    required this.id,
-    required this.attributes,
-  });
-
-  factory AvatarCardIdDataEntity.fromJson(Map<String, dynamic> json) =>
-      AvatarCardIdDataEntity(
-        id: json["id"],
-        attributes: AvatarCardIdAttributesEntity.fromJson(json["attributes"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "attributes": attributes.toJson(),
-      };
+  factory CardIdDataAttributesAvatarCardDataEntity.fromJson(Map<String, dynamic> json) =>
+      _$CardIdDataAttributesAvatarCardDataEntityFromJson(json);
 }
 
-class AvatarCardIdAttributesEntity {
-  final String name;
-  final dynamic alternativeText;
-  final dynamic caption;
-  final int width;
-  final int height;
-  final FormatsIdEntity formats;
-  final String hash;
-  final String ext;
-  final String mime;
-  final double size;
-  final String url;
-  final dynamic previewUrl;
-  final String provider;
-  final ProviderMetadataEntity providerMetadata;
-  final DateTime createdAt;
-  final DateTime updatedAt;
+@freezed
+class CardIdDataAttributesAvatarCardDataAttributesEntity
+    with _$CardIdDataAttributesAvatarCardDataAttributesEntity {
+  const factory CardIdDataAttributesAvatarCardDataAttributesEntity({
+    @JsonKey(name: "name") required String name,
+    @JsonKey(name: "alternativeText") required dynamic alternativeText,
+    @JsonKey(name: "caption") required dynamic caption,
+    @JsonKey(name: "width") required int width,
+    @JsonKey(name: "height") required int height,
+    @JsonKey(name: "formats")
+    required CardIdDataAttributesAvatarCardDataAttributesFormatsEntity formats,
+    @JsonKey(name: "hash") required String hash,
+    @JsonKey(name: "ext") required String ext,
+    @JsonKey(name: "mime") required String mime,
+    @JsonKey(name: "size") required double size,
+    @JsonKey(name: "url") required String url,
+    @JsonKey(name: "previewUrl") required dynamic previewUrl,
+    @JsonKey(name: "provider") required String provider,
+    @JsonKey(name: "provider_metadata") required dynamic providerMetadata,
+    @JsonKey(name: "createdAt") required DateTime createdAt,
+    @JsonKey(name: "updatedAt") required DateTime updatedAt,
+    @JsonKey(name: "isUrlSigned") required bool isUrlSigned,
+  }) = _CardIdDataAttributesAvatarCardDataAttributesEntity;
 
-  AvatarCardIdAttributesEntity({
-    required this.name,
-    required this.alternativeText,
-    required this.caption,
-    required this.width,
-    required this.height,
-    required this.formats,
-    required this.hash,
-    required this.ext,
-    required this.mime,
-    required this.size,
-    required this.url,
-    required this.previewUrl,
-    required this.provider,
-    required this.providerMetadata,
-    required this.createdAt,
-    required this.updatedAt,
-  });
-
-  factory AvatarCardIdAttributesEntity.fromJson(Map<String, dynamic> json) =>
-      AvatarCardIdAttributesEntity(
-        name: json["name"],
-        alternativeText: json["alternativeText"],
-        caption: json["caption"],
-        width: json["width"],
-        height: json["height"],
-        formats: FormatsIdEntity.fromJson(json["formats"]),
-        hash: json["hash"],
-        ext: json["ext"],
-        mime: json["mime"],
-        size: json["size"].toDouble(),
-        url: json["url"],
-        previewUrl: json["previewUrl"],
-        provider: json["provider"],
-        providerMetadata: ProviderMetadataEntity.fromJson(json["provider_metadata"]),
-        createdAt: DateTime.parse(json["createdAt"]),
-        updatedAt: DateTime.parse(json["updatedAt"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "name": name,
-        "alternativeText": alternativeText,
-        "caption": caption,
-        "width": width,
-        "height": height,
-        "formats": formats.toJson(),
-        "hash": hash,
-        "ext": ext,
-        "mime": mime,
-        "size": size,
-        "url": url,
-        "previewUrl": previewUrl,
-        "provider": provider,
-        "provider_metadata": providerMetadata.toJson(),
-        "createdAt": createdAt.toIso8601String(),
-        "updatedAt": updatedAt.toIso8601String(),
-      };
+  factory CardIdDataAttributesAvatarCardDataAttributesEntity.fromJson(Map<String, dynamic> json) =>
+      _$CardIdDataAttributesAvatarCardDataAttributesEntityFromJson(json);
 }
 
-class FormatsIdEntity {
-  final FormatIdDataEntity small;
-  final FormatIdDataEntity thumbnail;
+@freezed
+class CardIdDataAttributesAvatarCardDataAttributesFormatsEntity
+    with _$CardIdDataAttributesAvatarCardDataAttributesFormatsEntity {
+  const factory CardIdDataAttributesAvatarCardDataAttributesFormatsEntity({
+    @JsonKey(name: "small")
+    required CardIdDataAttributesAvatarCardDataAttributesFormatsSizeEntity small,
+    @JsonKey(name: "thumbnail")
+    required CardIdDataAttributesAvatarCardDataAttributesFormatsSizeEntity thumbnail,
+  }) = _CardIdDataAttributesAvatarCardDataAttributesFormatsEntity;
 
-  FormatsIdEntity({
-    required this.small,
-    required this.thumbnail,
-  });
-
-  factory FormatsIdEntity.fromJson(Map<String, dynamic> json) => FormatsIdEntity(
-        small: FormatIdDataEntity.fromJson(json["small"]),
-        thumbnail: FormatIdDataEntity.fromJson(json["thumbnail"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "small": small.toJson(),
-        "thumbnail": thumbnail.toJson(),
-      };
+  factory CardIdDataAttributesAvatarCardDataAttributesFormatsEntity.fromJson(
+          Map<String, dynamic> json) =>
+      _$CardIdDataAttributesAvatarCardDataAttributesFormatsEntityFromJson(json);
 }
 
-class FormatIdDataEntity {
-  final String ext;
-  final String url;
-  final String hash;
-  final String mime;
-  final String name;
-  final dynamic path;
-  final double size;
-  final int width;
-  final int height;
-  final ProviderMetadataEntity providerMetadata;
+@freezed
+class CardIdDataAttributesAvatarCardDataAttributesFormatsSizeEntity
+    with _$CardIdDataAttributesAvatarCardDataAttributesFormatsSizeEntity {
+  const factory CardIdDataAttributesAvatarCardDataAttributesFormatsSizeEntity({
+    @JsonKey(name: "ext") required String ext,
+    @JsonKey(name: "url") required String url,
+    @JsonKey(name: "hash") required String hash,
+    @JsonKey(name: "mime") required String mime,
+    @JsonKey(name: "name") required String name,
+    @JsonKey(name: "path") required dynamic path,
+    @JsonKey(name: "size") required double size,
+    @JsonKey(name: "width") required int width,
+    @JsonKey(name: "height") required int height,
+    @JsonKey(name: "isUrlSigned") required bool isUrlSigned,
+  }) = _CardIdDataAttributesAvatarCardDataAttributesFormatsSizeEntity;
 
-  FormatIdDataEntity({
-    required this.ext,
-    required this.url,
-    required this.hash,
-    required this.mime,
-    required this.name,
-    required this.path,
-    required this.size,
-    required this.width,
-    required this.height,
-    required this.providerMetadata,
-  });
-
-  factory FormatIdDataEntity.fromJson(Map<String, dynamic> json) => FormatIdDataEntity(
-        ext: json["ext"],
-        url: json["url"],
-        hash: json["hash"],
-        mime: json["mime"],
-        name: json["name"],
-        path: json["path"],
-        size: json["size"].toDouble(),
-        width: json["width"],
-        height: json["height"],
-        providerMetadata: ProviderMetadataEntity.fromJson(json["provider_metadata"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "ext": ext,
-        "url": url,
-        "hash": hash,
-        "mime": mime,
-        "name": name,
-        "path": path,
-        "size": size,
-        "width": width,
-        "height": height,
-        "provider_metadata": providerMetadata.toJson(),
-      };
+  factory CardIdDataAttributesAvatarCardDataAttributesFormatsSizeEntity.fromJson(
+          Map<String, dynamic> json) =>
+      _$CardIdDataAttributesAvatarCardDataAttributesFormatsSizeEntityFromJson(json);
 }
 
-class ProviderMetadataEntity {
-  final String publicId;
-  final String resourceType;
+@freezed
+class CardIdDataAttributesQuizzesEntity with _$CardIdDataAttributesQuizzesEntity {
+  const factory CardIdDataAttributesQuizzesEntity({
+    @JsonKey(name: "data") required List<CardIdDataAttributesQuizzesDataEntity> data,
+  }) = _CardIdDataAttributesQuizzesEntity;
 
-  ProviderMetadataEntity({
-    required this.publicId,
-    required this.resourceType,
-  });
-
-  factory ProviderMetadataEntity.fromJson(Map<String, dynamic> json) =>
-      ProviderMetadataEntity(
-        publicId: json["public_id"],
-        resourceType: json["resource_type"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "public_id": publicId,
-        "resource_type": resourceType,
-      };
+  factory CardIdDataAttributesQuizzesEntity.fromJson(Map<String, dynamic> json) =>
+      _$CardIdDataAttributesQuizzesEntityFromJson(json);
 }
 
-class CardIdResponseMetaEntity {
-  CardIdResponseMetaEntity();
+@freezed
+class CardIdDataAttributesQuizzesDataEntity with _$CardIdDataAttributesQuizzesDataEntity {
+  const factory CardIdDataAttributesQuizzesDataEntity({
+    @JsonKey(name: "id") required int id,
+    @JsonKey(name: "attributes")
+    required CardIdDataAttributesQuizzesDataAttributesEntity attributes,
+  }) = _CardIdDataAttributesQuizzesDataEntity;
 
-  factory CardIdResponseMetaEntity.fromJson(Map<String, dynamic> json) =>
-      CardIdResponseMetaEntity();
-
-  Map<String, dynamic> toJson() => {};
+  factory CardIdDataAttributesQuizzesDataEntity.fromJson(Map<String, dynamic> json) =>
+      _$CardIdDataAttributesQuizzesDataEntityFromJson(json);
 }
 
-class QuizCardResponseEntity {
-  final List<QuizCardDataEntity> data;
+@freezed
+class CardIdDataAttributesQuizzesDataAttributesEntity
+    with _$CardIdDataAttributesQuizzesDataAttributesEntity {
+  const factory CardIdDataAttributesQuizzesDataAttributesEntity({
+    @JsonKey(name: "quiz_question") required String quizQuestion,
+    @JsonKey(name: "option_one") required String optionOne,
+    @JsonKey(name: "option_two") required String optionTwo,
+    @JsonKey(name: "option_three") required String optionThree,
+    @JsonKey(name: "option_four") required String optionFour,
+    @JsonKey(name: "correct_option") required String correctOption,
+    @JsonKey(name: "createdAt") required DateTime createdAt,
+    @JsonKey(name: "updatedAt") required DateTime updatedAt,
+    @JsonKey(name: "publishedAt") required DateTime publishedAt,
+    @JsonKey(name: "score") required int score,
+  }) = _CardIdDataAttributesQuizzesDataAttributesEntity;
 
-  QuizCardResponseEntity({
-    required this.data,
-  });
-
-  factory QuizCardResponseEntity.fromJson(Map<String, dynamic> json) =>
-      QuizCardResponseEntity(
-        data: List<QuizCardDataEntity>.from(
-            json["data"].map((x) => QuizCardDataEntity.fromJson(x))),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "data": List<dynamic>.from(data.map((x) => x.toJson())),
-      };
+  factory CardIdDataAttributesQuizzesDataAttributesEntity.fromJson(Map<String, dynamic> json) =>
+      _$CardIdDataAttributesQuizzesDataAttributesEntityFromJson(json);
 }
 
-class QuizCardDataEntity {
-  final int id;
-  final QuizCardDataAttributesEntity attributes;
+@freezed
+class CardIdDataAttributesUsersEntity with _$CardIdDataAttributesUsersEntity {
+  const factory CardIdDataAttributesUsersEntity({
+    @JsonKey(name: "data") required List<CardIdDataAttributesUsersDataEntity> data,
+  }) = _CardIdDataAttributesUsersEntity;
 
-  QuizCardDataEntity({
-    required this.id,
-    required this.attributes,
-  });
-
-  factory QuizCardDataEntity.fromJson(Map<String, dynamic> json) => QuizCardDataEntity(
-        id: json["id"],
-        attributes: QuizCardDataAttributesEntity.fromJson(json["attributes"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "attributes": attributes.toJson(),
-      };
+  factory CardIdDataAttributesUsersEntity.fromJson(Map<String, dynamic> json) =>
+      _$CardIdDataAttributesUsersEntityFromJson(json);
 }
 
-class QuizCardDataAttributesEntity {
-  final String quizQuestion;
-  final String optionOne;
-  final String optionTwo;
-  final String optionThree;
-  final String optionFour;
-  final String correctOption;
-  final int score;
+@freezed
+class CardIdDataAttributesUsersDataEntity with _$CardIdDataAttributesUsersDataEntity {
+  const factory CardIdDataAttributesUsersDataEntity({
+    @JsonKey(name: "id") required int id,
+    @JsonKey(name: "attributes") required CardIdDataAttributesUsersDataAttributesEntity attributes,
+  }) = _CardIdDataAttributesUsersDataEntity;
 
-  QuizCardDataAttributesEntity({
-    required this.quizQuestion,
-    required this.optionOne,
-    required this.optionTwo,
-    required this.optionThree,
-    required this.optionFour,
-    required this.correctOption,
-    required this.score,
-  });
+  factory CardIdDataAttributesUsersDataEntity.fromJson(Map<String, dynamic> json) =>
+      _$CardIdDataAttributesUsersDataEntityFromJson(json);
+}
 
-  factory QuizCardDataAttributesEntity.fromJson(Map<String, dynamic> json) =>
-      QuizCardDataAttributesEntity(
-        quizQuestion: json["quiz_question"],
-        optionOne: json["option_one"],
-        optionTwo: json["option_two"],
-        optionThree: json["option_three"],
-        optionFour: json["option_four"],
-        correctOption: json["correct_option"],
-        score: json["score"],
-      );
+@freezed
+class CardIdDataAttributesUsersDataAttributesEntity
+    with _$CardIdDataAttributesUsersDataAttributesEntity {
+  const factory CardIdDataAttributesUsersDataAttributesEntity({
+    @JsonKey(name: "username") required String username,
+    @JsonKey(name: "email") required String email,
+    @JsonKey(name: "provider") required String provider,
+    @JsonKey(name: "confirmed") required bool confirmed,
+    @JsonKey(name: "blocked") required bool blocked,
+    @JsonKey(name: "collection_card") required int collectionCard,
+    @JsonKey(name: "createdAt") required DateTime createdAt,
+    @JsonKey(name: "updatedAt") required DateTime updatedAt,
+    @JsonKey(name: "scores") required int scores,
+  }) = _CardIdDataAttributesUsersDataAttributesEntity;
 
-  Map<String, dynamic> toJson() => {
-        "quiz_question": quizQuestion,
-        "option_one": optionOne,
-        "option_two": optionTwo,
-        "option_three": optionThree,
-        "option_four": optionFour,
-        "correct_option": correctOption,
-        "score": score,
-      };
+  factory CardIdDataAttributesUsersDataAttributesEntity.fromJson(Map<String, dynamic> json) =>
+      _$CardIdDataAttributesUsersDataAttributesEntityFromJson(json);
+}
+
+@freezed
+class CardIdMetaEntity with _$CardIdMetaEntity {
+  const factory CardIdMetaEntity() = _CardIdMetaEntity;
+
+  factory CardIdMetaEntity.fromJson(Map<String, dynamic> json) => _$CardIdMetaEntityFromJson(json);
 }

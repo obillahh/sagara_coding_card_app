@@ -71,67 +71,74 @@ class _DetailScannerScreenPageState extends State<DetailScannerScreenPage>
       body: BlocBuilder<CardBloc, CardState>(
         builder: (context, state) {
           return state.when(
-            initial: () {
-              return const SizedBox();
-            },
-            loading: () {
-              return const Center(child: CircularProgressIndicator(color: AppColors.primary));
-            },
+            initial: () => const SizedBox(),
+            loading: () => const Center(child: CircularProgressIndicator(color: AppColors.primary)),
             success: (cardList, card, userData, checkCard) {
+              if (card == null) {
+                return Center(
+                  child: Text(
+                    'Card data not found.',
+                    style: TextStyle(
+                      color: AppColors.text,
+                      fontSize: 18.sp,
+                    ),
+                  ),
+                );
+              }
               return SizedBox(
-                width: double.infinity.w,
-                height: double.infinity.h,
+                width: double.infinity,
+                height: double.infinity,
                 child: Align(
                   alignment: Alignment.topCenter,
                   child: Image.network(
-                    card!.attributes.avatarCard.data.attributes.url,
+                    card.attributes.avatarCard.data.attributes.url,
                     fit: BoxFit.fitWidth,
-                    width: double.infinity.w,
                   ),
                 ),
               );
             },
-            failure: (error) {
-              return Center(child: Text(error));
-            },
+            failure: (error) => Center(child: Text(error)),
           );
         },
       ),
       bottomSheet: BlocBuilder<CardBloc, CardState>(
         builder: (context, state) {
           return state.when(
-            initial: () {
-              return const SizedBox();
-            },
+            initial: () => const SizedBox(),
             loading: () {
               return BottomSheet(
                 animationController: _animationController,
                 enableDrag: true,
                 showDragHandle: true,
                 backgroundColor: const Color(0xff333030),
-                onClosing: () {
-                  context.pop();
-                },
+                onClosing: () {},
                 builder: (context) {
                   return SizedBox(
                     height: 260.h,
-                    child: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                    child: const Center(child: CircularProgressIndicator()),
                   );
                 },
               );
             },
             success: (cardList, card, userData, checkCard) {
+              if (card == null) {
+                return SizedBox(
+                  height: 260.h,
+                  child: const Center(
+                    child: Text(
+                      'No card data available.',
+                      style: TextStyle(color: AppColors.text),
+                    ),
+                  ),
+                );
+              }
               return DetailCardSheetWidget(
                 animationController: _animationController,
-                card: card!,
+                card: card,
                 isFromScanner: true,
               );
             },
-            failure: (error) {
-              return Center(child: Text(error));
-            },
+            failure: (error) => Center(child: Text(error)),
           );
         },
       ),

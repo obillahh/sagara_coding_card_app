@@ -6,7 +6,7 @@ class CardState with _$CardState {
   const factory CardState.loading() = _CardLoadingState;
   const factory CardState.success({
     List<CardAlbumResponseEntity>? cardList,
-    CardIdResponseDataEntity? card,
+    CardIdDataEntity? card,
     UserDataResponseEntity? userData,
     CheckCardResponseEntity? checkCard,
   }) = _CardSuccessState;

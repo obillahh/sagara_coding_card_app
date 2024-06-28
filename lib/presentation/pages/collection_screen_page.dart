@@ -149,7 +149,7 @@ class _CollectionScreenPageState extends State<CollectionScreenPage> {
                                   height: 180.h,
                                   width: 100.w,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(4),
+                                    borderRadius: BorderRadius.circular(4.r),
                                     color: AppColors.primary,
                                   ),
                                 ),
@@ -159,7 +159,7 @@ class _CollectionScreenPageState extends State<CollectionScreenPage> {
                           );
                         },
                         success: (cardList, card, userData, checkCard) {
-                          if (cardList == null) {
+                          if (cardList == null || cardList.isEmpty) {
                             return Center(
                               child: Text(
                                 'No cards available.',

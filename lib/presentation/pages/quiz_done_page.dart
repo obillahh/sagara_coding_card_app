@@ -282,8 +282,9 @@ class QuizDonePage extends StatelessWidget {
                   onPressed: () => {
                     context.read<AuthBloc>().add(
                           UpdateScoresEvent(
-                              req: ScoreUpdateRequestModel(scores: int.parse(totalPoints)),
-                              id: userId!),
+                            req: ScoreUpdateRequestModel(scores: int.parse(totalPoints)),
+                            id: userId!,
+                          ),
                         ),
                     context.read<AuthBloc>().add(SyncCollectionEvent(id: userId)),
                   },

@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/material.dart';
 import 'package:sagara_coding_card_application/data/data_sources/remote/card_remote_data_source.dart';
 import 'package:sagara_coding_card_application/data/models/card_model/card_id_response_model.dart';
 import 'package:sagara_coding_card_application/data/models/card_model/cards_list_response_model.dart';
@@ -133,10 +134,10 @@ class CardImplRepository extends CardRepository {
   }
 
   @override
-  Future<CardIdResponseDataEntity> getCardById({required int id}) async {
+  Future<CardIdDataEntity> getCardById({required int id}) async {
     final response = await cardRemoteDataSource.getCardById(id);
 
-    final data = CardIdResponseDataEntity(
+    final data = CardIdDataEntity(
       id: response.data?.id ?? 0,
       attributes: CardIdDataAttributesEntity(
         name: response.data?.attributes?.name ?? '',
@@ -146,18 +147,18 @@ class CardImplRepository extends CardRepository {
         createdAt: response.data?.attributes?.createdAt ?? DateTime.now(),
         updatedAt: response.data?.attributes?.updatedAt ?? DateTime.now(),
         publishedAt: response.data?.attributes?.publishedAt ?? DateTime.now(),
-        avatarCard: AvatarCardIdResponseEntity(
-          data: AvatarCardIdDataEntity(
+        avatarCard: CardIdDataAttributesAvatarCardEntity(
+          data: CardIdDataAttributesAvatarCardDataEntity(
             id: response.data?.attributes?.avatarCard?.data?.id ?? 0,
-            attributes: AvatarCardIdAttributesEntity(
+            attributes: CardIdDataAttributesAvatarCardDataAttributesEntity(
               name: response.data?.attributes?.avatarCard?.data?.attributes?.name ?? '',
               alternativeText:
                   response.data?.attributes?.avatarCard?.data?.attributes?.alternativeText ?? '',
               caption: response.data?.attributes?.avatarCard?.data?.attributes?.caption ?? '',
               width: response.data?.attributes?.avatarCard?.data?.attributes?.width ?? 0,
               height: response.data?.attributes?.avatarCard?.data?.attributes?.height ?? 0,
-              formats: FormatsIdEntity(
-                small: FormatIdDataEntity(
+              formats: CardIdDataAttributesAvatarCardDataAttributesFormatsEntity(
+                small: CardIdDataAttributesAvatarCardDataAttributesFormatsSizeEntity(
                   ext: response
                           .data?.attributes?.avatarCard?.data?.attributes?.formats?.small?.ext ??
                       '',
@@ -185,16 +186,11 @@ class CardImplRepository extends CardRepository {
                   height: response
                           .data?.attributes?.avatarCard?.data?.attributes?.formats?.small?.height ??
                       0,
-                  providerMetadata: ProviderMetadataEntity(
-                    publicId: response.data?.attributes?.avatarCard?.data?.attributes?.formats
-                            ?.small?.providerMetadata?.publicId ??
-                        '',
-                    resourceType: response.data?.attributes?.avatarCard?.data?.attributes?.formats
-                            ?.small?.providerMetadata?.resourceType ??
-                        '',
-                  ),
+                  isUrlSigned: response.data?.attributes?.avatarCard?.data?.attributes?.formats
+                          ?.small?.isUrlSigned ??
+                      false,
                 ),
-                thumbnail: FormatIdDataEntity(
+                thumbnail: CardIdDataAttributesAvatarCardDataAttributesFormatsSizeEntity(
                   ext: response.data?.attributes?.avatarCard?.data?.attributes?.formats?.thumbnail
                           ?.ext ??
                       '',
@@ -222,14 +218,9 @@ class CardImplRepository extends CardRepository {
                   height: response.data?.attributes?.avatarCard?.data?.attributes?.formats
                           ?.thumbnail?.height ??
                       0,
-                  providerMetadata: ProviderMetadataEntity(
-                    publicId: response.data?.attributes?.avatarCard?.data?.attributes?.formats
-                            ?.thumbnail?.providerMetadata?.publicId ??
-                        '',
-                    resourceType: response.data?.attributes?.avatarCard?.data?.attributes?.formats
-                            ?.thumbnail?.providerMetadata?.resourceType ??
-                        '',
-                  ),
+                  isUrlSigned: response.data?.attributes?.avatarCard?.data?.attributes?.formats
+                          ?.thumbnail?.isUrlSigned ??
+                      false,
                 ),
               ),
               hash: response.data?.attributes?.avatarCard?.data?.attributes?.hash ?? '',
@@ -239,38 +230,55 @@ class CardImplRepository extends CardRepository {
               url: response.data?.attributes?.avatarCard?.data?.attributes?.url ?? '',
               previewUrl: response.data?.attributes?.avatarCard?.data?.attributes?.previewUrl ?? '',
               provider: response.data?.attributes?.avatarCard?.data?.attributes?.provider ?? '',
-              providerMetadata: ProviderMetadataEntity(
-                publicId: response.data?.attributes?.avatarCard?.data?.attributes?.providerMetadata
-                        ?.publicId ??
-                    '',
-                resourceType: response.data?.attributes?.avatarCard?.data?.attributes
-                        ?.providerMetadata?.resourceType ??
-                    '',
-              ),
+              providerMetadata:
+                  response.data?.attributes?.avatarCard?.data?.attributes?.providerMetadata ?? '',
               createdAt: response.data?.attributes?.avatarCard?.data?.attributes?.createdAt ??
                   DateTime.now(),
               updatedAt: response.data?.attributes?.avatarCard?.data?.attributes?.updatedAt ??
                   DateTime.now(),
+              isUrlSigned:
+                  response.data?.attributes?.avatarCard?.data?.attributes?.isUrlSigned ?? false,
             ),
           ),
         ),
-        quizzes: QuizCardResponseEntity(
-          data: List<QuizCardDataModel>.from(response.data?.attributes?.quizzes?.data ?? [])
-              .map(
-                (e) => QuizCardDataEntity(
-                  id: e.id ?? 0,
-                  attributes: QuizCardDataAttributesEntity(
-                    quizQuestion: e.attributes?.quizQuestion ?? '',
-                    optionOne: e.attributes?.optionOne ?? '',
-                    optionTwo: e.attributes?.optionTwo ?? '',
-                    optionThree: e.attributes?.optionThree ?? '',
-                    optionFour: e.attributes?.optionFour ?? '',
-                    correctOption: e.attributes?.correctOption ?? '',
-                    score: e.attributes?.score ?? 0,
-                  ),
-                ),
-              )
-              .toList(),
+        quizzes: CardIdDataAttributesQuizzesEntity(
+          data: response.data?.attributes?.quizzes?.data
+                  ?.map((e) => CardIdDataAttributesQuizzesDataEntity(
+                        id: e.id ?? 0,
+                        attributes: CardIdDataAttributesQuizzesDataAttributesEntity(
+                          quizQuestion: e.attributes?.quizQuestion ?? '',
+                          optionOne: e.attributes?.optionOne ?? '',
+                          optionTwo: e.attributes?.optionTwo ?? '',
+                          optionThree: e.attributes?.optionThree ?? '',
+                          optionFour: e.attributes?.optionFour ?? '',
+                          correctOption: e.attributes?.correctOption ?? '',
+                          createdAt: e.attributes?.createdAt ?? DateTime.now(),
+                          updatedAt: e.attributes?.updatedAt ?? DateTime.now(),
+                          publishedAt: e.attributes?.publishedAt ?? DateTime.now(),
+                          score: e.attributes?.score ?? 0,
+                        ),
+                      ))
+                  .toList() ??
+              [],
+        ),
+        users: CardIdDataAttributesUsersEntity(
+          data: response.data?.attributes?.users?.data
+                  ?.map((e) => CardIdDataAttributesUsersDataEntity(
+                        id: e.id ?? 0,
+                        attributes: CardIdDataAttributesUsersDataAttributesEntity(
+                          username: e.attributes?.username ?? '',
+                          email: e.attributes?.email ?? '',
+                          provider: e.attributes?.provider ?? '',
+                          confirmed: e.attributes?.confirmed ?? false,
+                          blocked: e.attributes?.blocked ?? false,
+                          collectionCard: e.attributes?.collectionCard ?? 0,
+                          createdAt: e.attributes?.createdAt ?? DateTime.now(),
+                          updatedAt: e.attributes?.updatedAt ?? DateTime.now(),
+                          scores: e.attributes?.scores ?? 0,
+                        ),
+                      ))
+                  .toList() ??
+              [],
         ),
       ),
     );
@@ -279,146 +287,153 @@ class CardImplRepository extends CardRepository {
   }
 
   @override
-  Future<CardIdResponseDataEntity?> getCardByScanner({required String url}) async {
+  Future<CardIdDataEntity?> getCardByScanner({required String url}) async {
     final response = await cardRemoteDataSource.getCardByScanner(url);
     if (response.data == null) {
       return null;
     }
-    final data = CardIdResponseDataEntity(
-      id: response.data!.id ?? 0,
+    final data = CardIdDataEntity(
+      id: response.data?.id ?? 0,
       attributes: CardIdDataAttributesEntity(
-        name: response.data!.attributes?.name ?? '',
-        role: response.data!.attributes?.role ?? '',
-        description: response.data!.attributes?.description ?? '',
-        level: response.data!.attributes?.level ?? '',
-        createdAt: response.data!.attributes?.createdAt ?? DateTime.now(),
-        updatedAt: response.data!.attributes?.updatedAt ?? DateTime.now(),
-        publishedAt: response.data!.attributes?.publishedAt ?? DateTime.now(),
-        avatarCard: AvatarCardIdResponseEntity(
-          data: AvatarCardIdDataEntity(
-            id: response.data!.attributes?.avatarCard?.data?.id ?? 0,
-            attributes: AvatarCardIdAttributesEntity(
-              name: response.data!.attributes?.avatarCard?.data?.attributes?.name ?? '',
+        name: response.data?.attributes?.name ?? '',
+        role: response.data?.attributes?.role ?? '',
+        description: response.data?.attributes?.description ?? '',
+        level: response.data?.attributes?.level ?? '',
+        createdAt: response.data?.attributes?.createdAt ?? DateTime.now(),
+        updatedAt: response.data?.attributes?.updatedAt ?? DateTime.now(),
+        publishedAt: response.data?.attributes?.publishedAt ?? DateTime.now(),
+        avatarCard: CardIdDataAttributesAvatarCardEntity(
+          data: CardIdDataAttributesAvatarCardDataEntity(
+            id: response.data?.attributes?.avatarCard?.data?.id ?? 0,
+            attributes: CardIdDataAttributesAvatarCardDataAttributesEntity(
+              name: response.data?.attributes?.avatarCard?.data?.attributes?.name ?? '',
               alternativeText:
-                  response.data!.attributes?.avatarCard?.data?.attributes?.alternativeText ?? '',
-              caption: response.data!.attributes?.avatarCard?.data?.attributes?.caption ?? '',
-              width: response.data!.attributes?.avatarCard?.data?.attributes?.width ?? 0,
-              height: response.data!.attributes?.avatarCard?.data?.attributes?.height ?? 0,
-              formats: FormatsIdEntity(
-                small: FormatIdDataEntity(
+                  response.data?.attributes?.avatarCard?.data?.attributes?.alternativeText ?? '',
+              caption: response.data?.attributes?.avatarCard?.data?.attributes?.caption ?? '',
+              width: response.data?.attributes?.avatarCard?.data?.attributes?.width ?? 0,
+              height: response.data?.attributes?.avatarCard?.data?.attributes?.height ?? 0,
+              formats: CardIdDataAttributesAvatarCardDataAttributesFormatsEntity(
+                small: CardIdDataAttributesAvatarCardDataAttributesFormatsSizeEntity(
                   ext: response
-                          .data!.attributes?.avatarCard?.data?.attributes?.formats?.small?.ext ??
+                          .data?.attributes?.avatarCard?.data?.attributes?.formats?.small?.ext ??
                       '',
                   url: response
-                          .data!.attributes?.avatarCard?.data?.attributes?.formats?.small?.url ??
+                          .data?.attributes?.avatarCard?.data?.attributes?.formats?.small?.url ??
                       '',
                   hash: response
-                          .data!.attributes?.avatarCard?.data?.attributes?.formats?.small?.hash ??
+                          .data?.attributes?.avatarCard?.data?.attributes?.formats?.small?.hash ??
                       '',
                   mime: response
-                          .data!.attributes?.avatarCard?.data?.attributes?.formats?.small?.mime ??
+                          .data?.attributes?.avatarCard?.data?.attributes?.formats?.small?.mime ??
                       '',
                   name: response
-                          .data!.attributes?.avatarCard?.data?.attributes?.formats?.small?.name ??
+                          .data?.attributes?.avatarCard?.data?.attributes?.formats?.small?.name ??
                       '',
                   path: response
-                          .data!.attributes?.avatarCard?.data?.attributes?.formats?.small?.path ??
+                          .data?.attributes?.avatarCard?.data?.attributes?.formats?.small?.path ??
                       '',
                   size: response
-                          .data!.attributes?.avatarCard?.data?.attributes?.formats?.small?.size ??
+                          .data?.attributes?.avatarCard?.data?.attributes?.formats?.small?.size ??
                       0,
                   width: response
-                          .data!.attributes?.avatarCard?.data?.attributes?.formats?.small?.width ??
+                          .data?.attributes?.avatarCard?.data?.attributes?.formats?.small?.width ??
                       0,
                   height: response
-                          .data!.attributes?.avatarCard?.data?.attributes?.formats?.small?.height ??
+                          .data?.attributes?.avatarCard?.data?.attributes?.formats?.small?.height ??
                       0,
-                  providerMetadata: ProviderMetadataEntity(
-                    publicId: response.data!.attributes?.avatarCard?.data?.attributes?.formats
-                            ?.small?.providerMetadata?.publicId ??
-                        '',
-                    resourceType: response.data!.attributes?.avatarCard?.data?.attributes?.formats
-                            ?.small?.providerMetadata?.resourceType ??
-                        '',
-                  ),
+                  isUrlSigned: response.data?.attributes?.avatarCard?.data?.attributes?.formats
+                          ?.small?.isUrlSigned ??
+                      false,
                 ),
-                thumbnail: FormatIdDataEntity(
-                  ext: response.data!.attributes?.avatarCard?.data?.attributes?.formats?.thumbnail
+                thumbnail: CardIdDataAttributesAvatarCardDataAttributesFormatsSizeEntity(
+                  ext: response.data?.attributes?.avatarCard?.data?.attributes?.formats?.thumbnail
                           ?.ext ??
                       '',
-                  url: response.data!.attributes?.avatarCard?.data?.attributes?.formats?.thumbnail
+                  url: response.data?.attributes?.avatarCard?.data?.attributes?.formats?.thumbnail
                           ?.url ??
                       '',
-                  hash: response.data!.attributes?.avatarCard?.data?.attributes?.formats?.thumbnail
+                  hash: response.data?.attributes?.avatarCard?.data?.attributes?.formats?.thumbnail
                           ?.hash ??
                       '',
-                  mime: response.data!.attributes?.avatarCard?.data?.attributes?.formats?.thumbnail
+                  mime: response.data?.attributes?.avatarCard?.data?.attributes?.formats?.thumbnail
                           ?.mime ??
                       '',
-                  name: response.data!.attributes?.avatarCard?.data?.attributes?.formats?.thumbnail
+                  name: response.data?.attributes?.avatarCard?.data?.attributes?.formats?.thumbnail
                           ?.name ??
                       '',
-                  path: response.data!.attributes?.avatarCard?.data?.attributes?.formats?.thumbnail
+                  path: response.data?.attributes?.avatarCard?.data?.attributes?.formats?.thumbnail
                           ?.path ??
                       '',
-                  size: response.data!.attributes?.avatarCard?.data?.attributes?.formats?.thumbnail
+                  size: response.data?.attributes?.avatarCard?.data?.attributes?.formats?.thumbnail
                           ?.size ??
                       0,
-                  width: response.data!.attributes?.avatarCard?.data?.attributes?.formats?.thumbnail
+                  width: response.data?.attributes?.avatarCard?.data?.attributes?.formats?.thumbnail
                           ?.width ??
                       0,
-                  height: response.data!.attributes?.avatarCard?.data?.attributes?.formats
+                  height: response.data?.attributes?.avatarCard?.data?.attributes?.formats
                           ?.thumbnail?.height ??
                       0,
-                  providerMetadata: ProviderMetadataEntity(
-                    publicId: response.data!.attributes?.avatarCard?.data?.attributes?.formats
-                            ?.thumbnail?.providerMetadata?.publicId ??
-                        '',
-                    resourceType: response.data!.attributes?.avatarCard?.data?.attributes?.formats
-                            ?.thumbnail?.providerMetadata?.resourceType ??
-                        '',
-                  ),
+                  isUrlSigned: response.data?.attributes?.avatarCard?.data?.attributes?.formats
+                          ?.thumbnail?.isUrlSigned ??
+                      false,
                 ),
               ),
-              hash: response.data!.attributes?.avatarCard?.data?.attributes?.hash ?? '',
-              ext: response.data!.attributes?.avatarCard?.data?.attributes?.ext ?? '',
-              mime: response.data!.attributes?.avatarCard?.data?.attributes?.mime ?? '',
-              size: response.data!.attributes?.avatarCard?.data?.attributes?.size ?? 0,
-              url: response.data!.attributes?.avatarCard?.data?.attributes?.url ?? '',
-              previewUrl: response.data!.attributes?.avatarCard?.data?.attributes?.previewUrl ?? '',
-              provider: response.data!.attributes?.avatarCard?.data?.attributes?.provider ?? '',
-              providerMetadata: ProviderMetadataEntity(
-                publicId: response.data!.attributes?.avatarCard?.data?.attributes?.providerMetadata
-                        ?.publicId ??
-                    '',
-                resourceType: response.data!.attributes?.avatarCard?.data?.attributes
-                        ?.providerMetadata?.resourceType ??
-                    '',
-              ),
-              createdAt: response.data!.attributes?.avatarCard?.data?.attributes?.createdAt ??
+              hash: response.data?.attributes?.avatarCard?.data?.attributes?.hash ?? '',
+              ext: response.data?.attributes?.avatarCard?.data?.attributes?.ext ?? '',
+              mime: response.data?.attributes?.avatarCard?.data?.attributes?.mime ?? '',
+              size: response.data?.attributes?.avatarCard?.data?.attributes?.size ?? 0,
+              url: response.data?.attributes?.avatarCard?.data?.attributes?.url ?? '',
+              previewUrl: response.data?.attributes?.avatarCard?.data?.attributes?.previewUrl ?? '',
+              provider: response.data?.attributes?.avatarCard?.data?.attributes?.provider ?? '',
+              providerMetadata:
+                  response.data?.attributes?.avatarCard?.data?.attributes?.providerMetadata ?? '',
+              createdAt: response.data?.attributes?.avatarCard?.data?.attributes?.createdAt ??
                   DateTime.now(),
-              updatedAt: response.data!.attributes?.avatarCard?.data?.attributes?.updatedAt ??
+              updatedAt: response.data?.attributes?.avatarCard?.data?.attributes?.updatedAt ??
                   DateTime.now(),
+              isUrlSigned:
+                  response.data?.attributes?.avatarCard?.data?.attributes?.isUrlSigned ?? false,
             ),
           ),
         ),
-        quizzes: QuizCardResponseEntity(
-          data: List<QuizCardDataModel>.from(response.data?.attributes?.quizzes?.data ?? [])
-              .map(
-                (e) => QuizCardDataEntity(
-                  id: e.id ?? 0,
-                  attributes: QuizCardDataAttributesEntity(
-                    quizQuestion: e.attributes?.quizQuestion ?? '',
-                    optionOne: e.attributes?.optionOne ?? '',
-                    optionTwo: e.attributes?.optionTwo ?? '',
-                    optionThree: e.attributes?.optionThree ?? '',
-                    optionFour: e.attributes?.optionFour ?? '',
-                    correctOption: e.attributes?.correctOption ?? '',
-                    score: e.attributes?.score ?? 0,
-                  ),
-                ),
-              )
-              .toList(),
+        quizzes: CardIdDataAttributesQuizzesEntity(
+          data: response.data?.attributes?.quizzes?.data
+                  ?.map((e) => CardIdDataAttributesQuizzesDataEntity(
+                        id: e.id ?? 0,
+                        attributes: CardIdDataAttributesQuizzesDataAttributesEntity(
+                          quizQuestion: e.attributes?.quizQuestion ?? '',
+                          optionOne: e.attributes?.optionOne ?? '',
+                          optionTwo: e.attributes?.optionTwo ?? '',
+                          optionThree: e.attributes?.optionThree ?? '',
+                          optionFour: e.attributes?.optionFour ?? '',
+                          correctOption: e.attributes?.correctOption ?? '',
+                          createdAt: e.attributes?.createdAt ?? DateTime.now(),
+                          updatedAt: e.attributes?.updatedAt ?? DateTime.now(),
+                          publishedAt: e.attributes?.publishedAt ?? DateTime.now(),
+                          score: e.attributes?.score ?? 0,
+                        ),
+                      ))
+                  .toList() ??
+              [],
+        ),
+        users: CardIdDataAttributesUsersEntity(
+          data: response.data?.attributes?.users?.data
+                  ?.map((e) => CardIdDataAttributesUsersDataEntity(
+                        id: e.id ?? 0,
+                        attributes: CardIdDataAttributesUsersDataAttributesEntity(
+                          username: e.attributes?.username ?? '',
+                          email: e.attributes?.email ?? '',
+                          provider: e.attributes?.provider ?? '',
+                          confirmed: e.attributes?.confirmed ?? false,
+                          blocked: e.attributes?.blocked ?? false,
+                          collectionCard: e.attributes?.collectionCard ?? 0,
+                          createdAt: e.attributes?.createdAt ?? DateTime.now(),
+                          updatedAt: e.attributes?.updatedAt ?? DateTime.now(),
+                          scores: e.attributes?.scores ?? 0,
+                        ),
+                      ))
+                  .toList() ??
+              [],
         ),
       ),
     );

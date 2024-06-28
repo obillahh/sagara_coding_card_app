@@ -15,7 +15,7 @@ import '../utils/themes/app_colors.dart';
 import '../utils/themes/app_fonts.dart';
 
 class DetailCardSheetWidget extends StatelessWidget {
-  final CardIdResponseDataEntity card;
+  final CardIdDataEntity card;
   final bool isFromScanner;
 
   const DetailCardSheetWidget({

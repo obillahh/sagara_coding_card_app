@@ -9,8 +9,8 @@ import '../entities/card_entity/card_id_response_entity.dart';
 abstract class CardRepository {
   Future<List<CardListDataEntity>?> getListCards();
   Future<List<CardAlbumResponseEntity>?> getAlbumCards({required int id});
-  Future<CardIdResponseDataEntity?> getCardById({required int id});
-  Future<CardIdResponseDataEntity?> getCardByScanner({required String url});
+  Future<CardIdDataEntity?> getCardById({required int id});
+  Future<CardIdDataEntity?> getCardByScanner({required String url});
   Future<UserDataResponseEntity?> addCollectionCard({required int cardId, required int userId});
   Future<CheckCardResponseEntity?> checkCard(
       {required CheckCardRequestModel request, required int cardId});

@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,23 +22,19 @@ class QuizGameScreenPage extends StatefulWidget {
 
 class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
   late List<String?> selectedOptions;
-  late PageController _pageController;
-  Timer? _timer;
-  int _secondsRemaining = 120;
-  int _questionIndex = 0;
   int totalPoints = 0;
   late int totalQuestions;
 
-  String _formatTime(int seconds) {
-    int minutes = seconds ~/ 60;
-    int remainingSeconds = seconds % 60;
-    String formattedMinutes = minutes.toString().padLeft(2, '0');
-    String formattedSeconds = remainingSeconds.toString().padLeft(2, '0');
-    return '$formattedMinutes:$formattedSeconds';
-  }
+  late PageController _pageController;
+  int _questionIndex = 0;
+  int _secondsRemaining = 120;
+  Timer? _timer;
 
-  double _calculateProgress() {
-    return (_secondsRemaining / 120);
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -106,11 +101,144 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
     });
   }
 
-  @override
-  void dispose() {
-    _timer?.cancel();
-    _pageController.dispose();
-    super.dispose();
+  void showCorrectModal() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: AppColors.background,
+        content: SvgPicture.asset(AssetsConstant.correctIcon),
+      ),
+    );
+    Timer(const Duration(seconds: 5), () {
+      Navigator.of(context).pop();
+      if (_questionIndex < totalQuestions - 1) {
+        _pageController.nextPage(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeIn,
+        );
+      } else {
+        navigateToQuizDonePage();
+      }
+    });
+  }
+
+  void showIncorrectModal(String correctOption) {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: AppColors.background,
+        title: const Text(
+          'Incorrect',
+          style: TextStyle(color: AppColors.primary),
+        ),
+        content: Text(
+          'The correct answer is: $correctOption',
+          style: const TextStyle(color: AppColors.text),
+        ),
+      ),
+    );
+    Timer(const Duration(seconds: 5), () {
+      Navigator.of(context).pop();
+      if (_questionIndex < totalQuestions - 1) {
+        _pageController.nextPage(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeIn,
+        );
+      } else {
+        navigateToQuizDonePage();
+      }
+    });
+  }
+
+  Widget buildQuestionWidget(
+    dynamic quizItem,
+    int index,
+    String correctOption,
+    CardState state,
+  ) {
+    final quizzes = state.maybeWhen(
+      success: (cardList, card, userData, checkCard) => card?.attributes.quizzes,
+      orElse: () => null,
+    );
+    if (quizzes == null) {
+      return const SizedBox();
+    }
+
+    final scores = quizzes.data[index].attributes.score;
+
+    void handleOptionSelected(String option) {
+      setState(() {
+        selectedOptions[index] = option;
+      });
+      if (correctOption == option) {
+        totalPoints += scores;
+        showCorrectModal();
+      } else {
+        showIncorrectModal(correctOption);
+      }
+    }
+
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            quizItem.attributes.quizQuestion,
+            style: TextStyle(
+              fontSize: 18.sp,
+              fontWeight: FontWeight.bold,
+              color: AppColors.text,
+            ),
+          ),
+          SizedBox(height: 12.h),
+          OptionWidget(
+            option: 'A)',
+            optionValue: quizItem.attributes.optionOne,
+            isSelected: selectedOptions[index] == quizItem.attributes.optionOne,
+            isCorrect: correctOption == quizItem.attributes.optionOne,
+            onOptionSelected: () => handleOptionSelected(quizItem.attributes.optionOne),
+          ),
+          SizedBox(height: 6.h),
+          OptionWidget(
+            option: 'B)',
+            optionValue: quizItem.attributes.optionTwo,
+            isSelected: selectedOptions[index] == quizItem.attributes.optionTwo,
+            isCorrect: correctOption == quizItem.attributes.optionTwo,
+            onOptionSelected: () => handleOptionSelected(quizItem.attributes.optionTwo),
+          ),
+          SizedBox(height: 6.h),
+          OptionWidget(
+            option: 'C)',
+            optionValue: quizItem.attributes.optionThree,
+            isSelected: selectedOptions[index] == quizItem.attributes.optionThree,
+            isCorrect: correctOption == quizItem.attributes.optionThree,
+            onOptionSelected: () => handleOptionSelected(quizItem.attributes.optionThree),
+          ),
+          SizedBox(height: 6.h),
+          OptionWidget(
+            option: 'D)',
+            optionValue: quizItem.attributes.optionFour,
+            isSelected: selectedOptions[index] == quizItem.attributes.optionFour,
+            isCorrect: correctOption == quizItem.attributes.optionFour,
+            onOptionSelected: () => handleOptionSelected(quizItem.attributes.optionFour),
+          ),
+        ],
+      ),
+    );
+  }
+
+  String _formatTime(int seconds) {
+    int minutes = seconds ~/ 60;
+    int remainingSeconds = seconds % 60;
+    String formattedMinutes = minutes.toString().padLeft(2, '0');
+    String formattedSeconds = remainingSeconds.toString().padLeft(2, '0');
+    return '$formattedMinutes:$formattedSeconds';
+  }
+
+  double _calculateProgress() {
+    return (_secondsRemaining / 120);
   }
 
   @override
@@ -235,10 +363,10 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
                               ),
                             ],
                           ),
-                          SizedBox(height: 24.h),
+                          SizedBox(height: 12.h),
                           Container(
                             padding: EdgeInsets.symmetric(
-                              horizontal: 16.w,
+                              horizontal: 12.w,
                               vertical: 4.h,
                             ),
                             decoration: BoxDecoration(
@@ -248,154 +376,53 @@ class _QuizGameScreenPageState extends State<QuizGameScreenPage> {
                             child: Text(
                               '${_questionIndex + 1} of ${quizzes.data.length} Questions',
                               style: const TextStyle(
+                                fontWeight: FontWeight.w800,
                                 color: AppColors.text,
-                                fontWeight: FontWeight.w600,
                               ),
                             ),
                           ),
-                          SizedBox(height: 8.h),
-                          SizedBox(
-                            height: 400.h,
-                            child: PageView.builder(
-                              itemCount: totalQuestions,
-                              controller: _pageController,
-                              physics: const NeverScrollableScrollPhysics(),
-                              onPageChanged: (index) {
-                                setState(() {
-                                  _questionIndex = index;
-                                });
-                              },
-                              itemBuilder: (context, index) {
-                                return buildQuestionWidget(
-                                  quizzes.data[index],
-                                  index,
-                                  quizzes.data[index].attributes.correctOption,
-                                  state,
-                                );
-                              },
+                          Container(
+                            padding: EdgeInsets.all(12.h),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.r),
+                            ),
+                            child: SizedBox(
+                              width: double.infinity,
+                              height: 280.h,
+                              child: PageView.builder(
+                                controller: _pageController,
+                                itemCount: quizzes.data.length,
+                                onPageChanged: (index) {
+                                  setState(() {
+                                    _questionIndex = index;
+                                  });
+                                },
+                                itemBuilder: (context, index) {
+                                  final quizItem = quizzes.data[index];
+                                  final correctOption = quizItem.attributes.correctOption;
+                                  return buildQuestionWidget(
+                                    quizItem,
+                                    index,
+                                    correctOption,
+                                    state,
+                                  );
+                                },
+                              ),
                             ),
                           ),
                         ],
                       ),
                     );
                   },
-                  orElse: () => const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                  orElse: () {
+                    return Container();
+                  },
                 );
               },
             ),
           );
         },
       ),
-    );
-  }
-
-  Widget buildQuestionWidget(
-    dynamic quizItem,
-    int index,
-    String correctOption,
-    CardState state,
-  ) {
-    final quizzes = state.maybeWhen(
-      success: (cardList, card, userData, checkCard) => card?.attributes.quizzes,
-      orElse: () => null,
-    );
-    if (quizzes == null) {
-      return const SizedBox();
-    }
-
-    final scores = quizzes.data[index].attributes.score;
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          quizItem.attributes.quizQuestion,
-          style: TextStyle(
-            fontSize: 18.sp,
-            fontWeight: FontWeight.bold,
-            color: AppColors.text,
-          ),
-        ),
-        SizedBox(height: 12.h),
-        OptionWidget(
-          option: 'A)',
-          optionValue: quizItem.attributes.optionOne,
-          isSelected: selectedOptions[index] == quizItem.attributes.optionOne,
-          isCorrect: correctOption == quizItem.attributes.optionOne,
-          onOptionSelected: () {
-            setState(() {
-              selectedOptions[index] = quizItem.attributes.optionOne;
-            });
-            if (correctOption == quizItem.attributes.optionOne) {
-              totalPoints += scores;
-            }
-            log('totalPoints: $totalPoints');
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeIn,
-            );
-          },
-        ),
-        OptionWidget(
-          option: 'B)',
-          optionValue: quizItem.attributes.optionTwo,
-          isSelected: selectedOptions[index] == quizItem.attributes.optionTwo,
-          isCorrect: correctOption == quizItem.attributes.optionTwo,
-          onOptionSelected: () {
-            setState(() {
-              selectedOptions[index] = quizItem.attributes.optionTwo;
-            });
-            if (correctOption == quizItem.attributes.optionTwo) {
-              totalPoints += scores;
-            }
-            log('totalPoints: $totalPoints');
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeIn,
-            );
-          },
-        ),
-        OptionWidget(
-          option: 'C)',
-          optionValue: quizItem.attributes.optionThree,
-          isSelected: selectedOptions[index] == quizItem.attributes.optionThree,
-          isCorrect: correctOption == quizItem.attributes.optionThree,
-          onOptionSelected: () {
-            setState(() {
-              selectedOptions[index] = quizItem.attributes.optionThree;
-            });
-            if (correctOption == quizItem.attributes.optionThree) {
-              totalPoints += scores;
-            }
-            log('totalPoints: $totalPoints');
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeIn,
-            );
-          },
-        ),
-        OptionWidget(
-          option: 'D)',
-          optionValue: quizItem.attributes.optionFour,
-          isSelected: selectedOptions[index] == quizItem.attributes.optionFour,
-          isCorrect: correctOption == quizItem.attributes.optionFour,
-          onOptionSelected: () {
-            setState(() {
-              selectedOptions[index] = quizItem.attributes.optionFour;
-            });
-            if (correctOption == quizItem.attributes.optionFour) {
-              totalPoints += scores;
-            }
-            log('totalPoints: $totalPoints');
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeIn,
-            );
-          },
-        ),
-      ],
     );
   }
 }

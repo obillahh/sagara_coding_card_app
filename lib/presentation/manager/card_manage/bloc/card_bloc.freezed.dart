@@ -974,7 +974,7 @@ mixin _$CardState {
     required TResult Function() loading,
     required TResult Function(
             List<CardAlbumResponseEntity>? cardList,
-            CardIdResponseDataEntity? card,
+            CardIdDataEntity? card,
             UserDataResponseEntity? userData,
             CheckCardResponseEntity? checkCard)
         success,
@@ -987,7 +987,7 @@ mixin _$CardState {
     TResult? Function()? loading,
     TResult? Function(
             List<CardAlbumResponseEntity>? cardList,
-            CardIdResponseDataEntity? card,
+            CardIdDataEntity? card,
             UserDataResponseEntity? userData,
             CheckCardResponseEntity? checkCard)?
         success,
@@ -1000,7 +1000,7 @@ mixin _$CardState {
     TResult Function()? loading,
     TResult Function(
             List<CardAlbumResponseEntity>? cardList,
-            CardIdResponseDataEntity? card,
+            CardIdDataEntity? card,
             UserDataResponseEntity? userData,
             CheckCardResponseEntity? checkCard)?
         success,
@@ -1100,7 +1100,7 @@ class _$InitialImpl with DiagnosticableTreeMixin implements _Initial {
     required TResult Function() loading,
     required TResult Function(
             List<CardAlbumResponseEntity>? cardList,
-            CardIdResponseDataEntity? card,
+            CardIdDataEntity? card,
             UserDataResponseEntity? userData,
             CheckCardResponseEntity? checkCard)
         success,
@@ -1116,7 +1116,7 @@ class _$InitialImpl with DiagnosticableTreeMixin implements _Initial {
     TResult? Function()? loading,
     TResult? Function(
             List<CardAlbumResponseEntity>? cardList,
-            CardIdResponseDataEntity? card,
+            CardIdDataEntity? card,
             UserDataResponseEntity? userData,
             CheckCardResponseEntity? checkCard)?
         success,
@@ -1132,7 +1132,7 @@ class _$InitialImpl with DiagnosticableTreeMixin implements _Initial {
     TResult Function()? loading,
     TResult Function(
             List<CardAlbumResponseEntity>? cardList,
-            CardIdResponseDataEntity? card,
+            CardIdDataEntity? card,
             UserDataResponseEntity? userData,
             CheckCardResponseEntity? checkCard)?
         success,
@@ -1237,7 +1237,7 @@ class _$CardLoadingStateImpl
     required TResult Function() loading,
     required TResult Function(
             List<CardAlbumResponseEntity>? cardList,
-            CardIdResponseDataEntity? card,
+            CardIdDataEntity? card,
             UserDataResponseEntity? userData,
             CheckCardResponseEntity? checkCard)
         success,
@@ -1253,7 +1253,7 @@ class _$CardLoadingStateImpl
     TResult? Function()? loading,
     TResult? Function(
             List<CardAlbumResponseEntity>? cardList,
-            CardIdResponseDataEntity? card,
+            CardIdDataEntity? card,
             UserDataResponseEntity? userData,
             CheckCardResponseEntity? checkCard)?
         success,
@@ -1269,7 +1269,7 @@ class _$CardLoadingStateImpl
     TResult Function()? loading,
     TResult Function(
             List<CardAlbumResponseEntity>? cardList,
-            CardIdResponseDataEntity? card,
+            CardIdDataEntity? card,
             UserDataResponseEntity? userData,
             CheckCardResponseEntity? checkCard)?
         success,
@@ -1332,10 +1332,11 @@ abstract class _$$CardSuccessStateImplCopyWith<$Res> {
   @useResult
   $Res call(
       {List<CardAlbumResponseEntity>? cardList,
-      CardIdResponseDataEntity? card,
+      CardIdDataEntity? card,
       UserDataResponseEntity? userData,
       CheckCardResponseEntity? checkCard});
 
+  $CardIdDataEntityCopyWith<$Res>? get card;
   $UserDataResponseEntityCopyWith<$Res>? get userData;
   $CheckCardResponseEntityCopyWith<$Res>? get checkCard;
 }
@@ -1364,7 +1365,7 @@ class __$$CardSuccessStateImplCopyWithImpl<$Res>
       card: freezed == card
           ? _value.card
           : card // ignore: cast_nullable_to_non_nullable
-              as CardIdResponseDataEntity?,
+              as CardIdDataEntity?,
       userData: freezed == userData
           ? _value.userData
           : userData // ignore: cast_nullable_to_non_nullable
@@ -1374,6 +1375,18 @@ class __$$CardSuccessStateImplCopyWithImpl<$Res>
           : checkCard // ignore: cast_nullable_to_non_nullable
               as CheckCardResponseEntity?,
     ));
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $CardIdDataEntityCopyWith<$Res>? get card {
+    if (_value.card == null) {
+      return null;
+    }
+
+    return $CardIdDataEntityCopyWith<$Res>(_value.card!, (value) {
+      return _then(_value.copyWith(card: value));
+    });
   }
 
   @override
@@ -1424,7 +1437,7 @@ class _$CardSuccessStateImpl
   }
 
   @override
-  final CardIdResponseDataEntity? card;
+  final CardIdDataEntity? card;
   @override
   final UserDataResponseEntity? userData;
   @override
@@ -1481,7 +1494,7 @@ class _$CardSuccessStateImpl
     required TResult Function() loading,
     required TResult Function(
             List<CardAlbumResponseEntity>? cardList,
-            CardIdResponseDataEntity? card,
+            CardIdDataEntity? card,
             UserDataResponseEntity? userData,
             CheckCardResponseEntity? checkCard)
         success,
@@ -1497,7 +1510,7 @@ class _$CardSuccessStateImpl
     TResult? Function()? loading,
     TResult? Function(
             List<CardAlbumResponseEntity>? cardList,
-            CardIdResponseDataEntity? card,
+            CardIdDataEntity? card,
             UserDataResponseEntity? userData,
             CheckCardResponseEntity? checkCard)?
         success,
@@ -1513,7 +1526,7 @@ class _$CardSuccessStateImpl
     TResult Function()? loading,
     TResult Function(
             List<CardAlbumResponseEntity>? cardList,
-            CardIdResponseDataEntity? card,
+            CardIdDataEntity? card,
             UserDataResponseEntity? userData,
             CheckCardResponseEntity? checkCard)?
         success,
@@ -1567,12 +1580,12 @@ class _$CardSuccessStateImpl
 abstract class _CardSuccessState implements CardState {
   const factory _CardSuccessState(
       {final List<CardAlbumResponseEntity>? cardList,
-      final CardIdResponseDataEntity? card,
+      final CardIdDataEntity? card,
       final UserDataResponseEntity? userData,
       final CheckCardResponseEntity? checkCard}) = _$CardSuccessStateImpl;
 
   List<CardAlbumResponseEntity>? get cardList;
-  CardIdResponseDataEntity? get card;
+  CardIdDataEntity? get card;
   UserDataResponseEntity? get userData;
   CheckCardResponseEntity? get checkCard;
   @JsonKey(ignore: true)
@@ -1659,7 +1672,7 @@ class _$CardFailureStateImpl
     required TResult Function() loading,
     required TResult Function(
             List<CardAlbumResponseEntity>? cardList,
-            CardIdResponseDataEntity? card,
+            CardIdDataEntity? card,
             UserDataResponseEntity? userData,
             CheckCardResponseEntity? checkCard)
         success,
@@ -1675,7 +1688,7 @@ class _$CardFailureStateImpl
     TResult? Function()? loading,
     TResult? Function(
             List<CardAlbumResponseEntity>? cardList,
-            CardIdResponseDataEntity? card,
+            CardIdDataEntity? card,
             UserDataResponseEntity? userData,
             CheckCardResponseEntity? checkCard)?
         success,
@@ -1691,7 +1704,7 @@ class _$CardFailureStateImpl
     TResult Function()? loading,
     TResult Function(
             List<CardAlbumResponseEntity>? cardList,
-            CardIdResponseDataEntity? card,
+            CardIdDataEntity? card,
             UserDataResponseEntity? userData,
             CheckCardResponseEntity? checkCard)?
         success,

@@ -34,6 +34,7 @@ import 'package:sagara_coding_card_application/domain/use_cases/profile_use_case
 import 'package:sagara_coding_card_application/domain/use_cases/quiz_use_case/get_quiz_use_case.dart';
 import 'package:sagara_coding_card_application/presentation/manager/auth_manage/bloc/avatar_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/manager/card_manage/bloc/card_bloc.dart';
+import 'package:sagara_coding_card_application/presentation/manager/card_manage/bloc/scanner_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/manager/leaderboard_manage/get_leaderboard_bloc/leaderboard_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/manager/profile_manage/bloc/profile_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/manager/quiz_manage/bloc/quiz_bloc.dart';
@@ -144,6 +145,15 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
             checkCardUseCase: CheckCardUseCase(
+              cardRepository: CardImplRepository(
+                cardRemoteDataSource: CardRemoteDataSource(client: dio),
+              ),
+            ),
+          ),
+        ),
+        BlocProvider(
+          create: (context) => ScannerBloc(
+            getCardByScannerUseCase: GetCardByScannerUseCase(
               cardRepository: CardImplRepository(
                 cardRemoteDataSource: CardRemoteDataSource(client: dio),
               ),

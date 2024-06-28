@@ -173,7 +173,7 @@ class AuthRemoteDataSource {
   Future<UserResponseModel> updateScores(
       {required ScoreUpdateRequestModel request, required int id}) async {
     try {
-      final String url = '${ApiConstant.baseUrlApi}/$id/update-scores';
+      final String url = '${ApiConstant.baseUrlApi}/$id/update-score';
       final token = await AuthLocalDataSource().getToken();
       if (token != null) {
         final result = await client.put(

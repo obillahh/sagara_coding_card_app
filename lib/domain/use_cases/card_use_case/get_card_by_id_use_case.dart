@@ -6,6 +6,6 @@ class GetCardByIdUseCase {
 
   GetCardByIdUseCase({required this.cardRepository});
 
-  Future<CardIdResponseDataEntity?> call({required int id}) async =>
+  Future<CardIdDataEntity?> call({required int id}) async =>
       await cardRepository.getCardById(id: id);
 }

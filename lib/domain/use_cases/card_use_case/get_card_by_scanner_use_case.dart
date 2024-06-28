@@ -6,6 +6,6 @@ class GetCardByScannerUseCase {
 
   GetCardByScannerUseCase({required this.cardRepository});
 
-  Future<CardIdResponseDataEntity?> call({required String url}) async =>
+  Future<CardIdDataEntity?> call({required String url}) async =>
       await cardRepository.getCardByScanner(url: url);
 }

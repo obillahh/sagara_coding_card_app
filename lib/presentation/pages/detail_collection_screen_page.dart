@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:go_router/go_router.dart';
 import 'package:sagara_coding_card_application/presentation/manager/auth_manage/auth/auth_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/manager/card_manage/bloc/card_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_colors.dart';
-
 import '../widgets/detail_card_sheet_widget.dart';
 
 class DetailsCollectionScreenPage extends StatefulWidget {
@@ -26,12 +24,6 @@ class _DetailsCollectionScreenPageState extends State<DetailsCollectionScreenPag
   int? userId;
 
   @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  @override
   void initState() {
     super.initState();
     context.read<CardBloc>().add(CardEvent.getCardByIdEvent(id: widget.id));
@@ -39,6 +31,21 @@ class _DetailsCollectionScreenPageState extends State<DetailsCollectionScreenPag
       vsync: this,
       duration: const Duration(milliseconds: 300),
     );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  void _onBackPressed() {
+    final authState = context.read<AuthBloc>().state;
+    if (authState is CurrentUserState && authState.currentUser != null) {
+      userId = authState.currentUser!.id;
+      context.read<CardBloc>().add(CardEvent.getCardListEvent(id: userId!));
+    }
+    Navigator.of(context).pop();
   }
 
   @override
@@ -51,14 +58,7 @@ class _DetailsCollectionScreenPageState extends State<DetailsCollectionScreenPag
         leading: Padding(
           padding: const EdgeInsets.only(left: 8),
           child: IconButton(
-            onPressed: () {
-              final authState = context.read<AuthBloc>().state;
-              if (authState is CurrentUserState && authState.currentUser != null) {
-                userId = authState.currentUser!.id;
-                context.read<CardBloc>().add(CardEvent.getCardListEvent(id: userId!));
-              }
-              Navigator.of(context).pop();
-            },
+            onPressed: _onBackPressed,
             icon: Icon(
               Icons.arrow_circle_left,
               size: 40.sp,
@@ -83,12 +83,8 @@ class _DetailsCollectionScreenPageState extends State<DetailsCollectionScreenPag
       body: BlocBuilder<CardBloc, CardState>(
         builder: (context, state) {
           return state.when(
-            initial: () {
-              return const SizedBox();
-            },
-            loading: () {
-              return const Center(child: CircularProgressIndicator(color: AppColors.primary));
-            },
+            initial: () => const SizedBox(),
+            loading: () => const Center(child: CircularProgressIndicator(color: AppColors.primary)),
             success: (cardList, card, userData, checkCard) {
               if (card == null) {
                 return Center(
@@ -102,45 +98,36 @@ class _DetailsCollectionScreenPageState extends State<DetailsCollectionScreenPag
                 );
               }
               return SizedBox(
-                width: double.infinity.w,
-                height: double.infinity.h,
+                width: double.infinity,
+                height: double.infinity,
                 child: Align(
                   alignment: Alignment.topCenter,
                   child: Image.network(
                     card.attributes.avatarCard.data.attributes.url,
                     fit: BoxFit.fitWidth,
-                    width: double.infinity.w,
                   ),
                 ),
               );
             },
-            failure: (error) {
-              return Center(child: Text(error));
-            },
+            failure: (error) => Center(child: Text(error)),
           );
         },
       ),
       bottomSheet: BlocBuilder<CardBloc, CardState>(
         builder: (context, state) {
           return state.when(
-            initial: () {
-              return const SizedBox();
-            },
+            initial: () => const SizedBox(),
             loading: () {
               return BottomSheet(
                 animationController: _animationController,
                 enableDrag: true,
                 showDragHandle: true,
                 backgroundColor: const Color(0xff333030),
-                onClosing: () {
-                  context.pop();
-                },
+                onClosing: () {},
                 builder: (context) {
                   return SizedBox(
                     height: 260.h,
-                    child: const Center(
-                      child: CircularProgressIndicator(),
-                    ),
+                    child: const Center(child: CircularProgressIndicator()),
                   );
                 },
               );
@@ -163,9 +150,7 @@ class _DetailsCollectionScreenPageState extends State<DetailsCollectionScreenPag
                 isFromScanner: false,
               );
             },
-            failure: (error) {
-              return Center(child: Text(error));
-            },
+            failure: (error) => Center(child: Text(error)),
           );
         },
       ),

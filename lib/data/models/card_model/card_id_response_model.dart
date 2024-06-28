@@ -1,404 +1,225 @@
-class CardIdResponseModel {
-  CardIdResponseDataModel? data;
-  CardIdResponseMetaModel? meta;
+// To parse this JSON data, do
+//
+//     final cardIdResponseModel = cardIdResponseModelFromJson(jsonString);
 
-  CardIdResponseModel({
-    this.data,
-    this.meta,
-  });
+import 'package:freezed_annotation/freezed_annotation.dart';
+import 'dart:convert';
 
-  factory CardIdResponseModel.fromJson(Map<String, dynamic> json) => CardIdResponseModel(
-        data: json["data"] == null ? null : CardIdResponseDataModel.fromJson(json["data"]),
-        meta: json["meta"] == null ? null : CardIdResponseMetaModel.fromJson(json["meta"]),
-      );
+part 'card_id_response_model.freezed.dart';
+part 'card_id_response_model.g.dart';
 
-  Map<String, dynamic> toJson() => {
-        "data": data?.toJson(),
-        "meta": meta?.toJson(),
-      };
+CardIdResponseModel cardIdResponseModelFromJson(String str) =>
+    CardIdResponseModel.fromJson(json.decode(str));
+
+String cardIdResponseModelToJson(CardIdResponseModel data) => json.encode(data.toJson());
+
+@freezed
+class CardIdResponseModel with _$CardIdResponseModel {
+  const factory CardIdResponseModel({
+    @JsonKey(name: "data") CardIdDataModel? data,
+    @JsonKey(name: "meta") CardIdMetaModel? meta,
+  }) = _CardIdResponseModel;
+
+  factory CardIdResponseModel.fromJson(Map<String, dynamic> json) =>
+      _$CardIdResponseModelFromJson(json);
 }
 
-class CardIdResponseDataModel {
-  int? id;
-  CardDataAttributesModel? attributes;
+@freezed
+class CardIdDataModel with _$CardIdDataModel {
+  const factory CardIdDataModel({
+    @JsonKey(name: "id") int? id,
+    @JsonKey(name: "attributes") CardIdDataAttributesModel? attributes,
+  }) = _CardIdDataModel;
 
-  CardIdResponseDataModel({
-    this.id,
-    this.attributes,
-  });
-
-  factory CardIdResponseDataModel.fromJson(Map<String, dynamic> json) => CardIdResponseDataModel(
-        id: json["id"],
-        attributes: json["attributes"] == null
-            ? null
-            : CardDataAttributesModel.fromJson(json["attributes"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "attributes": attributes?.toJson(),
-      };
+  factory CardIdDataModel.fromJson(Map<String, dynamic> json) => _$CardIdDataModelFromJson(json);
 }
 
-class CardDataAttributesModel {
-  String? name;
-  String? role;
-  String? description;
-  String? level;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-  DateTime? publishedAt;
-  AvatarCardIdResponseModel? avatarCard;
-  QuizCardResponseModel? quizzes;
+@freezed
+class CardIdDataAttributesModel with _$CardIdDataAttributesModel {
+  const factory CardIdDataAttributesModel({
+    @JsonKey(name: "name") String? name,
+    @JsonKey(name: "role") String? role,
+    @JsonKey(name: "description") String? description,
+    @JsonKey(name: "level") String? level,
+    @JsonKey(name: "createdAt") DateTime? createdAt,
+    @JsonKey(name: "updatedAt") DateTime? updatedAt,
+    @JsonKey(name: "publishedAt") DateTime? publishedAt,
+    @JsonKey(name: "avatar_card") CardIdDataAttributesAvatarCardModel? avatarCard,
+    @JsonKey(name: "quizzes") CardIdDataAttributesQuizzesModel? quizzes,
+    @JsonKey(name: "users") CardIdDataAttributesUsersModel? users,
+  }) = _CardIdDataAttributesModel;
 
-  CardDataAttributesModel({
-    this.name,
-    this.role,
-    this.description,
-    this.level,
-    this.createdAt,
-    this.updatedAt,
-    this.publishedAt,
-    this.avatarCard,
-    this.quizzes,
-  });
-
-  factory CardDataAttributesModel.fromJson(Map<String, dynamic> json) => CardDataAttributesModel(
-        name: json["name"],
-        role: json["role"],
-        description: json["description"],
-        level: json["level"],
-        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-        updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
-        publishedAt: json["publishedAt"] == null ? null : DateTime.parse(json["publishedAt"]),
-        avatarCard: json["avatar_card"] == null
-            ? null
-            : AvatarCardIdResponseModel.fromJson(json["avatar_card"]),
-        quizzes: json["quizzes"] == null ? null : QuizCardResponseModel.fromJson(json["quizzes"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "name": name,
-        "role": role,
-        "description": description,
-        "level": level,
-        "createdAt": createdAt?.toIso8601String(),
-        "updatedAt": updatedAt?.toIso8601String(),
-        "publishedAt": publishedAt?.toIso8601String(),
-        "avatar_card": avatarCard?.toJson(),
-        "quizzes": quizzes?.toJson(),
-      };
+  factory CardIdDataAttributesModel.fromJson(Map<String, dynamic> json) =>
+      _$CardIdDataAttributesModelFromJson(json);
 }
 
-class AvatarCardIdResponseModel {
-  AvatarCardIdDataModel? data;
+@freezed
+class CardIdDataAttributesAvatarCardModel with _$CardIdDataAttributesAvatarCardModel {
+  const factory CardIdDataAttributesAvatarCardModel({
+    @JsonKey(name: "data") CardIdDataAttributesAvatarCardDataModel? data,
+  }) = _CardIdDataAttributesAvatarCardModel;
 
-  AvatarCardIdResponseModel({
-    this.data,
-  });
-
-  factory AvatarCardIdResponseModel.fromJson(Map<String, dynamic> json) =>
-      AvatarCardIdResponseModel(
-        data: json["data"] == null ? null : AvatarCardIdDataModel.fromJson(json["data"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "data": data?.toJson(),
-      };
+  factory CardIdDataAttributesAvatarCardModel.fromJson(Map<String, dynamic> json) =>
+      _$CardIdDataAttributesAvatarCardModelFromJson(json);
 }
 
-class AvatarCardIdDataModel {
-  int? id;
-  AvatarCardIdAttributesModel? attributes;
+@freezed
+class CardIdDataAttributesAvatarCardDataModel with _$CardIdDataAttributesAvatarCardDataModel {
+  const factory CardIdDataAttributesAvatarCardDataModel({
+    @JsonKey(name: "id") int? id,
+    @JsonKey(name: "attributes") CardIdDataAttributesAvatarCardDataAttributesModel? attributes,
+  }) = _CardIdDataAttributesAvatarCardDataModel;
 
-  AvatarCardIdDataModel({
-    this.id,
-    this.attributes,
-  });
-
-  factory AvatarCardIdDataModel.fromJson(Map<String, dynamic> json) => AvatarCardIdDataModel(
-        id: json["id"],
-        attributes: json["attributes"] == null
-            ? null
-            : AvatarCardIdAttributesModel.fromJson(json["attributes"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "attributes": attributes?.toJson(),
-      };
+  factory CardIdDataAttributesAvatarCardDataModel.fromJson(Map<String, dynamic> json) =>
+      _$CardIdDataAttributesAvatarCardDataModelFromJson(json);
 }
 
-class AvatarCardIdAttributesModel {
-  String? name;
-  dynamic alternativeText;
-  dynamic caption;
-  int? width;
-  int? height;
-  FormatsIdModel? formats;
-  String? hash;
-  String? ext;
-  String? mime;
-  double? size;
-  String? url;
-  dynamic previewUrl;
-  String? provider;
-  ProviderMetadataModel? providerMetadata;
-  DateTime? createdAt;
-  DateTime? updatedAt;
+@freezed
+class CardIdDataAttributesAvatarCardDataAttributesModel
+    with _$CardIdDataAttributesAvatarCardDataAttributesModel {
+  const factory CardIdDataAttributesAvatarCardDataAttributesModel({
+    @JsonKey(name: "name") String? name,
+    @JsonKey(name: "alternativeText") dynamic alternativeText,
+    @JsonKey(name: "caption") dynamic caption,
+    @JsonKey(name: "width") int? width,
+    @JsonKey(name: "height") int? height,
+    @JsonKey(name: "formats") CardIdDataAttributesAvatarCardDataAttributesFormatsModel? formats,
+    @JsonKey(name: "hash") String? hash,
+    @JsonKey(name: "ext") String? ext,
+    @JsonKey(name: "mime") String? mime,
+    @JsonKey(name: "size") double? size,
+    @JsonKey(name: "url") String? url,
+    @JsonKey(name: "previewUrl") dynamic previewUrl,
+    @JsonKey(name: "provider") String? provider,
+    @JsonKey(name: "provider_metadata") dynamic providerMetadata,
+    @JsonKey(name: "createdAt") DateTime? createdAt,
+    @JsonKey(name: "updatedAt") DateTime? updatedAt,
+    @JsonKey(name: "isUrlSigned") bool? isUrlSigned,
+  }) = _CardIdDataAttributesAvatarCardDataAttributesModel;
 
-  AvatarCardIdAttributesModel({
-    this.name,
-    this.alternativeText,
-    this.caption,
-    this.width,
-    this.height,
-    this.formats,
-    this.hash,
-    this.ext,
-    this.mime,
-    this.size,
-    this.url,
-    this.previewUrl,
-    this.provider,
-    this.providerMetadata,
-    this.createdAt,
-    this.updatedAt,
-  });
-
-  factory AvatarCardIdAttributesModel.fromJson(Map<String, dynamic> json) =>
-      AvatarCardIdAttributesModel(
-        name: json["name"],
-        alternativeText: json["alternativeText"],
-        caption: json["caption"],
-        width: json["width"],
-        height: json["height"],
-        formats: json["formats"] == null ? null : FormatsIdModel.fromJson(json["formats"]),
-        hash: json["hash"],
-        ext: json["ext"],
-        mime: json["mime"],
-        size: json["size"]?.toDouble(),
-        url: json["url"],
-        previewUrl: json["previewUrl"],
-        provider: json["provider"],
-        providerMetadata: json["provider_metadata"] == null
-            ? null
-            : ProviderMetadataModel.fromJson(json["provider_metadata"]),
-        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-        updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "name": name,
-        "alternativeText": alternativeText,
-        "caption": caption,
-        "width": width,
-        "height": height,
-        "formats": formats?.toJson(),
-        "hash": hash,
-        "ext": ext,
-        "mime": mime,
-        "size": size,
-        "url": url,
-        "previewUrl": previewUrl,
-        "provider": provider,
-        "provider_metadata": providerMetadata?.toJson(),
-        "createdAt": createdAt?.toIso8601String(),
-        "updatedAt": updatedAt?.toIso8601String(),
-      };
+  factory CardIdDataAttributesAvatarCardDataAttributesModel.fromJson(Map<String, dynamic> json) =>
+      _$CardIdDataAttributesAvatarCardDataAttributesModelFromJson(json);
 }
 
-class FormatsIdModel {
-  FormatIdDataModel? small;
-  FormatIdDataModel? thumbnail;
+@freezed
+class CardIdDataAttributesAvatarCardDataAttributesFormatsModel
+    with _$CardIdDataAttributesAvatarCardDataAttributesFormatsModel {
+  const factory CardIdDataAttributesAvatarCardDataAttributesFormatsModel({
+    @JsonKey(name: "small") CardIdDataAttributesAvatarCardDataAttributesFormatsSizeModel? small,
+    @JsonKey(name: "thumbnail")
+    CardIdDataAttributesAvatarCardDataAttributesFormatsSizeModel? thumbnail,
+  }) = _CardIdDataAttributesAvatarCardDataAttributesFormatsModel;
 
-  FormatsIdModel({
-    this.small,
-    this.thumbnail,
-  });
-
-  factory FormatsIdModel.fromJson(Map<String, dynamic> json) => FormatsIdModel(
-        small: json["small"] == null ? null : FormatIdDataModel.fromJson(json["small"]),
-        thumbnail: json["thumbnail"] == null ? null : FormatIdDataModel.fromJson(json["thumbnail"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "small": small?.toJson(),
-        "thumbnail": thumbnail?.toJson(),
-      };
+  factory CardIdDataAttributesAvatarCardDataAttributesFormatsModel.fromJson(
+          Map<String, dynamic> json) =>
+      _$CardIdDataAttributesAvatarCardDataAttributesFormatsModelFromJson(json);
 }
 
-class FormatIdDataModel {
-  String? ext;
-  String? url;
-  String? hash;
-  String? mime;
-  String? name;
-  dynamic path;
-  double? size;
-  int? width;
-  int? height;
-  ProviderMetadataModel? providerMetadata;
+@freezed
+class CardIdDataAttributesAvatarCardDataAttributesFormatsSizeModel
+    with _$CardIdDataAttributesAvatarCardDataAttributesFormatsSizeModel {
+  const factory CardIdDataAttributesAvatarCardDataAttributesFormatsSizeModel({
+    @JsonKey(name: "ext") String? ext,
+    @JsonKey(name: "url") String? url,
+    @JsonKey(name: "hash") String? hash,
+    @JsonKey(name: "mime") String? mime,
+    @JsonKey(name: "name") String? name,
+    @JsonKey(name: "path") dynamic path,
+    @JsonKey(name: "size") double? size,
+    @JsonKey(name: "width") int? width,
+    @JsonKey(name: "height") int? height,
+    @JsonKey(name: "isUrlSigned") bool? isUrlSigned,
+  }) = _CardIdDataAttributesAvatarCardDataAttributesFormatsSizeModel;
 
-  FormatIdDataModel({
-    this.ext,
-    this.url,
-    this.hash,
-    this.mime,
-    this.name,
-    this.path,
-    this.size,
-    this.width,
-    this.height,
-    this.providerMetadata,
-  });
-
-  factory FormatIdDataModel.fromJson(Map<String, dynamic> json) => FormatIdDataModel(
-        ext: json["ext"],
-        url: json["url"],
-        hash: json["hash"],
-        mime: json["mime"],
-        name: json["name"],
-        path: json["path"],
-        size: json["size"]?.toDouble(),
-        width: json["width"],
-        height: json["height"],
-        providerMetadata: json["provider_metadata"] == null
-            ? null
-            : ProviderMetadataModel.fromJson(json["provider_metadata"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "ext": ext,
-        "url": url,
-        "hash": hash,
-        "mime": mime,
-        "name": name,
-        "path": path,
-        "size": size,
-        "width": width,
-        "height": height,
-        "provider_metadata": providerMetadata?.toJson(),
-      };
+  factory CardIdDataAttributesAvatarCardDataAttributesFormatsSizeModel.fromJson(
+          Map<String, dynamic> json) =>
+      _$CardIdDataAttributesAvatarCardDataAttributesFormatsSizeModelFromJson(json);
 }
 
-class ProviderMetadataModel {
-  String? publicId;
-  String? resourceType;
+@freezed
+class CardIdDataAttributesQuizzesModel with _$CardIdDataAttributesQuizzesModel {
+  const factory CardIdDataAttributesQuizzesModel({
+    @JsonKey(name: "data") List<CardIdDataAttributesQuizzesDataModel>? data,
+  }) = _CardIdDataAttributesQuizzesModel;
 
-  ProviderMetadataModel({
-    this.publicId,
-    this.resourceType,
-  });
-
-  factory ProviderMetadataModel.fromJson(Map<String, dynamic> json) => ProviderMetadataModel(
-        publicId: json["public_id"],
-        resourceType: json["resource_type"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "public_id": publicId,
-        "resource_type": resourceType,
-      };
+  factory CardIdDataAttributesQuizzesModel.fromJson(Map<String, dynamic> json) =>
+      _$CardIdDataAttributesQuizzesModelFromJson(json);
 }
 
-class CardIdResponseMetaModel {
-  CardIdResponseMetaModel();
+@freezed
+class CardIdDataAttributesQuizzesDataModel with _$CardIdDataAttributesQuizzesDataModel {
+  const factory CardIdDataAttributesQuizzesDataModel({
+    @JsonKey(name: "id") int? id,
+    @JsonKey(name: "attributes") CardIdDataAttributesQuizzesDataAttributesModel? attributes,
+  }) = _CardIdDataAttributesQuizzesDataModel;
 
-  factory CardIdResponseMetaModel.fromJson(Map<String, dynamic> json) => CardIdResponseMetaModel();
-
-  Map<String, dynamic> toJson() => {};
+  factory CardIdDataAttributesQuizzesDataModel.fromJson(Map<String, dynamic> json) =>
+      _$CardIdDataAttributesQuizzesDataModelFromJson(json);
 }
 
-class QuizCardResponseModel {
-  List<QuizCardDataModel>? data;
+@freezed
+class CardIdDataAttributesQuizzesDataAttributesModel
+    with _$CardIdDataAttributesQuizzesDataAttributesModel {
+  const factory CardIdDataAttributesQuizzesDataAttributesModel({
+    @JsonKey(name: "quiz_question") String? quizQuestion,
+    @JsonKey(name: "option_one") String? optionOne,
+    @JsonKey(name: "option_two") String? optionTwo,
+    @JsonKey(name: "option_three") String? optionThree,
+    @JsonKey(name: "option_four") String? optionFour,
+    @JsonKey(name: "correct_option") String? correctOption,
+    @JsonKey(name: "createdAt") DateTime? createdAt,
+    @JsonKey(name: "updatedAt") DateTime? updatedAt,
+    @JsonKey(name: "publishedAt") DateTime? publishedAt,
+    @JsonKey(name: "score") int? score,
+  }) = _CardIdDataAttributesQuizzesDataAttributesModel;
 
-  QuizCardResponseModel({
-    this.data,
-  });
-
-  factory QuizCardResponseModel.fromJson(Map<String, dynamic> json) => QuizCardResponseModel(
-        data: json["data"] == null
-            ? []
-            : List<QuizCardDataModel>.from(json["data"]!.map((x) => QuizCardDataModel.fromJson(x))),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
-      };
+  factory CardIdDataAttributesQuizzesDataAttributesModel.fromJson(Map<String, dynamic> json) =>
+      _$CardIdDataAttributesQuizzesDataAttributesModelFromJson(json);
 }
 
-class QuizCardDataModel {
-  int? id;
-  QuizCardDataAttributesModel? attributes;
+@freezed
+class CardIdDataAttributesUsersModel with _$CardIdDataAttributesUsersModel {
+  const factory CardIdDataAttributesUsersModel({
+    @JsonKey(name: "data") List<CardIdDataAttributesUsersDataModel>? data,
+  }) = _CardIdDataAttributesUsersModel;
 
-  QuizCardDataModel({
-    this.id,
-    this.attributes,
-  });
-
-  factory QuizCardDataModel.fromJson(Map<String, dynamic> json) => QuizCardDataModel(
-        id: json["id"],
-        attributes: json["attributes"] == null
-            ? null
-            : QuizCardDataAttributesModel.fromJson(json["attributes"]),
-      );
-
-  Map<String, dynamic> toJson() => {
-        "id": id,
-        "attributes": attributes?.toJson(),
-      };
+  factory CardIdDataAttributesUsersModel.fromJson(Map<String, dynamic> json) =>
+      _$CardIdDataAttributesUsersModelFromJson(json);
 }
 
-class QuizCardDataAttributesModel {
-  String? quizQuestion;
-  String? optionOne;
-  String? optionTwo;
-  String? optionThree;
-  String? optionFour;
-  String? correctOption;
-  DateTime? createdAt;
-  DateTime? updatedAt;
-  DateTime? publishedAt;
-  int? score;
+@freezed
+class CardIdDataAttributesUsersDataModel with _$CardIdDataAttributesUsersDataModel {
+  const factory CardIdDataAttributesUsersDataModel({
+    @JsonKey(name: "id") int? id,
+    @JsonKey(name: "attributes") CardIdDataAttributesUsersDataAttributesModel? attributes,
+  }) = _CardIdDataAttributesUsersDataModel;
 
-  QuizCardDataAttributesModel({
-    this.quizQuestion,
-    this.optionOne,
-    this.optionTwo,
-    this.optionThree,
-    this.optionFour,
-    this.correctOption,
-    this.createdAt,
-    this.updatedAt,
-    this.publishedAt,
-    this.score,
-  });
+  factory CardIdDataAttributesUsersDataModel.fromJson(Map<String, dynamic> json) =>
+      _$CardIdDataAttributesUsersDataModelFromJson(json);
+}
 
-  factory QuizCardDataAttributesModel.fromJson(Map<String, dynamic> json) =>
-      QuizCardDataAttributesModel(
-        quizQuestion: json["quiz_question"],
-        optionOne: json["option_one"],
-        optionTwo: json["option_two"],
-        optionThree: json["option_three"],
-        optionFour: json["option_four"],
-        correctOption: json["correct_option"],
-        createdAt: json["createdAt"] == null ? null : DateTime.parse(json["createdAt"]),
-        updatedAt: json["updatedAt"] == null ? null : DateTime.parse(json["updatedAt"]),
-        publishedAt: json["publishedAt"] == null ? null : DateTime.parse(json["publishedAt"]),
-        score: json["score"],
-      );
+@freezed
+class CardIdDataAttributesUsersDataAttributesModel
+    with _$CardIdDataAttributesUsersDataAttributesModel {
+  const factory CardIdDataAttributesUsersDataAttributesModel({
+    @JsonKey(name: "username") String? username,
+    @JsonKey(name: "email") String? email,
+    @JsonKey(name: "provider") String? provider,
+    @JsonKey(name: "confirmed") bool? confirmed,
+    @JsonKey(name: "blocked") bool? blocked,
+    @JsonKey(name: "collection_card") int? collectionCard,
+    @JsonKey(name: "createdAt") DateTime? createdAt,
+    @JsonKey(name: "updatedAt") DateTime? updatedAt,
+    @JsonKey(name: "scores") int? scores,
+  }) = _CardIdDataAttributesUsersDataAttributesModel;
 
-  Map<String, dynamic> toJson() => {
-        "quiz_question": quizQuestion,
-        "option_one": optionOne,
-        "option_two": optionTwo,
-        "option_three": optionThree,
-        "option_four": optionFour,
-        "correct_option": correctOption,
-        "createdAt": createdAt?.toIso8601String(),
-        "updatedAt": updatedAt?.toIso8601String(),
-        "publishedAt": publishedAt?.toIso8601String(),
-        "score": score,
-      };
+  factory CardIdDataAttributesUsersDataAttributesModel.fromJson(Map<String, dynamic> json) =>
+      _$CardIdDataAttributesUsersDataAttributesModelFromJson(json);
+}
+
+@freezed
+class CardIdMetaModel with _$CardIdMetaModel {
+  const factory CardIdMetaModel() = _CardIdMetaModel;
+
+  factory CardIdMetaModel.fromJson(Map<String, dynamic> json) => _$CardIdMetaModelFromJson(json);
 }

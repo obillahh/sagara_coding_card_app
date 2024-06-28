@@ -47,6 +47,7 @@ class CardRemoteDataSource {
         options: Options(
           headers: {
             'Accept': 'application/json',
+            'Content-Type': 'application/json',
           },
         ),
       );
@@ -73,6 +74,7 @@ class CardRemoteDataSource {
         },
         options: Options(
           headers: {
+            'Content-Type': 'application/json',
             'Accept': 'application/json',
           },
         ),
@@ -81,16 +83,18 @@ class CardRemoteDataSource {
       return cardData;
     } catch (e) {
       inspect('Error: $e');
-      return CardIdResponseModel();
+      return const CardIdResponseModel();
     }
   }
 
   Future<CardIdResponseModel> getCardByScanner(String url) async {
     try {
+      final String completeUrl = 'https://$url';
       final result = await client.get(
-        url,
+        completeUrl,
         options: Options(
           headers: {
+            'Content-Type': 'application/json',
             'Accept': 'application/json',
           },
         ),

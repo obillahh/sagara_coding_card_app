@@ -10,6 +10,9 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:sagara_coding_card_application/data/models/card_model/check_card_request_model.dart';
 import 'package:sagara_coding_card_application/presentation/manager/auth_manage/auth/auth_bloc.dart';
 import 'package:sagara_coding_card_application/presentation/manager/card_manage/bloc/card_bloc.dart';
+import 'package:sagara_coding_card_application/presentation/manager/card_manage/bloc/scanner_bloc.dart';
+import 'package:sagara_coding_card_application/presentation/manager/card_manage/bloc/scanner_event.dart';
+import 'package:sagara_coding_card_application/presentation/manager/card_manage/bloc/scanner_state.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
 
 import '../utils/constant/assets_constant.dart';
@@ -51,8 +54,8 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
       (Barcode barcode) {
         inspect('Scanned barcode: ${barcode.code}');
         scannedData = barcode.code!;
-        final contextBloc = context.read<CardBloc>();
-        contextBloc.add(CardEvent.getCardByScannerEvent(url: scannedData));
+        final scannerBloc = context.read<ScannerBloc>();
+        scannerBloc.add(GetCardByScannerEvent(url: scannedData));
       },
     );
   }
@@ -118,68 +121,58 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
       ),
       body: Column(
         children: [
-          BlocConsumer<CardBloc, CardState>(
-            bloc: context.read<CardBloc>(),
+          BlocConsumer<ScannerBloc, ScannerState>(
             listener: (context, state) {
-              state.maybeWhen(
-                success: (cardList, card, userData, checkCard) {
-                  final cardId = card!.id;
-                  final userId =
-                      (context.read<AuthBloc>().state as CurrentUserState).currentUser!.id;
-                  inspect(cardId);
-                  final checkCardRequest = CheckCardRequestModel(userId: userId);
-                  context.read<CardBloc>().add(
-                        CardEvent.checkCardEvent(
-                          request: checkCardRequest,
-                          cardId: cardId,
-                        ),
-                      );
-                  context.read<CardBloc>().add(
-                        CardEvent.addCardCollectionEvent(
-                          cardId: cardId,
-                          userId: userId,
-                        ),
-                      );
-                  context.goNamed(
-                    RouterConstant.detailScanner,
-                    extra: cardId,
-                  );
-                },
-                failure: (message) {
-                  Text(message);
-                },
-                orElse: () {
-                  null;
-                },
-              );
+              if (state is ScannerSuccess) {
+                final cardId = state.card.id;
+                final userId = (context.read<AuthBloc>().state as CurrentUserState).currentUser!.id;
+                final checkCardRequest = CheckCardRequestModel(userId: userId);
+                context.read<CardBloc>().add(
+                      CardEvent.checkCardEvent(
+                        request: checkCardRequest,
+                        cardId: cardId,
+                      ),
+                    );
+                // context.read<CardBloc>().add(
+                //       CardEvent.addCardCollectionEvent(
+                //         cardId: cardId,
+                //         userId: userId,
+                //       ),
+                //     );
+                context.goNamed(
+                  RouterConstant.detailScanner,
+                  extra: cardId,
+                );
+              } else if (state is ScannerFailure) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(state.message)),
+                );
+              }
             },
             builder: (context, state) {
-              return state.maybeWhen(
-                loading: () {
-                  return const Expanded(
-                    child: Center(
-                      child: CircularProgressIndicator(),
+              if (state is ScannerLoading) {
+                return const Expanded(
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                );
+              } else {
+                return Expanded(
+                  child: QRView(
+                    key: _qrKey,
+                    onQRViewCreated: _onQRViewCreated,
+                    overlay: QrScannerOverlayShape(
+                      borderColor: AppColors.primary,
+                      overlayColor: AppColors.background.withOpacity(0.5.r),
+                      borderRadius: 6.r,
+                      borderLength: 80.r,
+                      borderWidth: 8.w,
+                      cutOutWidth: 280.w,
+                      cutOutHeight: 320.h,
                     ),
-                  );
-                },
-                orElse: () {
-                  return Expanded(
-                    child: QRView(
-                      key: _qrKey,
-                      onQRViewCreated: _onQRViewCreated,
-                      overlay: QrScannerOverlayShape(
-                        borderColor: AppColors.primary,
-                        overlayColor: AppColors.background.withOpacity(0.5.r),
-                        borderRadius: 6.r,
-                        borderLength: 80.r,
-                        borderWidth: 8.w,
-                        cutOutWidth: 280.w,
-                        cutOutHeight: 320.h,
-                      ),
-                    ),
-                  );
-                },
-              );
+                  ),
+                );
+              }
             },
           ),
         ],
