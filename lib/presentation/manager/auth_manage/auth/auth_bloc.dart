@@ -8,6 +8,7 @@ import 'package:sagara_coding_card_application/data/models/auth_model/reset_pass
 import 'package:sagara_coding_card_application/data/models/auth_model/user_model/score_update_request_model.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/forgot_password_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/sync_collection_response_entity.dart';
+import 'package:sagara_coding_card_application/domain/entities/auth_entity/update_score_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/user_entity/user_id_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/check_token_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/forgot_password_use_case.dart';
@@ -46,6 +47,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UpdateScoresUseCase updateScoresUseCase;
   final SyncCollectionUseCase syncCollectionUseCase;
   final GetUserIdUseCase getUserIdUseCase;
+
   AuthBloc({
     required this.registerUseCase,
     required this.loginUseCase,
@@ -62,126 +64,128 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.syncCollectionUseCase,
     required this.getUserIdUseCase,
   }) : super(AuthInitial()) {
-    on<AuthEvent>(
-      (event, emit) async {
-        if (event is LoginEvent) {
-          final UserResponseEntity? data = await loginUseCase(event.requestModel);
+    on<AuthEvent>((event, emit) async {
+      if (event is LoginEvent) {
+        final UserResponseEntity? data = await loginUseCase(event.requestModel);
+        if (data != null) {
+          emit(AuthLoginSuccess(login: data));
+        } else {
+          emit(AuthFailure(error: 'Login Failed'));
+        }
+      }
+      if (event is GoogleSignInEvent) {
+        try {
+          final data = await signInWithGoogleUseCase.call();
+          emit(AuthGoogleSignInState(googleSignInAccount: data));
+        } catch (e) {
+          emit(AuthFailure(error: e.toString()));
+        }
+      }
+      if (event is RegisterEvent) {
+        final UserResponseEntity? data = await registerUseCase(event.requestModel);
+        if (data != null) {
+          emit(AuthRegisterSuccess(register: data));
+        } else {
+          emit(AuthFailure(error: 'Registration Failed'));
+        }
+      }
+      if (event is ForgotPasswordEvent) {
+        final data = await forgotPasswordUseCase(request: event.requestModel);
+        if (data != null) {
+          emit(ForgotPasswordSuccess(forgotPassword: data));
+        } else {
+          emit(AuthFailure(error: 'Failed to reset password'));
+        }
+      }
+      if (event is ResetPasswordEvent) {
+        final data = await resetPasswordUseCase(request: event.requestModel);
+        if (data != null) {
+          emit(ResetPasswordSuccess(response: data));
+        } else {
+          emit(AuthFailure(error: 'Failed to reset password'));
+        }
+      }
+      if (event is IsLoggedInEvent) {
+        final isLoggedIn = await isLoggedInUseCase();
+        if (isLoggedIn) {
+          emit(AuthAuthenticated());
+        } else {
+          emit(AuthNotAuthenticated());
+        }
+      }
+      if (event is IsFirstEntryEvent) {
+        final isFirstEntry = await isFirstEntryUseCase();
+        if (isFirstEntry) {
+          emit(AuthFirstEntry());
+        } else {
+          emit(AuthNotFirstEntry());
+        }
+      }
+      if (event is GetCurrentUserEvent) {
+        final user = await getCurrentUserUseCase();
+        emit(CurrentUserState(
+          currentUser: user ??
+              const UserDataResponseEntity(
+                id: 0,
+                username: 'Guest',
+                email: 'guest@example.com',
+                collectionCard: 0,
+                scores: 0,
+              ),
+        ));
+      }
+      if (event is LogoutEvent) {
+        await logoutUseCase();
+        emit(AuthLogoutSuccess());
+      }
+      if (event is IncreaseCollectionCardEvent) {
+        try {
+          await increaseCollectionCardUseCase();
+          emit(CollectionCardIncreased(collectionCard: event.addCollection));
+        } catch (e) {
+          emit(AuthErrorState('Failed to increase collection card: $e'));
+        }
+      }
+      if (event is CheckTokenEvent) {
+        try {
+          final isTokenValid = await checkTokenUseCase();
+          emit(TokenChecked(isTokenValid: isTokenValid));
+        } catch (e) {
+          emit(AuthErrorState('Failed to check token: $e'));
+        }
+      }
+      if (event is UpdateScoresEvent) {
+        try {
+          final data = await updateScoresUseCase(request: event.req, id: event.id);
           if (data != null) {
-            emit(AuthLoginSuccess(login: data));
+            emit(ScoresUpdated(response: data));
           } else {
-            emit(AuthFailure(error: 'Login Failed'));
+            emit(AuthErrorState('Failed to update scores: Invalid response.'));
           }
+        } catch (e) {
+          emit(AuthErrorState('Failed to update scores: $e'));
         }
-        if (event is GoogleSignInEvent) {
-          try {
-            final data = await signInWithGoogleUseCase.call();
-            emit(AuthGoogleSignInState(googleSignInAccount: data));
-          } catch (e) {
-            emit(AuthFailure(error: e.toString()));
-          }
-        }
-        if (event is RegisterEvent) {
-          final UserResponseEntity? data = await registerUseCase(
-            event.requestModel,
-          );
+      }
+      if (event is SyncCollectionEvent) {
+        try {
+          final data = await syncCollectionUseCase(id: event.id);
           if (data != null) {
-            emit(AuthRegisterSuccess(register: data));
+            emit(CollectionSynced(syncCollection: data));
           } else {
-            emit(AuthFailure(error: 'Login Failed'));
+            emit(AuthErrorState('Failed to sync collection: Invalid response.'));
           }
+        } catch (e) {
+          emit(AuthErrorState('Failed to sync collection: $e'));
         }
-        if (event is ForgotPasswordEvent) {
-          final data = await forgotPasswordUseCase(request: event.requestModel);
-          if (data != null) {
-            emit(ForgotPasswordSuccess(forgotPassword: data));
-          } else {
-            emit(AuthFailure(error: 'Failed'));
-          }
+      }
+      if (event is GetUserIdEvent) {
+        try {
+          final data = await getUserIdUseCase(id: event.id);
+          emit(GetUserSuccessState(user: data!));
+        } catch (e) {
+          emit(AuthErrorState('Failed to get user: $e'));
         }
-        if (event is ResetPasswordEvent) {
-          final data = await resetPasswordUseCase(request: event.requestModel);
-          if (data != null) {
-            emit(ResetPasswordSuccess(response: data));
-          } else {
-            emit(AuthFailure(error: 'Failed'));
-          }
-        }
-        if (event is IsLoggedInEvent) {
-          final isLoggedIn = await isLoggedInUseCase();
-          if (isLoggedIn) {
-            emit(AuthAuthenticated());
-          } else {
-            emit(AuthNotAuthenticated());
-          }
-        }
-        if (event is IsFirstEntryEvent) {
-          final isFirstEntry = await isFirstEntryUseCase();
-          if (isFirstEntry) {
-            emit(AuthFirstEntry());
-          } else {
-            emit(AuthNotFirstEntry());
-          }
-        }
-        if (event is GetCurrentUserEvent) {
-          final user = await getCurrentUserUseCase();
-          emit(
-            CurrentUserState(
-              currentUser: user ??
-                  const UserDataResponseEntity(
-                    id: 0,
-                    username: 'Guest',
-                    email: 'guest@example.com',
-                    collectionCard: 0,
-                    scores: 0,
-                  ),
-            ),
-          );
-        }
-        if (event is LogoutEvent) {
-          await logoutUseCase();
-          emit(AuthLogoutSuccess());
-        }
-        if (event is IncreaseCollectionCardEvent) {
-          try {
-            await increaseCollectionCardUseCase();
-            emit(CollectionCardIncreased(collectionCard: event.addCollection));
-          } catch (e) {
-            emit(AuthErrorState('Failed to increase collection card: $e'));
-          }
-        }
-        if (event is CheckTokenEvent) {
-          try {
-            final isTokenValid = await checkTokenUseCase();
-            emit(TokenChecked(isTokenValid: isTokenValid));
-          } catch (e) {
-            emit(AuthErrorState('Failed to check token: $e'));
-          }
-        }
-        if (event is UpdateScoresEvent) {
-          try {
-            final data = await updateScoresUseCase(request: event.req, id: event.id);
-            emit(ScoresUpdated(user: data!));
-          } catch (e) {
-            emit(AuthErrorState('Failed to update scores: $e'));
-          }
-        }
-        if (event is SyncCollectionEvent) {
-          try {
-            final data = await syncCollectionUseCase(id: event.id);
-            emit(CollectionSynced(syncCollection: data!));
-          } catch (e) {
-            emit(AuthErrorState('Failed to sync collection: $e'));
-          }
-        }
-        if (event is GetUserIdEvent) {
-          try {
-            final data = await getUserIdUseCase(id: event.id);
-            emit(GetUserSuccessState(user: data!));
-          } catch (e) {
-            emit(AuthErrorState('Failed to get user: $e'));
-          }
-        }
-      },
-    );
+      }
+    });
   }
 }

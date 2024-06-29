@@ -8,6 +8,7 @@ import 'package:sagara_coding_card_application/data/models/auth_model/forgot_pas
 import 'package:sagara_coding_card_application/data/models/auth_model/register_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/reset_password_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/sync_collection_response_model.dart';
+import 'package:sagara_coding_card_application/data/models/auth_model/update_score_response_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/user_model/avatar_update_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/user_model/avatar_update_response_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/user_model/score_update_request_model.dart';
@@ -170,18 +171,32 @@ class AuthRemoteDataSource {
     }
   }
 
-  Future<UserResponseModel> updateScores(
+  Future<UpdateScoreResponseModel> updateScores(
       {required ScoreUpdateRequestModel request, required int id}) async {
     try {
       final String url = '${ApiConstant.baseUrlApi}/$id/update-score';
       final result = await client.put(
         url,
-        data: scoreUpdateRequestModelToJson(request),
+        data: request.toJson(),
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': '*/*',
+          },
+        ),
       );
-      final regisData = UserResponseModel.fromJson(result.data);
-      return regisData;
+
+      // Log the response for debugging
+      print('Update Scores Response: ${result.data}');
+
+      if (result.data == null) {
+        throw Exception('Invalid response: response data is null');
+      }
+
+      final updateScoreData = UpdateScoreResponseModel.fromJson(result.data);
+      return updateScoreData;
     } catch (e) {
-      inspect('Error: $e');
+      print('Error updating scores: $e');
       rethrow;
     }
   }
@@ -190,6 +205,7 @@ class AuthRemoteDataSource {
     try {
       final String url = '${ApiConstant.syncCollection}/$id/sync-collection';
       final token = await AuthLocalDataSource().getToken();
+
       if (token != null) {
         final result = await client.put(
           url,
@@ -199,13 +215,21 @@ class AuthRemoteDataSource {
             },
           ),
         );
+
+        // Log the response for debugging
+        print('Sync Collection Response: ${result.data}');
+
+        if (result.data == null || result.data['message'] == null) {
+          throw Exception('Invalid response: message is null');
+        }
+
         final syncCollectionData = SyncCollectionResponseModel.fromJson(result.data);
         return syncCollectionData;
       } else {
-        return const SyncCollectionResponseModel();
+        throw Exception('Token is null');
       }
     } catch (e) {
-      inspect('Error: $e');
+      print('Error syncing collection: $e');
       rethrow;
     }
   }

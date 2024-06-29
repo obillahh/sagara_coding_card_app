@@ -7,6 +7,7 @@ import 'package:sagara_coding_card_application/data/models/auth_model/user_model
 import 'package:sagara_coding_card_application/data/models/auth_model/user_model/score_update_request_model.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/forgot_password_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/sync_collection_response_entity.dart';
+import 'package:sagara_coding_card_application/domain/entities/auth_entity/update_score_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/user_entity/avatar_update_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/user_entity/user_id_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/user_entity/user_response_entity.dart';
@@ -224,25 +225,28 @@ class AuthImplRepository extends AuthRepository {
   }
 
   @override
-  Future<UserDataResponseEntity?> updateScores(
+  Future<UpdateScoreResponseEntity?> updateScores(
       {required ScoreUpdateRequestModel request, required int id}) async {
     try {
       final response = await authRemoteDataSource.updateScores(request: request, id: id);
-      if (response.user == null) {
-        print('Invalid response: user is null');
-        print('Response data: ${response.toJson()}');
-        return null;
-      }
-      final data = UserDataResponseEntity(
-        id: response.user?.id ?? 0,
-        username: response.user?.username ?? '',
-        email: response.user?.email ?? '',
-        collectionCard: response.user?.collectionCard ?? 0,
-        scores: response.user?.scores ?? 0,
+      final data = UpdateScoreResponseEntity(
+        id: response.id ?? 0,
+        username: response.username ?? '',
+        email: response.email ?? '',
+        provider: response.provider ?? '',
+        password: response.password ?? '',
+        resetPasswordToken: response.resetPasswordToken ?? '',
+        confirmationToken: response.confirmationToken ?? '',
+        confirmed: response.confirmed ?? false,
+        blocked: response.blocked ?? false,
+        createdAt: response.createdAt ?? DateTime.now(),
+        updatedAt: response.updatedAt ?? DateTime.now(),
+        collectionCard: response.collectionCard ?? 0,
+        scores: response.scores ?? 0,
       );
       return data;
     } catch (e) {
-      print('Login error: $e');
+      print('Update scores error: $e');
       return null;
     }
   }
@@ -251,12 +255,17 @@ class AuthImplRepository extends AuthRepository {
   Future<SyncCollectionResponseEntity?> syncCollection({required int id}) async {
     try {
       final response = await authRemoteDataSource.syncCollection(id: id);
+      if (response.message == null) {
+        print('Invalid response: message is null');
+        print('Response data: ${response.toJson()}');
+        return null;
+      }
       final data = SyncCollectionResponseEntity(
         message: response.message ?? '',
       );
       return data;
     } catch (e) {
-      print('Sync error: $e');
+      print('Sync collection error: $e');
       return null;
     }
   }

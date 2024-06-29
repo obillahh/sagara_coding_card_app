@@ -103,15 +103,21 @@ class ResetPasswordSuccess extends AuthState {
 }
 
 class ScoresUpdated extends AuthState {
-  final UserDataResponseEntity user;
+  final UpdateScoreResponseEntity response;
 
-  ScoresUpdated({required this.user});
+  ScoresUpdated({required this.response});
+
+  @override
+  List<Object?> get props => [response];
 }
 
 class CollectionSynced extends AuthState {
   final SyncCollectionResponseEntity syncCollection;
 
   CollectionSynced({required this.syncCollection});
+
+  @override
+  List<Object?> get props => [syncCollection];
 }
 
 class GetUserSuccessState extends AuthState {

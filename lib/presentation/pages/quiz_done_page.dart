@@ -1,18 +1,19 @@
-import "package:flutter/material.dart";
-import "package:flutter_bloc/flutter_bloc.dart";
-import "package:flutter_screenutil/flutter_screenutil.dart";
-import "package:flutter_svg/flutter_svg.dart";
-import "package:go_router/go_router.dart";
-import "package:sagara_coding_card_application/data/models/auth_model/user_model/score_update_request_model.dart";
-import "package:sagara_coding_card_application/presentation/manager/auth_manage/auth/auth_bloc.dart";
-import "package:sagara_coding_card_application/presentation/manager/card_manage/bloc/card_bloc.dart";
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:sagara_coding_card_application/data/models/auth_model/user_model/score_update_request_model.dart';
+import 'package:sagara_coding_card_application/presentation/manager/auth_manage/auth/auth_bloc.dart';
+import 'package:sagara_coding_card_application/presentation/manager/card_manage/bloc/card_bloc.dart';
 
 class QuizDonePage extends StatelessWidget {
-  const QuizDonePage(
-      {super.key,
-      required this.timeRemaining,
-      required this.totalPoints,
-      required this.totalQuestion});
+  const QuizDonePage({
+    super.key,
+    required this.timeRemaining,
+    required this.totalPoints,
+    required this.totalQuestion,
+  });
 
   final String timeRemaining;
   final String totalPoints;
@@ -26,6 +27,7 @@ class QuizDonePage extends StatelessWidget {
     if (authState is CurrentUserState && authState.currentUser != null) {
       userId = authState.currentUser!.id;
     }
+
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -40,16 +42,12 @@ class QuizDonePage extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(
-              height: 24.h,
-            ),
+            SizedBox(height: 24.h),
             SvgPicture.asset(
               "assets/icons/quiz_done.svg",
               height: 240.h,
             ),
-            SizedBox(
-              height: 32.h,
-            ),
+            SizedBox(height: 32.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Row(
@@ -58,9 +56,7 @@ class QuizDonePage extends StatelessWidget {
                     "assets/icons/card_collection_icon.svg",
                     height: 32.h,
                   ),
-                  SizedBox(
-                    width: 12.w,
-                  ),
+                  SizedBox(width: 12.w),
                   BlocBuilder<CardBloc, CardState>(
                     builder: (context, state) {
                       return state.maybeWhen(
@@ -81,9 +77,7 @@ class QuizDonePage extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
-              height: 16.h,
-            ),
+            SizedBox(height: 16.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Row(
@@ -107,27 +101,31 @@ class QuizDonePage extends StatelessWidget {
                 ],
               ),
             ),
-            SizedBox(
-              height: 20.h,
-            ),
+            SizedBox(height: 20.h),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: BlocListener<AuthBloc, AuthState>(
                 listener: (context, state) {
                   if (state is ScoresUpdated || state is CollectionSynced) {
                     context.go('/home');
+                  } else if (state is AuthErrorState) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text(state.error),
+                    ));
                   }
                 },
                 child: ElevatedButton(
-                  onPressed: () {
-                    context.read<AuthBloc>().add(
-                          UpdateScoresEvent(
-                            req: ScoreUpdateRequestModel(scores: int.parse(totalPoints)),
-                            id: userId!,
-                          ),
-                        );
-                    context.read<AuthBloc>().add(SyncCollectionEvent(id: userId));
-                  },
+                  onPressed: userId == null
+                      ? null
+                      : () {
+                          context.read<AuthBloc>().add(
+                                UpdateScoresEvent(
+                                  req: ScoreUpdateRequestModel(scores: int.parse(totalPoints)),
+                                  id: userId!,
+                                ),
+                              );
+                          context.read<AuthBloc>().add(SyncCollectionEvent(id: userId));
+                        },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0.r),
@@ -212,9 +210,7 @@ class InfoCard extends StatelessWidget {
                   iconPath,
                   height: 20.h,
                 ),
-                SizedBox(
-                  width: 4.w,
-                ),
+                SizedBox(width: 4.w),
                 Text(
                   content,
                   style: TextStyle(

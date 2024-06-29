@@ -68,12 +68,18 @@ class UpdateScoresEvent extends AuthEvent {
   final int id;
 
   UpdateScoresEvent({required this.req, required this.id});
+
+  @override
+  List<Object?> get props => [req, id];
 }
 
 class SyncCollectionEvent extends AuthEvent {
   final int id;
 
   SyncCollectionEvent({required this.id});
+
+  @override
+  List<Object?> get props => [id];
 }
 
 class GetUserIdEvent extends AuthEvent {
