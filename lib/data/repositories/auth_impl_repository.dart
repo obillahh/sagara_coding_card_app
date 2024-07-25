@@ -5,6 +5,7 @@ import 'package:sagara_coding_card_application/data/models/auth_model/register_r
 import 'package:sagara_coding_card_application/data/models/auth_model/reset_password_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/user_model/avatar_update_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/user_model/score_update_request_model.dart';
+import 'package:sagara_coding_card_application/domain/entities/auth_entity/email_confirmation_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/forgot_password_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/sync_collection_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/update_score_response_entity.dart';
@@ -299,6 +300,19 @@ class AuthImplRepository extends AuthRepository {
     } catch (e) {
       print('Sync error: $e');
       return null;
+    }
+  }
+
+  @override
+  Future<EmailConfirmationResponseEntity?> sendEmailConfirmation({required String email}) async {
+    try {
+      final response = await authRemoteDataSource.emailConfirmation(email: email);
+      final data = EmailConfirmationResponseEntity(
+          email: response.email ?? '', sent: response.sent ?? false);
+      return data;
+    } catch (e) {
+      const data = EmailConfirmationResponseEntity(email: '', sent: false);
+      return data;
     }
   }
 }

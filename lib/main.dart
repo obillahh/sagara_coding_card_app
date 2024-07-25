@@ -16,6 +16,7 @@ import 'package:sagara_coding_card_application/data/repositories/profile_impl_re
 import 'package:sagara_coding_card_application/data/repositories/quiz_impl_repository.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/change_avatar_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/check_token_use_case.dart';
+import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/email_confirmation_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/forgot_password_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/get_current_user_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/get_user_id_user_case.dart';
@@ -241,6 +242,12 @@ class _MyAppState extends State<MyApp> {
               ),
             ),
             getUserIdUseCase: GetUserIdUseCase(
+              authRepository: AuthImplRepository(
+                authRemoteDataSource: AuthRemoteDataSource(client: dio),
+                authLocalDataSource: AuthLocalDataSource(),
+              ),
+            ),
+            emailConfirmationUseCase: EmailConfirmationUseCase(
               authRepository: AuthImplRepository(
                 authRemoteDataSource: AuthRemoteDataSource(client: dio),
                 authLocalDataSource: AuthLocalDataSource(),

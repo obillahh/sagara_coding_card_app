@@ -135,8 +135,33 @@ class _RegisterScreenPageState extends State<RegisterScreenPage> {
                     BlocListener<AuthBloc, AuthState>(
                       listener: (context, state) {
                         try {
-                          if (state is AuthRegisterSuccess) {
-                            context.go('/login');
+                          if (state is AuthRegisterSuccess || state is EmailConfirmationSuccess) {
+                            showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text('Confirmation Email Sent'),
+                                  content: Column(
+                                    children: [
+                                      const Text(
+                                        'Please check your email for the confirmation and click on the link.',
+                                      ),
+                                      SizedBox(height: 16.h),
+                                      const CircularProgressIndicator(),
+                                    ],
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        context.go('/login');
+                                      },
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
                           }
                         } catch (e) {
                           if (state is AuthErrorState) {
@@ -165,6 +190,9 @@ class _RegisterScreenPageState extends State<RegisterScreenPage> {
                                       username: usernameController.text,
                                     ),
                                   ),
+                                );
+                            context.read<AuthBloc>().add(
+                                  SendEmailConfirmationEvent(email: emailController.text),
                                 );
                           }
                         },

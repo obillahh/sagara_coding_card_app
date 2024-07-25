@@ -125,3 +125,9 @@ class GetUserSuccessState extends AuthState {
 
   GetUserSuccessState({required this.user});
 }
+
+class EmailConfirmationSuccess extends AuthState {
+  final EmailConfirmationResponseEntity response;
+
+  EmailConfirmationSuccess({required this.response});
+}

@@ -87,3 +87,9 @@ class GetUserIdEvent extends AuthEvent {
 
   GetUserIdEvent({required this.id});
 }
+
+class SendEmailConfirmationEvent extends AuthEvent {
+  final String email;
+
+  SendEmailConfirmationEvent({required this.email});
+}

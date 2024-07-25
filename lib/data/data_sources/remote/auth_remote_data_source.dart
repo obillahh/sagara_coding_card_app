@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:sagara_coding_card_application/data/data_sources/local/auth_local_data_source.dart';
+import 'package:sagara_coding_card_application/data/models/auth_model/email_confirmation_response_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/forgot_password_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/forgot_password_response_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/register_request_model.dart';
@@ -216,7 +217,6 @@ class AuthRemoteDataSource {
           ),
         );
 
-        // Log the response for debugging
         print('Sync Collection Response: ${result.data}');
 
         if (result.data == null || result.data['message'] == null) {
@@ -230,6 +230,26 @@ class AuthRemoteDataSource {
       }
     } catch (e) {
       print('Error syncing collection: $e');
+      rethrow;
+    }
+  }
+
+  Future<EmailConfirmationResponseModel> emailConfirmation({required String email}) async {
+    try {
+      const String url = '${ApiConstant.baseUrlApi}/email-confirmation';
+      final result = await client.post(
+        url,
+        data: {'email': email},
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+      final emailConfirmationData = EmailConfirmationResponseModel.fromJson(result.data);
+      return emailConfirmationData;
+    } catch (e) {
+      inspect('Error: $e');
       rethrow;
     }
   }

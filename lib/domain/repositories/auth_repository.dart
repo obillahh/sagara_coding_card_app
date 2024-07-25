@@ -6,6 +6,7 @@ import 'package:sagara_coding_card_application/data/models/auth_model/register_r
 import 'package:sagara_coding_card_application/data/models/auth_model/reset_password_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/user_model/avatar_update_request_model.dart';
 import 'package:sagara_coding_card_application/data/models/auth_model/user_model/score_update_request_model.dart';
+import 'package:sagara_coding_card_application/domain/entities/auth_entity/email_confirmation_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/forgot_password_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/sync_collection_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/update_score_response_entity.dart';
@@ -36,4 +37,5 @@ abstract class AuthRepository {
   Future<UpdateScoreResponseEntity?> updateScores(
       {required ScoreUpdateRequestModel request, required int id});
   Future<SyncCollectionResponseEntity?> syncCollection({required int id});
+  Future<EmailConfirmationResponseEntity?> sendEmailConfirmation({required String email});
 }

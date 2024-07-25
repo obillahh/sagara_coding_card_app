@@ -9,6 +9,7 @@ class ApiConstant {
   static const String forgotPassword = '$baseUrlApi/auth/forgot-password';
   static const String resetPassword = '$baseUrlApi/auth/reset-password';
   static const String syncCollection = '$baseUrlApi/users';
+  static const String emailConfirmation = '$baseUrlApi/auth/send-email-confirmation';
 
   // Card
   static const String card = '$baseUrlApi/cards';
