@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:sagara_coding_card_application/presentation/utils/constant/assets_constant.dart';
+import 'package:sagara_coding_card_application/presentation/utils/constant/router_constant.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_colors.dart';
 import 'package:sagara_coding_card_application/presentation/utils/themes/app_fonts.dart';
 
@@ -19,7 +21,12 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
   @override
   void initState() {
     super.initState();
-    context.read<AuthBloc>().add(GetCurrentUserEvent());
+    context.read<AuthBloc>().add(GetStoredUserIdEvent());
+    context.read<AuthBloc>().stream.listen((state) {
+      if (state is UserIdStoredState) {
+        context.read<AuthBloc>().add(GetUserByIdEvent(id: state.userId));
+      }
+    });
   }
 
   @override
@@ -34,9 +41,14 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
           child: SvgPicture.asset(AssetsConstant.logoSagaraCodingCardIcon),
         ),
         actions: [
-          Padding(
-            padding: EdgeInsets.all(8.sp),
-            child: SvgPicture.asset(AssetsConstant.settingIcon),
+          GestureDetector(
+            onTap: () {
+              context.goNamed(RouterConstant.profile);
+            },
+            child: Padding(
+              padding: EdgeInsets.all(8.sp),
+              child: SvgPicture.asset(AssetsConstant.settingIcon),
+            ),
           )
         ],
       ),
@@ -65,10 +77,10 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
                 padding: EdgeInsets.symmetric(horizontal: 20.sp),
                 child: BlocBuilder<AuthBloc, AuthState>(
                   builder: (context, state) {
-                    if (state is CurrentUserState) {
+                    if (state is GetUserByIdSuccessState) {
                       return Text.rich(
                         TextSpan(
-                          text: state.currentUser!.username,
+                          text: state.user.username,
                           style: AppFonts.appFont.displaySmall!.copyWith(
                             fontWeight: FontWeight.w700,
                             color: AppColors.primary,
@@ -141,9 +153,7 @@ class _HomeScreenPageState extends State<HomeScreenPage> {
                     return Image.asset(AssetsConstant.myCollectionCard);
                   },
                   separatorBuilder: (context, index) {
-                    return SizedBox(
-                      width: 12.w,
-                    );
+                    return SizedBox(width: 12.w);
                   },
                   itemCount: 3,
                 ),

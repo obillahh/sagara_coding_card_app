@@ -89,7 +89,7 @@ class CardRemoteDataSource {
 
   Future<CardIdResponseModel> getCardByScanner(String url) async {
     try {
-      final String completeUrl = 'https://$url';
+      final String completeUrl = url;
       final result = await client.get(
         completeUrl,
         options: Options(
@@ -102,8 +102,23 @@ class CardRemoteDataSource {
       final cardData = CardIdResponseModel.fromJson(result.data);
       return cardData;
     } catch (e) {
-      inspect('Error: $e');
-      throw Exception('Failed to get card data');
+      try {
+        final String completeHttpUrl = 'https://$url';
+        final resultHttp = await client.get(
+          completeHttpUrl,
+          options: Options(
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+          ),
+        );
+        final cardDataHttp = CardIdResponseModel.fromJson(resultHttp.data);
+        return cardDataHttp;
+      } catch (e) {
+        inspect('Error: $e');
+        throw Exception('Failed to get card data');
+      }
     }
   }
 

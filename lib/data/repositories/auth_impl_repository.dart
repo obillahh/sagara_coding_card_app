@@ -56,12 +56,8 @@ class AuthImplRepository extends AuthRepository {
   }
 
   @override
-  Future<UserDataResponseEntity?> getCurrentUser() async {
-    final isLoggedIn = await authLocalDataSource.getToken() != null;
-    if (isLoggedIn) {
-      return await authLocalDataSource.getUserData();
-    }
-    return null;
+  Future<int?> storeUserId() async {
+    return await authLocalDataSource.getUserId();
   }
 
   @override
@@ -108,7 +104,7 @@ class AuthImplRepository extends AuthRepository {
       );
 
       await authLocalDataSource.saveToken(data.jwt);
-      await authLocalDataSource.saveUserData(data.user);
+      await authLocalDataSource.saveUserId(data.user.id);
 
       return data;
     } catch (e) {
@@ -120,7 +116,7 @@ class AuthImplRepository extends AuthRepository {
   @override
   Future logout() async {
     await authLocalDataSource.removeToken();
-    await authLocalDataSource.removeUserData();
+    await authLocalDataSource.removeUserId();
   }
 
   @override
@@ -272,9 +268,9 @@ class AuthImplRepository extends AuthRepository {
   }
 
   @override
-  Future<UserIdResponseEntity?> getUserId({required int id}) async {
+  Future<UserIdResponseEntity?> getUserById({required int id}) async {
     try {
-      final response = await authRemoteDataSource.getUserId(id: id);
+      final response = await authRemoteDataSource.getUserById(id: id);
       final data = UserIdResponseEntity(
         id: response.id ?? 0,
         username: response.username ?? '',

@@ -14,9 +14,6 @@ class LeaderboardRemoteDataSource {
       const url = ApiConstant.leaderboard;
       final result = await client.get(
         url,
-        queryParameters: {
-          "populate": "avatar",
-        },
         options: Options(
           headers: {
             'Accept': 'application/json',

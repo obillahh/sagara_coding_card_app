@@ -21,8 +21,13 @@ class _LeaderboardScreenPageState extends State<LeaderboardScreenPage> {
   @override
   void initState() {
     super.initState();
+    context.read<AuthBloc>().add(GetStoredUserIdEvent());
     context.read<LeaderboardBloc>().add(GetLeaderboardEvent());
-    context.read<AuthBloc>().add(GetCurrentUserEvent());
+    context.read<AuthBloc>().stream.listen((state) {
+      if (state is UserIdStoredState) {
+        context.read<AuthBloc>().add(GetUserByIdEvent(id: state.userId));
+      }
+    });
   }
 
   @override
@@ -81,9 +86,9 @@ class _LeaderboardScreenPageState extends State<LeaderboardScreenPage> {
                                   children: [
                                     BlocBuilder<AuthBloc, AuthState>(
                                       builder: (context, state) {
-                                        if (state is CurrentUserState) {
+                                        if (state is GetUserByIdSuccessState) {
                                           return Text(
-                                            state.currentUser!.collectionCard.toString(),
+                                            state.user.collectionCard.toString(),
                                             style: AppFonts.appFont.titleLarge!.copyWith(
                                               fontWeight: FontWeight.w700,
                                             ),

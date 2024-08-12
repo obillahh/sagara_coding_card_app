@@ -45,15 +45,6 @@ class AuthNotFirstEntry extends AuthState {}
 
 class AuthLogoutSuccess extends AuthState {}
 
-class CurrentUserState extends AuthState {
-  final UserDataResponseEntity? currentUser;
-
-  CurrentUserState({required this.currentUser});
-
-  @override
-  List<Object?> get props => [currentUser];
-}
-
 class AuthFailure extends AuthState {
   final String error;
 
@@ -120,10 +111,22 @@ class CollectionSynced extends AuthState {
   List<Object?> get props => [syncCollection];
 }
 
-class GetUserSuccessState extends AuthState {
+class UserIdStoredState extends AuthState {
+  final int userId;
+
+  UserIdStoredState({required this.userId});
+
+  @override
+  List<Object?> get props => [userId];
+}
+
+class GetUserByIdSuccessState extends AuthState {
   final UserIdResponseEntity user;
 
-  GetUserSuccessState({required this.user});
+  GetUserByIdSuccessState({required this.user});
+
+  @override
+  List<Object?> get props => [user];
 }
 
 class EmailConfirmationSuccess extends AuthState {

@@ -124,20 +124,16 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
           BlocConsumer<ScannerBloc, ScannerState>(
             listener: (context, state) {
               if (state is ScannerSuccess) {
+                context.read<AuthBloc>().add(GetStoredUserIdEvent());
+
                 final cardId = state.card.id;
-                final userId = (context.read<AuthBloc>().state as CurrentUserState).currentUser!.id;
+                final userId = (context.read<AuthBloc>().state as UserIdStoredState).userId;
                 final checkCardRequest = CheckCardRequestModel(userId: userId);
                 context.read<CardBloc>().add(
-                      CardEvent.checkCardEvent(
-                        request: checkCardRequest,
-                        cardId: cardId,
-                      ),
+                      CardEvent.checkCardEvent(request: checkCardRequest, cardId: cardId),
                     );
                 context.read<CardBloc>().add(
-                      CardEvent.addCardCollectionEvent(
-                        cardId: cardId,
-                        userId: userId,
-                      ),
+                      CardEvent.addCardCollectionEvent(cardId: cardId, userId: userId),
                     );
                 context.goNamed(
                   RouterConstant.detailScanner,
@@ -221,7 +217,7 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          height: 64.h,
+                          height: 65.w,
                           width: 105.w,
                           padding: EdgeInsets.all(8.0.w),
                           decoration: BoxDecoration(
@@ -244,7 +240,7 @@ class _ScannerScreenPageState extends State<ScannerScreenPage> {
                           ),
                         ),
                         Container(
-                          height: 64.h,
+                          height: 65.w,
                           width: 105.w,
                           padding: EdgeInsets.all(8.0.w),
                           decoration: BoxDecoration(

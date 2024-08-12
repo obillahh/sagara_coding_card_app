@@ -20,24 +20,24 @@ class CollectionScreenPage extends StatefulWidget {
 }
 
 class _CollectionScreenPageState extends State<CollectionScreenPage> {
-  int? userId;
-
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final authState = context.read<AuthBloc>().state;
-    if (authState is CurrentUserState && authState.currentUser != null) {
-      userId = authState.currentUser!.id;
-      context.read<CardBloc>().add(CardEvent.getCardListEvent(id: userId!));
-    }
+  void initState() {
+    super.initState();
+    context.read<AuthBloc>().add(GetStoredUserIdEvent());
+    context.read<AuthBloc>().stream.listen((state) {
+      if (state is UserIdStoredState) {
+        context.read<CardBloc>().add(CardEvent.getCardListEvent(id: state.userId));
+      }
+    });
   }
 
   Future<void> _refresh() async {
-    final authState = context.read<AuthBloc>().state;
-    if (authState is CurrentUserState && authState.currentUser != null) {
-      userId = authState.currentUser!.id;
-      context.read<CardBloc>().add(CardEvent.getCardListEvent(id: userId!));
-    }
+    context.read<AuthBloc>().add(GetStoredUserIdEvent());
+    context.read<AuthBloc>().stream.listen((state) {
+      if (state is UserIdStoredState) {
+        context.read<CardBloc>().add(CardEvent.getCardListEvent(id: state.userId));
+      }
+    });
   }
 
   @override
@@ -176,9 +176,9 @@ class _CollectionScreenPageState extends State<CollectionScreenPage> {
                             shrinkWrap: true,
                             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
-                              crossAxisSpacing: 8.sp,
-                              mainAxisSpacing: 4.sp,
-                              childAspectRatio: 0.56.r,
+                              crossAxisSpacing: 4.h,
+                              mainAxisSpacing: 4.h,
+                              childAspectRatio: ScreenUtil().pixelRatio! * 0.28,
                             ),
                             itemBuilder: (context, index) {
                               if (cardList[index].status == "locked") {
@@ -221,10 +221,18 @@ class _CollectionScreenPageState extends State<CollectionScreenPage> {
                               return GestureDetector(
                                 onTap: () {
                                   final id = cardList[index].id;
-                                  context.read<CardBloc>().add(CardEvent.checkCardEvent(
-                                        cardId: id,
-                                        request: CheckCardRequestModel(userId: userId!),
-                                      ));
+                                  context.read<AuthBloc>().add(GetStoredUserIdEvent());
+                                  context.read<AuthBloc>().stream.listen((state) {
+                                    if (state is UserIdStoredState) {
+                                      context.read<CardBloc>().add(
+                                            CardEvent.checkCardEvent(
+                                              cardId: id,
+                                              request: CheckCardRequestModel(userId: state.userId),
+                                            ),
+                                          );
+                                    }
+                                  });
+
                                   context.read<CardBloc>().add(CardEvent.getCardByIdEvent(id: id));
                                   context.pushNamed(
                                     RouterConstant.detailCollection,

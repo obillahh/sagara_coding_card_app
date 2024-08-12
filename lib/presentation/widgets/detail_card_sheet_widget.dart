@@ -29,8 +29,8 @@ class DetailCardSheetWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<AuthBloc, AuthState>(
       builder: (context, authState) {
-        if (authState is CurrentUserState) {
-          final userId = authState.currentUser!.id;
+        if (authState is GetUserByIdSuccessState) {
+          final userId = authState.user.id;
           return BlocBuilder<CardBloc, CardState>(
             builder: (context, cardState) {
               return _buildDraggableScrollableSheet(context, userId, cardState);

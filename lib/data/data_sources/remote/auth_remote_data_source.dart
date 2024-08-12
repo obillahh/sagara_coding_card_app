@@ -65,7 +65,7 @@ class AuthRemoteDataSource {
     }
   }
 
-  Future<UserIdResponseModel> getUserId({required int id}) async {
+  Future<UserIdResponseModel> getUserById({required int id}) async {
     try {
       final String url = '${ApiConstant.baseUrlApi}/users/$id';
       final result = await client.get(
@@ -73,13 +73,7 @@ class AuthRemoteDataSource {
         queryParameters: {
           'populate': 'avatar',
         },
-        options: Options(
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        ),
       );
-
       final userIdData = UserIdResponseModel.fromJson(result.data);
       return userIdData;
     } catch (e) {

@@ -19,7 +19,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(seconds: 7)).then((value) {
+    Future.delayed(const Duration(seconds: 4)).then((value) {
       context.read<AuthBloc>().add(IsFirstEntryEvent());
       context.read<AuthBloc>().add(IsLoggedInEvent());
       context.read<AuthBloc>().add(CheckTokenEvent());

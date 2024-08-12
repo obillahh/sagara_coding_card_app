@@ -43,6 +43,11 @@ class TextFieldUnderlineWidget extends StatelessWidget {
             color: AppColors.primary,
           ),
         ),
+        focusedBorder: const UnderlineInputBorder(
+          borderSide: BorderSide(
+            color: AppColors.primary,
+          ),
+        ),
         hintText: hintText,
         hintStyle: AppFonts.appFont.labelLarge!.copyWith(
           color: AppColors.placeholder,

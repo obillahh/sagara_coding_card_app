@@ -18,13 +18,13 @@ import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/ch
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/check_token_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/email_confirmation_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/forgot_password_use_case.dart';
-import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/get_current_user_use_case.dart';
-import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/get_user_id_user_case.dart';
+import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/get_user_by_id_user_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/increase_collection_card_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/is_first_entry_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/is_logged_in_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/login_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/reset_password_use_case.dart';
+import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/stored_user_id_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/sync_collection_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/update_scores_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/card_use_case/add_card_collection_use_case.dart';
@@ -181,12 +181,6 @@ class _MyAppState extends State<MyApp> {
                 authLocalDataSource: AuthLocalDataSource(),
               ),
             ),
-            getCurrentUserUseCase: GetCurrentUserUseCase(
-              authRepository: AuthImplRepository(
-                authRemoteDataSource: AuthRemoteDataSource(client: dio),
-                authLocalDataSource: AuthLocalDataSource(),
-              ),
-            ),
             logoutUseCase: LogoutUseCase(
               authRepository: AuthImplRepository(
                 authRemoteDataSource: AuthRemoteDataSource(client: dio),
@@ -241,13 +235,19 @@ class _MyAppState extends State<MyApp> {
                 authLocalDataSource: AuthLocalDataSource(),
               ),
             ),
-            getUserIdUseCase: GetUserIdUseCase(
+            getUserByIdUseCase: GetUserByIdUseCase(
               authRepository: AuthImplRepository(
                 authRemoteDataSource: AuthRemoteDataSource(client: dio),
                 authLocalDataSource: AuthLocalDataSource(),
               ),
             ),
             emailConfirmationUseCase: EmailConfirmationUseCase(
+              authRepository: AuthImplRepository(
+                authRemoteDataSource: AuthRemoteDataSource(client: dio),
+                authLocalDataSource: AuthLocalDataSource(),
+              ),
+            ),
+            storedUserIdUseCase: StoredUserIdUseCase(
               authRepository: AuthImplRepository(
                 authRemoteDataSource: AuthRemoteDataSource(client: dio),
                 authLocalDataSource: AuthLocalDataSource(),

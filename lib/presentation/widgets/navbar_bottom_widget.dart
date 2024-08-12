@@ -28,7 +28,7 @@ class _NavigationBottomWidgetState extends State<NavigationBottomWidget> {
     return Container(
       decoration: BoxDecoration(
         color: selectedIndex == index ? const Color(0xffC5233A) : Colors.transparent,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12).r,
       ),
       child: IconButton(
         onPressed: () {
@@ -39,7 +39,7 @@ class _NavigationBottomWidgetState extends State<NavigationBottomWidget> {
         },
         icon: SvgPicture.asset(
           selectedIndex == index ? activeIcon : nonActiveIcon,
-          width: 24.w,
+          width: 24.h,
         ),
         color: Colors.white,
       ),
@@ -55,7 +55,7 @@ class _NavigationBottomWidgetState extends State<NavigationBottomWidget> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: SizedBox(
         height: 70.h,
-        width: 70.w,
+        width: 70.h,
         child: FloatingActionButton(
           onPressed: () {
             context.push('/scanner');
@@ -64,14 +64,14 @@ class _NavigationBottomWidgetState extends State<NavigationBottomWidget> {
           shape: const CircleBorder(),
           child: SvgPicture.asset(
             AssetsConstant.scannerIcon,
-            width: 30.w,
+            width: 30.h,
           ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(
         shape: const CircularNotchedRectangle(),
         color: const Color(0xff333030),
-        notchMargin: 14,
+        notchMargin: 14.h,
         clipBehavior: Clip.antiAlias,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

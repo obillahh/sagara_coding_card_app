@@ -21,7 +21,7 @@ class DetailsCollectionScreenPage extends StatefulWidget {
 class _DetailsCollectionScreenPageState extends State<DetailsCollectionScreenPage>
     with TickerProviderStateMixin {
   late AnimationController _animationController;
-  int? userId;
+  late int userId;
 
   @override
   void initState() {
@@ -40,11 +40,11 @@ class _DetailsCollectionScreenPageState extends State<DetailsCollectionScreenPag
   }
 
   void _onBackPressed() {
-    final authState = context.read<AuthBloc>().state;
-    if (authState is CurrentUserState && authState.currentUser != null) {
-      userId = authState.currentUser!.id;
-      context.read<CardBloc>().add(CardEvent.getCardListEvent(id: userId!));
-    }
+    context.read<AuthBloc>().stream.listen((state) {
+      if (state is UserIdStoredState) {
+        context.read<CardBloc>().add(CardEvent.getCardListEvent(id: state.userId));
+      }
+    });
     Navigator.of(context).pop();
   }
 
@@ -86,25 +86,25 @@ class _DetailsCollectionScreenPageState extends State<DetailsCollectionScreenPag
             initial: () => const SizedBox(),
             loading: () => const Center(child: CircularProgressIndicator(color: AppColors.primary)),
             success: (cardList, card, userData, checkCard) {
-              if (card == null) {
-                return Center(
-                  child: Text(
-                    'Card data not found.',
-                    style: TextStyle(
-                      color: AppColors.text,
-                      fontSize: 18.sp,
+              if (card != null) {
+                return SizedBox(
+                  width: double.infinity,
+                  height: double.infinity,
+                  child: Align(
+                    alignment: Alignment.topCenter,
+                    child: Image.network(
+                      card.attributes.avatarCard.data.attributes.url,
+                      fit: BoxFit.fitWidth,
                     ),
                   ),
                 );
               }
-              return SizedBox(
-                width: double.infinity,
-                height: double.infinity,
-                child: Align(
-                  alignment: Alignment.topCenter,
-                  child: Image.network(
-                    card.attributes.avatarCard.data.attributes.url,
-                    fit: BoxFit.fitWidth,
+              return Center(
+                child: Text(
+                  'Card data not found.',
+                  style: TextStyle(
+                    color: AppColors.text,
+                    fontSize: 18.sp,
                   ),
                 ),
               );

@@ -48,8 +48,6 @@ class IsLoggedInEvent extends AuthEvent {}
 
 class IsFirstEntryEvent extends AuthEvent {}
 
-class GetCurrentUserEvent extends AuthEvent {}
-
 class LogoutEvent extends AuthEvent {}
 
 class IncreaseCollectionCardEvent extends AuthEvent {
@@ -82,10 +80,15 @@ class SyncCollectionEvent extends AuthEvent {
   List<Object?> get props => [id];
 }
 
-class GetUserIdEvent extends AuthEvent {
+class GetStoredUserIdEvent extends AuthEvent {}
+
+class GetUserByIdEvent extends AuthEvent {
   final int id;
 
-  GetUserIdEvent({required this.id});
+  GetUserByIdEvent({required this.id});
+
+  @override
+  List<Object?> get props => [id];
 }
 
 class SendEmailConfirmationEvent extends AuthEvent {

@@ -1,14 +1,10 @@
-import 'dart:convert';
-
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../../domain/entities/auth_entity/user_entity/user_data_response_entity.dart';
 
 class AuthLocalDataSource {
   static const String _avatarProfileKey = 'avatar_profile';
   static const String _firstEntryKey = 'firstEntry';
   static const String _tokenKey = 'jwt';
-  static const String _userDataKey = 'user';
+  static const String _userIdKey = 'id';
   static const String _collectionCardKey = 'collection_card';
 
   Future<void> saveFirstEntry(bool isFirstEntry) async {
@@ -31,26 +27,19 @@ class AuthLocalDataSource {
     await sharedPreference.remove(_tokenKey);
   }
 
-  Future<void> saveUserData(UserDataResponseEntity userData) async {
+  Future<void> saveUserId(int userId) async {
     final sharedPreferences = await SharedPreferences.getInstance();
-    final jsonData = userData.toJson();
-    final jsonString = jsonEncode(jsonData);
-    await sharedPreferences.setString(_userDataKey, jsonString);
+    await sharedPreferences.setInt(_userIdKey, userId);
   }
 
-  Future<UserDataResponseEntity?> getUserData() async {
+  Future<int?> getUserId() async {
     final sharedPreferences = await SharedPreferences.getInstance();
-    final jsonString = sharedPreferences.getString(_userDataKey);
-    if (jsonString != null) {
-      final jsonData = jsonDecode(jsonString);
-      return UserDataResponseEntity.fromJson(jsonData);
-    }
-    return null;
+    return sharedPreferences.getInt(_userIdKey);
   }
 
-  Future<void> removeUserData() async {
+  Future<void> removeUserId() async {
     final sharedPreferences = await SharedPreferences.getInstance();
-    await sharedPreferences.remove(_userDataKey);
+    await sharedPreferences.remove(_userIdKey);
   }
 
   Future<bool> isFirstEntry() async {

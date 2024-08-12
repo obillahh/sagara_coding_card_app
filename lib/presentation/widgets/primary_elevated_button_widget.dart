@@ -19,7 +19,7 @@ class PrimaryElevatedButtonWidget extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: AppColors.primary,
-        minimumSize: Size(280.w, 36.h),
+        minimumSize: Size(280.h, 36.h),
       ),
       child: Text(
         text,

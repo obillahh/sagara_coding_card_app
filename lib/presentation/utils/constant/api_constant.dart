@@ -8,8 +8,10 @@ class ApiConstant {
   static const String avatarUpdate = '$baseUrlApi/upload';
   static const String forgotPassword = '$baseUrlApi/auth/forgot-password';
   static const String resetPassword = '$baseUrlApi/auth/reset-password';
-  static const String syncCollection = '$baseUrlApi/users';
   static const String emailConfirmation = '$baseUrlApi/auth/send-email-confirmation';
+  static const String syncCollection = '$baseUrlApi/users';
+
+  //User
 
   // Card
   static const String card = '$baseUrlApi/cards';

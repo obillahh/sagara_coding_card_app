@@ -21,12 +21,7 @@ class QuizDonePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int? userId;
     double scorePercentage = (int.parse(totalPoints) / (int.parse(totalQuestion) * 20)) * 100;
-    final authState = context.read<AuthBloc>().state;
-    if (authState is CurrentUserState && authState.currentUser != null) {
-      userId = authState.currentUser!.id;
-    }
 
     return Scaffold(
       body: SafeArea(
@@ -115,17 +110,23 @@ class QuizDonePage extends StatelessWidget {
                   }
                 },
                 child: ElevatedButton(
-                  onPressed: userId == null
-                      ? null
-                      : () {
-                          context.read<AuthBloc>().add(
-                                UpdateScoresEvent(
-                                  req: ScoreUpdateRequestModel(scores: int.parse(totalPoints)),
-                                  id: userId!,
-                                ),
-                              );
-                          context.read<AuthBloc>().add(SyncCollectionEvent(id: userId));
-                        },
+                  onPressed: () {
+                    final authBloc = context.read<AuthBloc>();
+                    authBloc.add(GetStoredUserIdEvent());
+
+                    authBloc.stream.listen((state) {
+                      if (state is UserIdStoredState) {
+                        final userId = state.userId;
+                        authBloc.add(
+                          UpdateScoresEvent(
+                            req: ScoreUpdateRequestModel(scores: int.parse(totalPoints)),
+                            id: userId,
+                          ),
+                        );
+                        authBloc.add(SyncCollectionEvent(id: userId));
+                      }
+                    });
+                  },
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.0.r),

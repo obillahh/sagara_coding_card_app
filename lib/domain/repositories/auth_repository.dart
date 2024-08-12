@@ -14,8 +14,6 @@ import 'package:sagara_coding_card_application/domain/entities/auth_entity/user_
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/user_entity/user_id_response_entity.dart';
 import 'package:sagara_coding_card_application/domain/entities/auth_entity/user_entity/user_response_entity.dart';
 
-import '../entities/auth_entity/user_entity/user_data_response_entity.dart';
-
 abstract class AuthRepository {
   Future<UserResponseEntity?> login({required LoginRequestModel loginRequest});
   Future signInWithGoogle();
@@ -27,8 +25,8 @@ abstract class AuthRepository {
   Future<bool> isLoggedIn();
   bool isSignedInWithGoogle();
   Future<bool> isFirstEntry();
-  Future<UserDataResponseEntity?> getCurrentUser();
-  Future<UserIdResponseEntity?> getUserId({required int id});
+  Future<int?> storeUserId();
+  Future<UserIdResponseEntity?> getUserById({required int id});
   Future logout();
   Future<AvatarUpdateResponseEntity?> changeAvatar({required AvatarUpdateRequestModel request});
   Future<String?> isAvatarChanged();

@@ -13,7 +13,6 @@ import 'package:sagara_coding_card_application/presentation/widgets/text_field_u
 import '../manager/auth_manage/auth/auth_bloc.dart';
 import '../utils/themes/app_colors.dart';
 import '../widgets/primary_elevated_button_widget.dart';
-import '../widgets/secondary_elevated_button_widget.dart';
 import '../widgets/text_button_widget.dart';
 
 class LoginScreenPage extends StatefulWidget {

@@ -14,7 +14,8 @@ import 'package:sagara_coding_card_application/domain/entities/auth_entity/user_
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/check_token_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/email_confirmation_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/forgot_password_use_case.dart';
-import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/get_user_id_user_case.dart';
+import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/stored_user_id_use_case.dart';
+import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/get_user_by_id_user_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/increase_collection_card_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/is_first_entry_use_case.dart';
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/is_logged_in_use_case.dart';
@@ -26,9 +27,7 @@ import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/sy
 import 'package:sagara_coding_card_application/domain/use_cases/auth_use_case/update_scores_use_case.dart';
 
 import '../../../../data/models/auth_model/register_request_model.dart';
-import '../../../../domain/entities/auth_entity/user_entity/user_data_response_entity.dart';
 import '../../../../domain/entities/auth_entity/user_entity/user_response_entity.dart';
-import '../../../../domain/use_cases/auth_use_case/get_current_user_use_case.dart';
 import '../../../../domain/use_cases/auth_use_case/login_use_case.dart';
 
 part 'auth_event.dart';
@@ -43,12 +42,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final IsLoggedInUseCase isLoggedInUseCase;
   final IsFirstEntryUseCase isFirstEntryUseCase;
   final LogoutUseCase logoutUseCase;
-  final GetCurrentUserUseCase getCurrentUserUseCase;
   final IncreaseCollectionCardUseCase increaseCollectionCardUseCase;
   final CheckTokenUseCase checkTokenUseCase;
   final UpdateScoresUseCase updateScoresUseCase;
   final SyncCollectionUseCase syncCollectionUseCase;
-  final GetUserIdUseCase getUserIdUseCase;
+  final GetUserByIdUseCase getUserByIdUseCase;
+  final StoredUserIdUseCase storedUserIdUseCase;
   final EmailConfirmationUseCase emailConfirmationUseCase;
 
   AuthBloc({
@@ -60,12 +59,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.isLoggedInUseCase,
     required this.isFirstEntryUseCase,
     required this.logoutUseCase,
-    required this.getCurrentUserUseCase,
     required this.increaseCollectionCardUseCase,
     required this.checkTokenUseCase,
     required this.updateScoresUseCase,
     required this.syncCollectionUseCase,
-    required this.getUserIdUseCase,
+    required this.storedUserIdUseCase,
+    required this.getUserByIdUseCase,
     required this.emailConfirmationUseCase,
   }) : super(AuthInitial()) {
     on<AuthEvent>(
@@ -126,19 +125,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             emit(AuthNotFirstEntry());
           }
         }
-        if (event is GetCurrentUserEvent) {
-          final user = await getCurrentUserUseCase();
-          emit(CurrentUserState(
-            currentUser: user ??
-                const UserDataResponseEntity(
-                  id: 0,
-                  username: 'Guest',
-                  email: 'guest@example.com',
-                  collectionCard: 0,
-                  scores: 0,
-                ),
-          ));
-        }
         if (event is LogoutEvent) {
           await logoutUseCase();
           emit(AuthLogoutSuccess());
@@ -183,12 +169,28 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
             emit(AuthErrorState('Failed to sync collection: $e'));
           }
         }
-        if (event is GetUserIdEvent) {
+        if (event is GetStoredUserIdEvent) {
           try {
-            final data = await getUserIdUseCase(id: event.id);
-            emit(GetUserSuccessState(user: data!));
+            final id = await storedUserIdUseCase();
+            if (id != null) {
+              emit(UserIdStoredState(userId: id));
+            } else {
+              emit(AuthErrorState('User ID not found'));
+            }
           } catch (e) {
-            emit(AuthErrorState('Failed to get user: $e'));
+            emit(AuthErrorState('Failed to get stored user ID: $e'));
+          }
+        }
+        if (event is GetUserByIdEvent) {
+          try {
+            final data = await getUserByIdUseCase(id: event.id);
+            if (data != null) {
+              emit(GetUserByIdSuccessState(user: data));
+            } else {
+              emit(AuthErrorState('User data not found'));
+            }
+          } catch (e) {
+            emit(AuthErrorState('Failed to get user by ID: $e'));
           }
         }
         if (event is SendEmailConfirmationEvent) {
